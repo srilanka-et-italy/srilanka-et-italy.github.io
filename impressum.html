@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum - Sri Lanka ET Italy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+        .legal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+        .legal-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        .legal-title {
+            font-family: var(--font-display);
+            color: var(--brushed-gold);
+            margin-bottom: 1rem;
+        }
+        .legal-content {
+            background: var(--deep-black);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .legal-section {
+            margin-bottom: var(--spacing-lg);
+        }
+        .legal-section:last-child {
+            margin-bottom: 0;
+        }
+        .legal-section h2 {
+            color: var(--brushed-gold);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .legal-section h3 {
+            color: var(--gray-light);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .legal-section p {
+            color: var(--gray-light);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .legal-section ul {
+            color: var(--gray-light);
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .legal-section li {
+            margin-bottom: 0.5rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--brushed-gold);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-md);
+            transition: color var(--transition-fast);
+        }
+        .back-link:hover {
+            color: var(--gold-light);
+        }
+        .back-arrow {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo-text">Sri Lanka ET Italy</a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#hero" class="nav-link" data-i18n="nav.home">Home</a>
+                <a href="index.html#menu" class="nav-link" data-i18n="nav.menu">Menü</a>
+                <a href="index.html#location" class="nav-link" data-i18n="nav.location">Standort</a>
+                <a href="index.html#contact" class="nav-link" data-i18n="nav.contact">Kontakt</a>
+            </div>
+            <div class="nav-actions">
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="de" aria-label="Deutsch">DE</button>
+                    <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Legal Content -->
+    <div class="legal-container">
+        <a href="index.html" class="back-link">
+            <svg class="back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span data-i18n="legal.back">Zurück zur Startseite</span>
+        </a>
+
+        <div class="legal-header">
+            <h1 class="legal-title" data-i18n="impressum.title">Impressum</h1>
+        </div>
+
+        <div class="legal-content">
+            <div class="legal-section">
+                <h2 data-i18n="impressum.section1.title">Angaben gemäß § 5 TMG</h2>
+                <p>
+                    <strong>Betreiber:</strong><br>
+                    Akeelan Gunasiri<br>
+                    Rötenbacher Str. 33<br>
+                    88364 Wolfegg<br>
+                    Deutschland
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 data-i18n="impressum.section2.title">Kontakt</h2>
+                <p>
+                    <strong data-i18n="impressum.email">E-Mail:</strong> <a href="mailto:srilankaetitaly@gmail.com" class="contact-link">srilankaetitaly@gmail.com</a>
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 data-i18n="impressum.section3.title">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+                <p>
+                    Akeelan Gunasiri<br>
+                    Rötenbacher Str. 33<br>
+                    88364 Wolfegg<br>
+                    Deutschland
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h3 data-i18n="impressum.section4.title">Haftung für Inhalte</h3>
+                <p data-i18n="impressum.section4.content">
+                    Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h3 data-i18n="impressum.section5.title">Haftung für Links</h3>
+                <p data-i18n="impressum.section5.content">
+                    Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h3 data-i18n="impressum.section6.title">Urheberrecht</h3>
+                <p data-i18n="impressum.section6.content">
+                    Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Add translations specific to impressum page
+        const impressumTranslations = {
+            de: {
+                legal: {
+                    back: "Zurück zur Startseite"
+                },
+                impressum: {
+                    title: "Impressum",
+                    email: "E-Mail",
+                    section1: {
+                        title: "Angaben gemäß § 5 TMG"
+                    },
+                    section2: {
+                        title: "Kontakt"
+                    },
+                    section3: {
+                        title: "Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV"
+                    },
+                    section4: {
+                        title: "Haftung für Inhalte",
+                        content: "Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen."
+                    },
+                    section5: {
+                        title: "Haftung für Links",
+                        content: "Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich."
+                    },
+                    section6: {
+                        title: "Urheberrecht",
+                        content: "Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers."
+                    }
+                }
+            },
+            en: {
+                legal: {
+                    back: "Back to Home"
+                },
+                impressum: {
+                    title: "Imprint",
+                    email: "Email",
+                    section1: {
+                        title: "Information according to § 5 TMG"
+                    },
+                    section2: {
+                        title: "Contact"
+                    },
+                    section3: {
+                        title: "Responsible for content according to § 55 Abs. 2 RStV"
+                    },
+                    section4: {
+                        title: "Liability for Content",
+                        content: "As a service provider, we are responsible for our own content on these pages in accordance with § 7 Para. 1 TMG under general law. According to §§ 8 to 10 TMG, however, we as a service provider are not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity."
+                    },
+                    section5: {
+                        title: "Liability for Links",
+                        content: "Our website contains links to external third-party websites over whose content we have no influence. Therefore, we cannot assume any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages."
+                    },
+                    section6: {
+                        title: "Copyright",
+                        content: "The content and works created by the site operators on these pages are subject to German copyright law. The reproduction, editing, distribution and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator."
+                    }
+                }
+            }
+        };
+
+        // Merge with main translations
+        Object.keys(impressumTranslations).forEach(lang => {
+            if (translations[lang]) {
+                translations[lang] = {...translations[lang], ...impressumTranslations[lang]};
+            }
+        });
+    </script>
+</body>
+</html>
