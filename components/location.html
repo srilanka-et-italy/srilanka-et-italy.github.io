@@ -21,9 +21,22 @@
         <a href="https://maps.google.com/?q=Rötenbacher+Str.+33,+88364+Wolfegg" target="_blank" class="dir-btn"
             data-i18n="location.route_btn">→ Route planen</a>
     </div>
-    <div class="map-wrap reveal" style="transition-delay:.15s">
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2679.1522891653244!2d9.79374747648357!3d47.817266271209974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479ba34b8cc44bdb%3A0xf193ea7ee673b972!2sR%C3%B6tenbacher%20Str.%2033%2C%2088364%20Wolfegg%2C%20Deutschland!5e0!3m2!1sde!2sch!4v1772821968428!5m2!1sde!2sch"
-            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="map-wrap reveal" id="map-container" style="transition-delay:.15s; cursor: pointer; position: relative;">
+        <div class="map-placeholder"
+            style="width:100%; height:100%; background: var(--sand); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
+            <h3 style="font-family: 'Libre Baskerville', serif; font-size: 1.1rem; margin-bottom: 0.5rem;"
+                data-i18n="location.address_desc">Rötenbacher Str. 33, Wolfegg</h3>
+            <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem;"
+                data-i18n="location.map_load_hint">Klicken, um die interaktive Karte zu aktivieren</p>
+            <button class="btn-dark" style="padding: 0.6rem 1.2rem; font-size: 0.7rem;"
+                data-i18n="location.map_load_btn">Karte laden</button>
+        </div>
+        <template id="map-template">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2679.1522891653244!2d9.79374747648357!3d47.817266271209974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479ba34b8cc44bdb%3A0xf193ea7ee673b972!2sR%C3%B6tenbacher%20Str.+33%2C+88364+Wolfegg%2C+Deutschland!5e0!3m2!1sde!2sch!4v1772821968428!5m2!1sde!2sch"
+                allowfullscreen loading="eager" referrerpolicy="no-referrer-when-downgrade"
+                style="width:100%; height:100%; border:none;"></iframe>
+        </template>
     </div>
 </section>
