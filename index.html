@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka ET Italy - Fusion redefined. Wolfegg's finest.</title>
+    <meta name="description" content="Sri Lanka ET Italy - High-end Fusion Restaurant im Schützenverein Wolfegg. The Silk Road & The Marble Way.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="sin">SIN</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-video-container">
+            <div class="hero-video-overlay"></div>
+            <!-- Video background would go here -->
+            <div class="hero-background-image"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="https://github.com/user-attachments/assets/77aff4c2-d64a-4ab7-9433-ac9ed10a276e" alt="Sri Lanka ET Italy Logo">
+            </div>
+            <h1 class="hero-title" data-i18n="hero.title">Fusion redefined. Wolfegg's finest.</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">The Silk Road & The Marble Way</p>
+            <div class="hero-cta">
+                <a href="#menu" class="cta-primary" data-i18n="hero.cta1">Menü entdecken</a>
+                <a href="#location" class="cta-secondary" data-i18n="hero.cta2">Tisch reservieren</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <h2 class="section-title reveal-up" data-i18n="menu.title">The Menu</h2>
+            <p class="section-subtitle reveal-up" data-i18n="menu.subtitle">Eine kulinarische Reise zwischen zwei Welten</p>
+            
+            <!-- Category Tabs -->
+            <div class="menu-tabs reveal-up">
+                <button class="tab-btn active" data-category="burgers" data-i18n="menu.tabs.burgers">Burger & Snacks</button>
+                <button class="tab-btn" data-category="hotdogs" data-i18n="menu.tabs.hotdogs">Hot Dogs</button>
+                <button class="tab-btn" data-category="drinks" data-i18n="menu.tabs.drinks">Getränke</button>
+            </div>
+
+            <!-- Bento Grid Menu Items -->
+            <div class="bento-grid" id="menuGrid">
+                <!-- Burgers & Snacks -->
+                <div class="menu-category active" data-category="burgers">
+                    <div class="bento-item reveal-up" data-item="cheeseburger">
+                        <div class="item-image">
+                            <div class="image-placeholder burger-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.cheeseburger.name">Cheeseburger</h3>
+                            <p class="item-price">9,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="cheeseburger-pommes">
+                        <div class="item-image">
+                            <div class="image-placeholder burger-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.cheeseburger_pommes.name">Cheeseburger mit Pommes</h3>
+                            <p class="item-price">12,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="chickenburger">
+                        <div class="item-image">
+                            <div class="image-placeholder burger-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.chickenburger.name">Chickenburger</h3>
+                            <p class="item-price">7,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="chicken-nuggets">
+                        <div class="item-image">
+                            <div class="image-placeholder snacks-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.chicken_nuggets.name">Chicken Nuggets mit Pommes</h3>
+                            <p class="item-price">12,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="double-cheeseburger">
+                        <div class="item-image">
+                            <div class="image-placeholder burger-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.double_cheeseburger.name">Double Cheeseburger</h3>
+                            <p class="item-price">11,90 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="veggie-burger">
+                        <div class="item-image">
+                            <div class="image-placeholder burger-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.veggie_burger.name">Vegetarischer Burger</h3>
+                            <p class="item-price">8,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="pommes">
+                        <div class="item-image">
+                            <div class="image-placeholder snacks-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.pommes.name">Pommes Frites</h3>
+                            <p class="item-price">4,50 €</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hot Dogs -->
+                <div class="menu-category" data-category="hotdogs">
+                    <div class="bento-item reveal-up" data-item="hotdog">
+                        <div class="item-image">
+                            <div class="image-placeholder hotdog-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.hotdog.name">Hot Dog</h3>
+                            <p class="item-price">4,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="hotdog-pommes">
+                        <div class="item-image">
+                            <div class="image-placeholder hotdog-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.hotdog_pommes.name">Hot Dog mit Pommes</h3>
+                            <p class="item-price">9,50 €</p>
+                        </div>
+                    </div>
+
+                    <div class="bento-item reveal-up" data-item="wiener">
+                        <div class="item-image">
+                            <div class="image-placeholder hotdog-img"></div>
+                        </div>
+                        <div class="item-content">
+                            <h3 class="item-name" data-i18n="menu.items.wiener.name">2 Wiener mit Brot</h3>
+                            <p class="item-price">4,50 €</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drinks -->
+                <div class="menu-category" data-category="drinks">
+                    <div class="drinks-grid">
+                        <!-- Beer -->
+                        <div class="drink-section reveal-up">
+                            <h3 class="drink-category-title" data-i18n="menu.drinks.beer">Bier</h3>
+                            <div class="drink-list">
+                                <div class="drink-item">
+                                    <span class="drink-name">Härle Gold vom Fass</span>
+                                    <span class="drink-price">0,3l – 2,50€ | 0,5l – 3,70€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Härle Pils (Flasche 0,33l)</span>
+                                    <span class="drink-price">3,30€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Hefeweizen vom Fass (0,5l)</span>
+                                    <span class="drink-price">3,90€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Radler (0,5l)</span>
+                                    <span class="drink-price">3,50€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Alkoholfreies Weizen (0,5l)</span>
+                                    <span class="drink-price">3,50€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Kristallweizen (0,5l)</span>
+                                    <span class="drink-price">3,50€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Cola Weizen / Russ (0,5l)</span>
+                                    <span class="drink-price">3,90€</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cocktails -->
+                        <div class="drink-section reveal-up">
+                            <h3 class="drink-category-title" data-i18n="menu.drinks.cocktails">Cocktails & Longdrinks</h3>
+                            <div class="drink-list">
+                                <div class="drink-item">
+                                    <span class="drink-name">Hugo Spritz</span>
+                                    <span class="drink-price">5,30€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Special Naruendi Cocktail</span>
+                                    <span class="drink-price">6,50€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Aperol Spritz</span>
+                                    <span class="drink-price">6,20€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Lillet</span>
+                                    <span class="drink-price">6,80€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Mojito</span>
+                                    <span class="drink-price">9,50€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Whiskey Sour</span>
+                                    <span class="drink-price">7,80€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Whiskey Cola</span>
+                                    <span class="drink-price">7,50€</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shots -->
+                        <div class="drink-section reveal-up">
+                            <h3 class="drink-category-title" data-i18n="menu.drinks.shots">Shots</h3>
+                            <div class="drink-list">
+                                <div class="drink-item">
+                                    <span class="drink-name">Jägermeister Shot</span>
+                                    <span class="drink-price">3,90€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Jäger Bomb</span>
+                                    <span class="drink-price">6,30€</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Non-Alcoholic -->
+                        <div class="drink-section reveal-up">
+                            <h3 class="drink-category-title" data-i18n="menu.drinks.non_alcoholic">Alkoholfreie Getränke</h3>
+                            <div class="drink-list">
+                                <div class="drink-item">
+                                    <span class="drink-name">Cola / Fanta / Sprite (0,5l)</span>
+                                    <span class="drink-price">2,80€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Mineralwasser (0,3l – 0,5l)</span>
+                                    <span class="drink-price">2,50€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Apfelsaftschorle (0,5l)</span>
+                                    <span class="drink-price">2,90€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Seeztingle (0,33l)</span>
+                                    <span class="drink-price">2,90€</span>
+                                </div>
+                                <div class="drink-item">
+                                    <span class="drink-name">Tee</span>
+                                    <span class="drink-price">2,00€</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location" class="location-section">
+        <div class="container">
+            <h2 class="section-title reveal-up" data-i18n="location.title">The Location</h2>
+            <div class="location-content reveal-up">
+                <div class="location-info">
+                    <div class="status-indicator">
+                        <span class="pulse-dot"></span>
+                        <span class="status-text" data-i18n="location.status">Jetzt geöffnet bis 21:00 Uhr</span>
+                    </div>
+                    <h3 class="location-name">Sri Lanka ET Italy</h3>
+                    <p class="location-address">
+                        Im Schützenverein Wolfegg<br>
+                        88364 Wolfegg<br>
+                        Deutschland
+                    </p>
+                    <div class="opening-hours">
+                        <h4 data-i18n="location.hours.title">Öffnungszeiten</h4>
+                        <p data-i18n="location.hours.info">Geöffnet bis 21:00 Uhr<br>Warme Küche bis 21:00 Uhr</p>
+                    </div>
+                </div>
+                <div class="location-map">
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2674.8!2d9.8!3d47.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDfCsDQ4JzAwLjAiTiA5wrA0OCcwMC4wIkU!5e0!3m2!1sde!2sde!4v1234567890"
+                            width="600" 
+                            height="450" 
+                            style="border:0; filter: invert(90%) hue-rotate(180deg);" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 data-i18n="footer.contact.title">Kontakt</h3>
+                    <p>
+                        Sri Lanka ET Italy<br>
+                        Im Schützenverein Wolfegg<br>
+                        88364 Wolfegg<br>
+                        Deutschland
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3 data-i18n="footer.hours.title">Öffnungszeiten</h3>
+                    <p data-i18n="footer.hours.info">
+                        Geöffnet bis 21:00 Uhr<br>
+                        Warme Küche bis 21:00 Uhr
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3 data-i18n="footer.legal.title">Rechtliches</h3>
+                    <div class="footer-links">
+                        <a href="#" id="impressumLink" data-i18n="footer.legal.impressum">Impressum</a>
+                        <a href="#" id="datenschutzLink" data-i18n="footer.legal.datenschutz">Datenschutz</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sri Lanka ET Italy. <span data-i18n="footer.rights">Alle Rechte vorbehalten.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Impressum Modal -->
+    <div id="impressumModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2 data-i18n="impressum.title">Impressum</h2>
+            <div class="legal-content">
+                <h3 data-i18n="impressum.operator">Angaben gemäß § 5 TMG</h3>
+                <p>
+                    Sri Lanka ET Italy<br>
+                    Im Schützenverein Wolfegg<br>
+                    88364 Wolfegg<br>
+                    Deutschland
+                </p>
+                <h3 data-i18n="impressum.contact">Kontakt</h3>
+                <p>
+                    Telefon: +49 (0) XXX XXXXXXX<br>
+                    E-Mail: info@srilanka-et-italy.de
+                </p>
+                <h3 data-i18n="impressum.responsible">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+                <p>
+                    [Inhabername]<br>
+                    Im Schützenverein Wolfegg<br>
+                    88364 Wolfegg
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datenschutz Modal -->
+    <div id="datenschutzModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2 data-i18n="datenschutz.title">Datenschutzerklärung</h2>
+            <div class="legal-content">
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header" data-i18n="datenschutz.general.title">1. Allgemeine Hinweise</button>
+                        <div class="accordion-content">
+                            <p data-i18n="datenschutz.general.content">
+                                Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" data-i18n="datenschutz.collection.title">2. Datenerfassung auf dieser Website</button>
+                        <div class="accordion-content">
+                            <p data-i18n="datenschutz.collection.content">
+                                Diese Website verwendet SSL-Verschlüsselung aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte. Wir verwenden nur technisch notwendige Cookies.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" data-i18n="datenschutz.cookies.title">3. Cookies</button>
+                        <div class="accordion-content">
+                            <p data-i18n="datenschutz.cookies.content">
+                                Diese Website verwendet ausschließlich technisch notwendige Cookies, die für den Betrieb der Website erforderlich sind. Diese Cookies speichern keine personenbezogenen Daten und werden automatisch gelöscht, wenn Sie Ihren Browser schließen.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" data-i18n="datenschutz.rights.title">4. Ihre Rechte</button>
+                        <div class="accordion-content">
+                            <p data-i18n="datenschutz.rights.content">
+                                Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder Löschung dieser Daten.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Detail Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="item-detail">
+                <div class="item-detail-image">
+                    <div class="image-placeholder"></div>
+                </div>
+                <div class="item-detail-info">
+                    <h2 id="itemDetailName"></h2>
+                    <p id="itemDetailPrice"></p>
+                    <div class="item-detail-description">
+                        <p id="itemDetailDescription"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
