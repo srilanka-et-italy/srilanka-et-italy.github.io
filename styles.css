@@ -196,7 +196,7 @@ p {
     z-index: 2;
     text-align: center;
     max-width: 1200px;
-    padding: 6rem 2rem 0 2rem;
+    padding: var(--spacing-xl) 2rem 0 2rem;
     animation: fadeInUp 1s ease;
 }
 
@@ -918,7 +918,7 @@ section {
     }
 
     .hero-content {
-        padding: 8rem 2rem 0 2rem;
+        padding: var(--spacing-xxl) 2rem 0 2rem;
     }
 
     .hero-cta {
