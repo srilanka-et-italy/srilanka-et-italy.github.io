@@ -710,15 +710,27 @@ function initSmoothScroll() {
 }
 
 // ============================================
-// Parallax Effect
+// Parallax Effect & Scroll Indicator
 // ============================================
 function initParallax() {
     const hero = document.querySelector('.hero');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
     if (!hero) return;
     
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         const parallaxSpeed = 0.5;
+        
+        // Hide scroll indicator when user starts scrolling
+        if (scrollIndicator) {
+            if (scrolled > 100) {
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.visibility = 'hidden';
+            } else {
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.visibility = 'visible';
+            }
+        }
         
         if (scrolled < window.innerHeight) {
             hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
