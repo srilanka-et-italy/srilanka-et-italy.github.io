@@ -280,7 +280,10 @@ p {
     bottom: 3rem;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 10;
     animation: bounce 2s infinite;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .scroll-arrow {
@@ -378,6 +381,8 @@ section {
    Menu Section
    ============================================ */
 .menu-section {
+    position: relative;
+    z-index: 100;
     background: linear-gradient(to bottom, var(--obsidian-black), var(--deep-black));
     padding-top: calc(var(--spacing-xxl) + var(--spacing-md));
 }
