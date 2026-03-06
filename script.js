@@ -24,14 +24,14 @@ const translations = {
             subtitle: "The Silk Road & The Marble Way",
             cta1: "Menü entdecken",
             cta2: "Uns besuchen",
-            hours: "Geöffnet bis 21:00 Uhr",
+            hours: "Geöffnet von 11:00 bis 21:00 Uhr",
             scroll: "Scrollen"
         },
         menu: {
             title: "Unsere Speisekarte",
             subtitle: "Eine kulinarische Reise zwischen Sri Lanka und Italien",
             burgers: {
-                title: "Burger",
+                title: "Burger & Snacks",
                 description: "Saftige Burger mit frischen Zutaten"
             },
             hotdogs: {
@@ -40,16 +40,38 @@ const translations = {
             },
             drinks: {
                 title: "Getränkekarte",
-                description: "Biere, Cocktails und Erfrischungen"
+                description: "Biere, Cocktails und Erfrischungen",
+                beer: "Bier",
+                cocktails: "Cocktails & Longdrinks",
+                shots: "Shots",
+                nonAlcoholic: "Alkoholfreie Getränke"
             },
             items: {
                 cheeseburger: "Cheeseburger",
+                pommesFrites: "Pommes Frites",
+                chickenNuggets: "Chicken Nuggets mit Pommes",
                 chickenburger: "Chickenburger",
+                doubleCheeseburger: "Double Cheeseburger",
+                veggiBurger: "Vegetarischer Burger",
                 hotdog: "Hot Dog",
+                hotdogPommes: "Hot Dog mit Pommes",
                 wiener: "2 Wiener mit Brot",
-                beer: "Härle Gold vom Fass",
-                cocktails: "Cocktails & Longdrinks",
-                shots: "Shots"
+                haerleGold: "Härle Gold vom Fass 0,3l",
+                haerlePils: "Härle Pils (Flasche) 0,3l",
+                hefeweizen: "Hefeweizen vom Fass 0,5l",
+                hugoSpritz: "Hugo Spritz",
+                specialCocktail: "Special Hurricane Cocktail",
+                aperolSpritz: "Aperol Spritz",
+                lillet: "Lillet",
+                mojito: "Mojito",
+                whiskeySour: "Whiskey Sour",
+                whiskeyCola: "Whiskey Cola",
+                jaegermeister: "Jägermeister Shot",
+                jaegerBomb: "Jäger Bomb",
+                softDrinks: "Cola / Fanta / Sprite 0,3l",
+                mineralWasser: "Mineralwasser 0,3l",
+                apfelSchorle: "Apfelsaftschorle 0,3l",
+                tee: "Tee"
             },
             note: "Alle Preise verstehen sich in Euro. Weitere Informationen finden Sie auf unseren Menükarten vor Ort."
         },
@@ -59,7 +81,7 @@ const translations = {
             hours: {
                 title: "Öffnungszeiten",
                 status: "Jetzt geöffnet",
-                info: "Geöffnet bis 21:00 Uhr<br>Warme Küche bis 21:00 Uhr"
+                info: "Täglich von 11:00 bis 21:00 Uhr<br>Warme Küche bis 21:00 Uhr"
             },
             address: {
                 title: "Adresse"
@@ -72,7 +94,7 @@ const translations = {
             tagline: "The Silk Road & The Marble Way",
             hours: {
                 title: "Öffnungszeiten",
-                info: "Geöffnet bis 21:00 Uhr<br>Warme Küche bis 21:00 Uhr"
+                info: "Täglich von 11:00 bis 21:00 Uhr<br>Warme Küche bis 21:00 Uhr"
             },
             contact: {
                 title: "Kontakt"
@@ -103,14 +125,14 @@ const translations = {
             subtitle: "The Silk Road & The Marble Way",
             cta1: "Discover Menu",
             cta2: "Visit Us",
-            hours: "Open until 9:00 PM",
+            hours: "Open from 11:00 AM to 9:00 PM",
             scroll: "Scroll"
         },
         menu: {
             title: "Our Menu",
             subtitle: "A culinary journey between Sri Lanka and Italy",
             burgers: {
-                title: "Burgers",
+                title: "Burgers & Snacks",
                 description: "Juicy burgers with fresh ingredients"
             },
             hotdogs: {
@@ -119,16 +141,38 @@ const translations = {
             },
             drinks: {
                 title: "Drinks Menu",
-                description: "Beers, cocktails and refreshments"
+                description: "Beers, cocktails and refreshments",
+                beer: "Beer",
+                cocktails: "Cocktails & Longdrinks",
+                shots: "Shots",
+                nonAlcoholic: "Non-Alcoholic Drinks"
             },
             items: {
                 cheeseburger: "Cheeseburger",
+                pommesFrites: "French Fries",
+                chickenNuggets: "Chicken Nuggets with Fries",
                 chickenburger: "Chicken Burger",
+                doubleCheeseburger: "Double Cheeseburger",
+                veggiBurger: "Vegetarian Burger",
                 hotdog: "Hot Dog",
+                hotdogPommes: "Hot Dog with Fries",
                 wiener: "2 Wieners with Bread",
-                beer: "Härle Gold Draft",
-                cocktails: "Cocktails & Longdrinks",
-                shots: "Shots"
+                haerleGold: "Härle Gold Draft 0.3l",
+                haerlePils: "Härle Pils (Bottle) 0.3l",
+                hefeweizen: "Hefeweizen Draft 0.5l",
+                hugoSpritz: "Hugo Spritz",
+                specialCocktail: "Special Hurricane Cocktail",
+                aperolSpritz: "Aperol Spritz",
+                lillet: "Lillet",
+                mojito: "Mojito",
+                whiskeySour: "Whiskey Sour",
+                whiskeyCola: "Whiskey Cola",
+                jaegermeister: "Jägermeister Shot",
+                jaegerBomb: "Jäger Bomb",
+                softDrinks: "Cola / Fanta / Sprite 0.3l",
+                mineralWasser: "Mineral Water 0.3l",
+                apfelSchorle: "Apple Spritzer 0.3l",
+                tee: "Tea"
             },
             note: "All prices are in Euro. More information can be found on our menus on-site."
         },
@@ -138,7 +182,7 @@ const translations = {
             hours: {
                 title: "Opening Hours",
                 status: "Now open",
-                info: "Open until 9:00 PM<br>Hot food until 9:00 PM"
+                info: "Daily from 11:00 AM to 9:00 PM<br>Hot food until 9:00 PM"
             },
             address: {
                 title: "Address"
@@ -151,7 +195,7 @@ const translations = {
             tagline: "The Silk Road & The Marble Way",
             hours: {
                 title: "Opening Hours",
-                info: "Open until 9:00 PM<br>Hot food until 9:00 PM"
+                info: "Daily from 11:00 AM to 9:00 PM<br>Hot food until 9:00 PM"
             },
             contact: {
                 title: "Contact"
