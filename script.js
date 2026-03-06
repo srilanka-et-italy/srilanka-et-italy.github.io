@@ -30,9 +30,13 @@ const translations = {
         menu: {
             title: "Unsere Speisekarte",
             subtitle: "Eine kulinarische Reise zwischen Sri Lanka und Italien",
-            food: {
-                title: "Burger & Snacks",
-                description: "Saftige Burger, knusprige Hot Dogs und mehr"
+            burgers: {
+                title: "Burger",
+                description: "Saftige Burger mit frischen Zutaten"
+            },
+            hotdogs: {
+                title: "Hot Dogs & Wiener",
+                description: "Knusprige Hot Dogs und klassische Wiener"
             },
             drinks: {
                 title: "Getränkekarte",
@@ -42,6 +46,7 @@ const translations = {
                 cheeseburger: "Cheeseburger",
                 chickenburger: "Chickenburger",
                 hotdog: "Hot Dog",
+                wiener: "2 Wiener mit Brot",
                 beer: "Härle Gold vom Fass",
                 cocktails: "Cocktails & Longdrinks",
                 shots: "Shots"
@@ -104,9 +109,13 @@ const translations = {
         menu: {
             title: "Our Menu",
             subtitle: "A culinary journey between Sri Lanka and Italy",
-            food: {
-                title: "Burgers & Snacks",
-                description: "Juicy burgers, crispy hot dogs and more"
+            burgers: {
+                title: "Burgers",
+                description: "Juicy burgers with fresh ingredients"
+            },
+            hotdogs: {
+                title: "Hot Dogs & Wieners",
+                description: "Crispy hot dogs and classic wieners"
             },
             drinks: {
                 title: "Drinks Menu",
@@ -116,6 +125,7 @@ const translations = {
                 cheeseburger: "Cheeseburger",
                 chickenburger: "Chicken Burger",
                 hotdog: "Hot Dog",
+                wiener: "2 Wieners with Bread",
                 beer: "Härle Gold Draft",
                 cocktails: "Cocktails & Longdrinks",
                 shots: "Shots"
