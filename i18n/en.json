@@ -9,31 +9,42 @@
         "eyebrow": "Wolfegg's Finest",
         "title1": "Silk Road meets ",
         "title_it": "Marble Way",
-        "desc": "Sri Lankan spice meets Italian tradition — in the heart of the Allgäu.",
+        "desc": "Sri Lankan spice art meets Italian kitchen tradition — in the heart of the Allgäu.",
         "cta_menu": "View Menu",
         "cta_visit": "Visit Us",
-        "open_status": "Open Now · Kitchen until 9 PM"
+        "open_status": "Open Now · Kitchen until 9:00 PM"
     },
     "strip": {
-        "club": "Inside Wolfegg Shooting Club",
+        "club": "At the Wolfegg Shooting Club",
         "open": "Open Daily"
     },
     "about": {
         "label": "Our Story",
         "title1": "Two Cultures, ",
         "title_it": "One Passion",
-        "body1": "Inside the Wolfegg Shooting Club, something special has emerged: a kitchen that connects two worlds. The spice of the Indian Ocean and the soul of Italy — not an experiment, but authentic fusion.",
+        "body1": "Inside the Wolfegg Shooting Club, something special emerged: a kitchen that connects two worlds. The spice of the Indian Ocean and the soul of Italy — not an experiment, but true fusion.",
         "body2": "Prepared fresh every day, with ingredients we know and love. You can taste the difference.",
-        "pill1": "🌿 Fresh ingredients",
-        "pill2": "🍋 Daily fresh",
-        "pill3": "🤝 Family business",
-        "pill4": "🌶 Authentic spices",
+        "pill1": "🌿 Fresh Ingredients",
+        "pill2": "🍋 Daily Fresh",
+        "pill3": "🤝 Family Business",
+        "pill4": "🌶 Authentic Spices",
         "card_sl_title": "Sri Lanka",
         "card_sl_desc": "Coconut, curry, cinnamon — the flavors of an island that supplied the world with spices.",
         "card_it_title": "Italia",
         "card_it_desc": "Pasta, risotto, dolce — cooking as a philosophy of life, handmade with heart and soul.",
         "card_fusion_title": "Fusion",
-        "card_fusion_desc": "Where both meet, something completely unique is created — right here in the Allgäu."
+        "card_fusion_desc": "Where both meet, something completely unique is created — right here in the Allgäu region."
+    },
+    "club": {
+        "label": "Our Home",
+        "title1": "Shooting Club ",
+        "title2": "Tell Wolfegg",
+        "desc": "Our restaurant is a proud part of SG Tell Wolfegg. Experience sport and culinary delights in one place.",
+        "sport1": "Archery",
+        "sport2": "Air Rifles",
+        "sport3": "Blowgun",
+        "sport4": "Steel Darts",
+        "link": "More about the club"
     },
     "menu": {
         "label": "Menu",
@@ -48,14 +59,16 @@
         "title1": "In the heart of ",
         "title_it": "Wolfegg",
         "hours_label": "Opening Hours",
-        "hours_desc": "Open daily<br>Kitchen until 9:00 PM",
+        "hours_desc": "Open Daily<br>Kitchen until 9:00 PM",
         "address_label": "Address",
-        "address_desc": "Rötenbacher Str. 33<br>88364 Wolfegg, Germany<br>Inside the Shooting Club",
+        "address_desc": "Rötenbacher Str. 33<br>88364 Wolfegg, Germany<br>At the Shooting Club",
         "contact_label": "Contact",
-        "route_btn": "→ Plan Route"
+        "route_btn": "→ Plan Route",
+        "map_load_hint": "Click to activate the interactive map",
+        "map_load_btn": "Load Map"
     },
     "footer": {
-        "imprint": "Imprint",
+        "imprint": "Legal Notice",
         "privacy": "Privacy Policy",
         "copy": "© 2025 Sri Lanka ET Italy · Wolfegg"
     },
@@ -63,7 +76,7 @@
         "back": "Back to Home"
     },
     "impressum": {
-        "title": "Imprint",
+        "title": "Legal Notice (Imprint)",
         "email": "Email",
         "section1": {
             "title": "Information according to § 5 TMG"
@@ -76,15 +89,74 @@
         },
         "section4": {
             "title": "Liability for Content",
-            "content": "As a service provider, we are responsible for our own content on these pages in accordance with § 7 Para. 1 TMG under general law. According to §§ 8 to 10 TMG, however, we as a service provider are not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity."
+            "content": "As a service provider, we are responsible for our own content on these pages according to the general laws pursuant to § 7 para. 1 TMG. According to §§ 8 to 10 TMG, we are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity."
         },
         "section5": {
             "title": "Liability for Links",
-            "content": "Our website contains links to external third-party websites over whose content we have no influence. Therefore, we cannot assume any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages."
+            "content": "Our offer contains links to external websites of third parties, on whose contents we have no influence. Therefore, we cannot assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the content of the linked pages."
         },
         "section6": {
             "title": "Copyright",
-            "content": "The content and works created by the site operators on these pages are subject to German copyright law. The reproduction, editing, distribution and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator."
+            "content": "The content and works created by the site operators on these pages are subject to German copyright law. Duplication, editing, distribution and any kind of use outside the limits of copyright law require the written consent of the respective author or creator."
+        },
+        "section7": {
+            "title": "EU Dispute Resolution",
+            "content": "The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/. Our email address can be found above."
+        },
+        "section8": {
+            "title": "Consumer Dispute Resolution",
+            "content": "We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board."
         }
+    },
+    "datenschutz": {
+        "title": "Privacy Policy",
+        "email": "Email",
+        "section1": {
+            "title": "1. Privacy at a Glance",
+            "subtitle": "General Notes",
+            "content": "The following information provides a simple overview of what happens to your personal data when you visit this website. Personal data is any data with which you can be personally identified. Detailed information on the subject of data protection can be found in our privacy policy listed below this text."
+        },
+        "section2": {
+            "title": "2. Responsible Body",
+            "intro": "The responsible body for data processing on this website is:",
+            "content": "The responsible body is the natural or legal person who alone or jointly with others decides on the purposes and means of processing personal data (e.g., names, email addresses, etc.)."
+        },
+        "section3": {
+            "title": "3. Data Collection on this Website",
+            "subtitle": "How do we collect your data?",
+            "content1": "Your data is partly collected by you communicating it to us. This could be data that you send us by email.",
+            "content2": "Other data is collected automatically or after your consent when visiting the website by our IT systems. This is primarily technical data (e.g., internet browser, operating system, or time of page access). This data is collected automatically as soon as you enter this website."
+        },
+        "section4": {
+            "title": "What do we use your data for?",
+            "content": "Part of the data is collected to ensure the error-free provision of the website. Other data can be used to analyze your user behavior."
+        },
+        "section5": {
+            "title": "What rights do you have regarding your data?",
+            "content": "You have the right to receive information about the origin, recipient, and purpose of your stored personal data free of charge at any time. You also have a right to request the correction or deletion of this data. If you have given your consent to data processing, you can revoke this consent for the future at any time. You also have the right to request the restriction of processing of your personal data under certain circumstances."
+        },
+        "section6": {
+            "title": "4. Hosting",
+            "content": "This website is hosted by Firebase Hosting (Google). The provider is Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland. When you visit the website, various types of data are automatically collected, such as IP addresses. For details, please see Google's privacy policy: https://policies.google.com/privacy."
+        },
+        "section7": {
+            "title": "5. General Notes and Mandatory Information",
+            "subtitle": "SSL or TLS Encryption",
+            "content": "For security reasons and to protect the transmission of confidential content, such as inquiries you send to us as the site operator, this site uses SSL or TLS encryption. You can recognize an encrypted connection by the fact that the address line of the browser changes from \"http://\" to \"https://\" and by the lock symbol in your browser line."
+        },
+        "section8": {
+            "title": "6. Cookies and Storage",
+            "content1": "This website does not use tracking cookies. We only use your browser's local storage (localStorage) to store your chosen language (German, English, or Tamil). This is technically necessary to display the website in your preferred language (Art. 6 para. 1 lit. f GDPR).",
+            "content2": "When embedding Google Maps, Google's own cookies may be set, over which we have no influence."
+        },
+        "section9": {
+            "title": "7. Contact",
+            "content": "If you contact us via email, your query including all personal data (name, query) will be stored and processed by us for the purpose of processing your request. We do not pass on this data without your consent."
+        },
+        "section10": {
+            "title": "8. Google Maps",
+            "content": "This site uses the Google Maps mapping service. The provider is Google Ireland Limited (\"Google\"), Gordon House, Barrow Street, Dublin 4, Ireland. To use the functions of Google Maps, it is necessary to store your IP address. This information is usually transmitted to a Google server in the USA and stored there. The provider of this page has no influence on this data transmission."
+        },
+        "date": "Last updated: March 2025"
     }
 }

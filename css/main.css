@@ -198,16 +198,20 @@ section {
 /* ── HERO ── */
 #hero {
   padding-top: 64px;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5rem;
+  gap: 4rem;
 }
 
 .hero-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 5rem 4rem 5rem 5rem;
+  padding: 0;
 }
 
 .hero-eyebrow {
@@ -289,21 +293,30 @@ section {
 }
 
 .hero-visual {
+  flex: 0 0 400px;
+  height: 500px;
   position: relative;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(28, 20, 16, 0.25);
+  cursor: zoom-in;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--sand);
+  border: 1px solid var(--border);
 }
 
-.hero-visual-inner {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: 3px;
-  background: var(--cream);
+.hero-visual:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 35px 60px -15px rgba(28, 20, 16, 0.3);
+}
+
+.hero-visual:hover .hv-img img {
+  transform: scale(1.08);
 }
 
 .hv-img {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -311,24 +324,22 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .7s ease;
-}
-
-.hv-img:hover img {
-  transform: scale(1.04);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-badge {
   position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  background: rgba(253, 250, 245, .95);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1rem 1.4rem;
-  text-align: center;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--white);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 20px rgba(28, 20, 16, .08);
 }
 
 .badge-et {
@@ -448,6 +459,51 @@ section {
   font-size: .8rem;
   color: var(--muted);
   line-height: 1.6;
+}
+
+/* ── CLUB ── */
+#club {
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+.club-body {
+  font-size: .97rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: var(--muted);
+  margin: 1.4rem 0 2rem;
+}
+
+.club-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cg-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--cream);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-size: .85rem;
+  color: var(--ink);
+}
+
+.cg-icon {
+  font-size: 1.2rem;
+}
+
+.cv-img img {
+  width: 100%;
+  height: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 /* ── MENU ── */
@@ -695,7 +751,11 @@ footer {
   }
 
   #hero {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    padding: 6rem 1.5rem;
+    height: auto;
+    min-height: auto;
+    gap: 3rem;
   }
 
   .hero-content {
@@ -703,9 +763,11 @@ footer {
   }
 
   .hero-visual {
-    height: 60vw;
+    flex: 0 0 450px;
+    width: 100%;
+    max-width: 400px;
+    height: 500px;
     display: block;
-    position: relative;
   }
 
   section {
@@ -713,6 +775,7 @@ footer {
   }
 
   #about,
+  #club,
   #location {
     grid-template-columns: 1fr;
     gap: 3rem;

@@ -7,6 +7,7 @@ class App {
             { id: 'nav-placeholder', file: 'components/nav.html' },
             { id: 'hero-placeholder', file: 'components/hero.html' },
             { id: 'about-placeholder', file: 'components/about.html' },
+            { id: 'club-placeholder', file: 'components/club.html' },
             { id: 'menu-placeholder', file: 'components/menu.html' },
             { id: 'location-placeholder', file: 'components/location.html' },
             { id: 'footer-placeholder', file: 'components/footer.html' }
@@ -80,6 +81,19 @@ class App {
         // Close Lightbox on click (background or button)
         lb.addEventListener('click', () => {
             lb.classList.remove('active');
+        });
+
+        // Map Loading Logic (Facade)
+        document.addEventListener('click', (e) => {
+            const container = e.target.closest('#map-container');
+            if (container && !container.querySelector('iframe')) {
+                const template = container.querySelector('#map-template');
+                if (template) {
+                    const content = template.content.cloneNode(true);
+                    container.innerHTML = '';
+                    container.appendChild(content);
+                }
+            }
         });
     }
 }
