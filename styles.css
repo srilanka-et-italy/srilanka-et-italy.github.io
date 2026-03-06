@@ -379,6 +379,7 @@ section {
    ============================================ */
 .menu-section {
     background: linear-gradient(to bottom, var(--obsidian-black), var(--deep-black));
+    padding-top: calc(var(--spacing-xxl) + 2rem);
 }
 
 .menu-tabs {
@@ -952,6 +953,10 @@ section {
 
     .item-detail {
         grid-template-columns: 1fr;
+    }
+
+    .menu-section {
+        padding-top: calc(var(--spacing-xl) + 3rem);
     }
 
     .menu-tabs {
