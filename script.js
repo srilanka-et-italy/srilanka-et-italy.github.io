@@ -282,7 +282,6 @@ function initSmoothScroll() {
 }
 
 // ============================================
-<<<<<<< HEAD
 // Scroll Animations
 // ============================================
 function initScrollAnimations() {
@@ -318,27 +317,15 @@ function initScrollAnimations() {
 function initParallax() {
     const heroImage = document.querySelector('.hero-image');
     const scrollIndicator = document.querySelector('.scroll-indicator');
-=======
-// Parallax Effect & Scroll Indicator
-// ============================================
-function initParallax() {
-    const hero = document.querySelector('.hero');
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    if (!hero) return;
->>>>>>> origin/main
     
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         
-<<<<<<< HEAD
         if (heroImage) {
             heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
         }
         
         // Hide scroll indicator after scrolling
-=======
-        // Hide scroll indicator when user starts scrolling
->>>>>>> origin/main
         if (scrollIndicator) {
             if (scrolled > 100) {
                 scrollIndicator.style.opacity = '0';
@@ -347,13 +334,6 @@ function initParallax() {
                 scrollIndicator.style.opacity = '1';
                 scrollIndicator.style.visibility = 'visible';
             }
-<<<<<<< HEAD
-=======
-        }
-        
-        if (scrolled < window.innerHeight) {
-            hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
->>>>>>> origin/main
         }
     });
 }

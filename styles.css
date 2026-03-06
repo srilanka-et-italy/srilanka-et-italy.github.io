@@ -301,166 +301,8 @@ a {
     z-index: 2;
     text-align: center;
     max-width: 1200px;
-<<<<<<< HEAD
     padding: var(--spacing-xl) var(--spacing-md);
     animation: fadeInUp 1s ease-out;
-=======
-    padding: var(--spacing-xl) 2rem var(--spacing-md) 2rem;
-    animation: fadeInUp 1s ease;
-}
-
-.hero-logo {
-    margin-bottom: 2rem;
-    animation: fadeIn 1.5s ease;
-}
-
-.hero-logo img {
-    max-width: 600px;
-    width: 100%;
-    height: auto;
-    filter: drop-shadow(0 10px 30px rgba(212, 175, 55, 0.3));
-}
-
-.hero-title {
-    color: var(--brushed-gold);
-    margin-bottom: 1rem;
-    text-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
-    animation: fadeInUp 1.2s ease;
-}
-
-.hero-subtitle {
-    font-size: clamp(1.25rem, 3vw, 2rem);
-    color: var(--off-white);
-    margin-bottom: 3rem;
-    font-weight: var(--font-weight-light);
-    animation: fadeInUp 1.4s ease;
-}
-
-.hero-cta {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeInUp 1.6s ease;
-}
-
-.cta-primary,
-.cta-secondary {
-    display: inline-block;
-    padding: 1.25rem 3rem;
-    font-size: 1.125rem;
-    font-weight: var(--font-weight-semibold);
-    text-decoration: none;
-    border-radius: var(--radius-lg);
-    transition: all var(--transition-normal);
-    cursor: pointer;
-    border: 2px solid transparent;
-}
-
-.cta-primary {
-    background: var(--brushed-gold);
-    color: var(--obsidian-black);
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-}
-
-.cta-primary:hover {
-    background: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
-}
-
-.cta-secondary {
-    background: transparent;
-    color: var(--brushed-gold);
-    border-color: var(--brushed-gold);
-}
-
-.cta-secondary:hover {
-    background: rgba(212, 175, 55, 0.1);
-    border-color: var(--gold-light);
-    color: var(--gold-light);
-    transform: translateY(-2px);
-}
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    animation: bounce 2s infinite;
-    pointer-events: none;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.scroll-arrow {
-    width: 30px;
-    height: 50px;
-    border: 2px solid var(--brushed-gold);
-    border-radius: 20px;
-    position: relative;
-}
-
-.scroll-arrow::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background: var(--brushed-gold);
-    border-radius: 50%;
-    animation: scroll 2s infinite;
-}
-
-@keyframes scroll {
-    0% {
-        top: 10px;
-        opacity: 1;
-    }
-    100% {
-        top: 30px;
-        opacity: 0;
-    }
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateX(-50%) translateY(0);
-    }
-    50% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
->>>>>>> origin/main
-}
-    filter: drop-shadow(0 10px 30px rgba(212, 175, 55, 0.3));
-}
-
-.hero-title {
-    color: var(--brushed-gold);
-    margin-bottom: 1rem;
-    text-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
-    animation: fadeInUp 1.2s ease;
-}
-
-.hero-subtitle {
-    font-size: clamp(1.25rem, 3vw, 2rem);
-    color: var(--off-white);
-    margin-bottom: 3rem;
-    font-weight: var(--font-weight-light);
-    animation: fadeInUp 1.4s ease;
 }
 
 .hero-cta {
@@ -573,6 +415,104 @@ a {
 }
 
 @keyframes fadeInUp {
+    display: inline-block;
+    padding: 1.25rem 3rem;
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.cta-primary {
+    background: var(--brushed-gold);
+    color: var(--obsidian-black);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+.cta-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+}
+
+.cta-secondary {
+    background: transparent;
+    color: var(--brushed-gold);
+    border-color: var(--brushed-gold);
+}
+
+.cta-secondary:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+    transform: translateY(-2px);
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    animation: bounce 2s infinite;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.scroll-arrow {
+    width: 30px;
+    height: 50px;
+    border: 2px solid var(--brushed-gold);
+    border-radius: 20px;
+    position: relative;
+}
+
+.scroll-arrow::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--brushed-gold);
+    border-radius: 50%;
+    animation: scroll 2s infinite;
+}
+
+@keyframes scroll {
+    0% {
+        top: 10px;
+        opacity: 1;
+    }
+    100% {
+        top: 30px;
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(30px);
@@ -583,7 +523,6 @@ a {
     }
 }
 
-<<<<<<< HEAD
 .hero-badge {
     display: inline-block;
     padding: 0.5rem 1.5rem;
@@ -591,62 +530,6 @@ a {
     border: 1px solid var(--brushed-gold);
     border-radius: 50px;
     font-size: 0.875rem;
-=======
-/* ============================================
-   Container & Layout
-   ============================================ */
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-/* ============================================
-   Section Styles
-   ============================================ */
-section {
-    padding: var(--spacing-xxl) 0;
-}
-
-.section-title {
-    color: var(--brushed-gold);
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.section-subtitle {
-    text-align: center;
-    color: var(--gray-light);
-    font-size: 1.25rem;
-    margin-bottom: var(--spacing-lg);
-    font-weight: var(--font-weight-light);
-}
-
-/* ============================================
-   Menu Section
-   ============================================ */
-.menu-section {
-    position: relative;
-    z-index: 100;
-    background: linear-gradient(to bottom, var(--obsidian-black), var(--deep-black));
-    padding-top: calc(var(--spacing-xxl) + var(--spacing-md));
-}
-
-.menu-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: var(--spacing-lg);
-    flex-wrap: wrap;
-}
-
-.tab-btn {
-    background: transparent;
-    border: 2px solid var(--gray-dark);
-    color: var(--off-white);
-    font-family: var(--font-primary);
-    font-size: 1rem;
->>>>>>> origin/main
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.1em;
     text-transform: uppercase;
