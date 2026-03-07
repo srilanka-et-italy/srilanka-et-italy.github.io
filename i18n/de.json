@@ -12,11 +12,11 @@
         "desc": "Sri-lankische Gewürzkunst trifft auf italienische Küchentradition — im Herzen des Allgäus.",
         "cta_menu": "Speisekarte ansehen",
         "cta_visit": "Uns besuchen",
-        "open_status": "Jetzt geöffnet · Warme Küche bis 21:00 Uhr"
+        "open_status": "Mo - Sa: Warme Küche bis 21:00 Uhr"
     },
     "strip": {
         "club": "Im Schützenverein Wolfegg",
-        "open": "Täglich geöffnet"
+        "open": "Mo - Sa geöffnet"
     },
     "about": {
         "label": "Unsere Geschichte",
@@ -59,7 +59,7 @@
         "title1": "Mitten in ",
         "title_it": "Wolfegg",
         "hours_label": "Öffnungszeiten",
-        "hours_desc": "Täglich geöffnet<br>Warme Küche bis 21:00 Uhr",
+        "hours_desc": "Mo - Sa: Warme Küche bis 21:00 Uhr<br>Sonntag: Geschlossen",
         "address_label": "Adresse",
         "address_desc": "Rötenbacher Str. 33<br>88364 Wolfegg, Deutschland<br>Im Schützenverein",
         "contact_label": "Kontakt",

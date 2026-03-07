@@ -12,11 +12,11 @@
         "desc": "Sri Lankan spice art meets Italian kitchen tradition — in the heart of the Allgäu.",
         "cta_menu": "View Menu",
         "cta_visit": "Visit Us",
-        "open_status": "Open Now · Kitchen until 9:00 PM"
+        "open_status": "Mon - Sat: Kitchen until 9:00 PM"
     },
     "strip": {
         "club": "At the Wolfegg Shooting Club",
-        "open": "Open Daily"
+        "open": "Open Mon - Sat"
     },
     "about": {
         "label": "Our Story",
@@ -59,7 +59,7 @@
         "title1": "In the heart of ",
         "title_it": "Wolfegg",
         "hours_label": "Opening Hours",
-        "hours_desc": "Open Daily<br>Kitchen until 9:00 PM",
+        "hours_desc": "Mon - Sat: Kitchen until 9:00 PM<br>Sunday: Closed",
         "address_label": "Address",
         "address_desc": "Rötenbacher Str. 33<br>88364 Wolfegg, Germany<br>At the Shooting Club",
         "contact_label": "Contact",
