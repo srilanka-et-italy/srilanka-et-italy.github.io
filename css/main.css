@@ -197,12 +197,11 @@ section {
 
 /* ── HERO ── */
 #hero {
-  padding-top: 64px;
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5rem;
+  padding: calc(64px + 4vh) 5rem 4vh;
   gap: 4rem;
 }
 
@@ -563,6 +562,63 @@ section {
   text-align: left;
 }
 
+/* PDF card */
+.mc-pdf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-decoration: none;
+  background: var(--cream);
+}
+
+.mc-pdf:hover {
+  background: var(--white);
+}
+
+.mc-pdf-icon svg {
+  width: 52px;
+  height: 64px;
+}
+
+.mc-pdf-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.mc-pdf-sub {
+  font-size: .62rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--spice);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.mc-pdf-sub::before,
+.mc-pdf-sub::after {
+  content: '';
+  width: 14px;
+  height: 1px;
+  background: var(--spice);
+  opacity: .5;
+}
+
+.mc-pdf-badge {
+  font-size: .58rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: .22rem .6rem;
+  border-radius: 100px;
+}
+
 .menu-note {
   font-size: .72rem;
   color: var(--muted);
@@ -752,14 +808,10 @@ footer {
 
   #hero {
     flex-direction: column;
-    padding: 6rem 1.5rem;
+    padding: calc(64px + 2rem) 1.5rem 4rem;
     height: auto;
     min-height: auto;
     gap: 3rem;
-  }
-
-  .hero-content {
-    padding: 3rem 1.5rem;
   }
 
   .hero-visual {
