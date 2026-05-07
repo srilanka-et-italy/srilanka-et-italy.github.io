@@ -12,7 +12,11 @@
         "desc": "Sri-lankische Gewürzkunst trifft auf italienische Küchentradition — im Herzen des Allgäus.",
         "cta_menu": "Speisekarte ansehen",
         "cta_visit": "Uns besuchen",
-        "open_status": "Täglich außer Mi: 11–14 &amp; 17–21 Uhr Warme Küche"
+        "open_status": "Täglich außer Mi: 11–14 &amp; 17–21 Uhr Warme Küche",
+        "mday_kicker": "Nur bis Muttertag",
+        "mday_title": "Muttertags-Angebotskarte",
+        "mday_desc": "Unsere besondere Karte zum Muttertag entdecken.",
+        "mday_cta": "PDF anzeigen"
     },
     "strip": {
         "club": "Im Schützenverein Wolfegg",
@@ -50,6 +54,7 @@
         "label": "Speisekarte",
         "title": "Eine Reise auf dem Teller",
         "sub": "Von Kottu Roti bis Carbonara — entdecken Sie unsere Karte.",
+        "ambience": "Restaurant",
         "food": "Speisen",
         "drinks": "Getränke & Biere",
         "note": "Alle Preise in Euro inkl. MwSt. · Vollständige Karte vor Ort erhältlich."

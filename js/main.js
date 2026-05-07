@@ -26,6 +26,9 @@ class App {
 
         // Setup Event Listeners
         this.setupEventListeners();
+
+        // Show seasonal PDF promo until Mother's Day ends
+        this.setupMothersDayPromo();
     }
 
     async loadComponent(id, file) {
@@ -94,6 +97,37 @@ class App {
                     container.appendChild(content);
                 }
             }
+        });
+    }
+
+    setupMothersDayPromo() {
+        const modal = document.getElementById('mothersday-modal');
+        const link = document.getElementById('mothersday-pdf-link');
+        if (!modal || !link) return;
+
+        const promoKey = 'mothersDayPromoDismissed2026';
+        const pdfPath = 'assets/mothers day speisekarte pdf.pdf';
+        const promoEnd = new Date('2026-05-10T23:59:59+02:00');
+
+        link.href = encodeURI(pdfPath);
+
+        const isExpired = Date.now() > promoEnd.getTime();
+        const isDismissed = localStorage.getItem(promoKey) === '1';
+
+        if (isExpired || isDismissed) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            return;
+        }
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+
+        modal.addEventListener('click', (e) => {
+            if (!e.target.closest('[data-md-close="true"]')) return;
+            localStorage.setItem(promoKey, '1');
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
         });
     }
 }

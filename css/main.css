@@ -304,6 +304,48 @@ section {
   border: 1px solid var(--border);
 }
 
+.hero-seasonal {
+  cursor: default;
+  background: radial-gradient(120% 100% at 0% 0%, #fffaf0 0%, var(--sand) 55%, #eee3cf 100%);
+}
+
+.hero-seasonal-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .9rem;
+  padding: 2rem;
+}
+
+.hero-seasonal-kicker {
+  font-size: .66rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--spice);
+}
+
+.hero-seasonal-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.hero-seasonal-text {
+  font-size: .92rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 28ch;
+}
+
+.hero-seasonal-btn {
+  width: fit-content;
+}
+
 .hero-visual:hover {
   transform: translateY(-12px) scale(1.02);
   box-shadow: 0 35px 60px -15px rgba(28, 20, 16, 0.3);
@@ -524,6 +566,11 @@ section {
   gap: 1.2rem;
   max-width: 740px;
   margin: 0 auto 1.5rem;
+}
+
+.menu-grid-single {
+  grid-template-columns: 1fr;
+  max-width: 360px;
 }
 
 .mc {
@@ -796,6 +843,77 @@ footer {
   transform: scale(1.1);
 }
 
+/* ── MOTHER'S DAY PDF MODAL ── */
+.md-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: none;
+}
+
+.md-modal.active {
+  display: block;
+}
+
+.md-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 20, 16, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.md-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 470px);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2rem 1.5rem 1.6rem;
+  box-shadow: 0 24px 60px rgba(28, 20, 16, 0.28);
+  text-align: center;
+}
+
+.md-close {
+  position: absolute;
+  right: .75rem;
+  top: .7rem;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.md-kicker {
+  font-size: .66rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--spice);
+  margin-bottom: .7rem;
+}
+
+.md-card h3 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.25;
+  margin-bottom: .8rem;
+}
+
+.md-text {
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   nav {
@@ -822,6 +940,10 @@ footer {
     display: block;
   }
 
+  .hero-seasonal-inner {
+    padding: 1.4rem;
+  }
+
   section {
     padding: 4.5rem 1.5rem;
   }
@@ -842,5 +964,10 @@ footer {
     flex-direction: column;
     text-align: center;
     padding: 2rem 1.5rem;
+  }
+
+  .md-card {
+    padding: 1.8rem 1.1rem 1.2rem;
+    border-radius: 14px;
   }
 }

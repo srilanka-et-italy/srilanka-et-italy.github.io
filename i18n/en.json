@@ -12,7 +12,11 @@
         "desc": "Sri Lankan spice art meets Italian kitchen tradition — in the heart of the Allgäu.",
         "cta_menu": "View Menu",
         "cta_visit": "Visit Us",
-        "open_status": "Daily except Wed: 11 AM–2 PM &amp; 5–9 PM Kitchen"
+        "open_status": "Daily except Wed: 11 AM–2 PM &amp; 5–9 PM Kitchen",
+        "mday_kicker": "Only until Mother's Day",
+        "mday_title": "Mother's Day Special Menu",
+        "mday_desc": "Discover our special menu for Mother's Day.",
+        "mday_cta": "Open PDF"
     },
     "strip": {
         "club": "At the Wolfegg Shooting Club",
@@ -50,6 +54,7 @@
         "label": "Menu",
         "title": "A Journey on Your Plate",
         "sub": "From Kottu Roti to Carbonara — discover our menu.",
+        "ambience": "Restaurant",
         "food": "Dishes",
         "drinks": "Drinks & Beers",
         "note": "All prices in Euro incl. VAT · Full menu available on site."
