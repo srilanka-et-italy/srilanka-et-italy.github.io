@@ -27,8 +27,14 @@ class App {
         // Setup Event Listeners
         this.setupEventListeners();
 
+        // TODO(AI-AGENT, after 2026-05-10): Remove setupMothersDayPromo() call and the entire
+        // setupMothersDayPromo() method below. Also remove #mothersday-modal from index.html,
+        // #hero-seasonal-card from components/hero.html, and delete
+        // assets/"mothers day speisekarte pdf.pdf". Remove hero.mday_* keys from all i18n/*.json.
+        // Remove .hero-seasonal, .hero-seasonal-inner, .hero-seasonal-* CSS from main.css.
         // Show seasonal PDF promo until Mother's Day ends
         this.setupMothersDayPromo();
+        this.renderMothersDay();
     }
 
     async loadComponent(id, file) {
@@ -100,18 +106,55 @@ class App {
         });
     }
 
+    async renderMothersDay() {
+        const canvas = document.getElementById('mday-pdf-canvas');
+        if (!canvas || typeof pdfjsLib === 'undefined') return;
+
+        const promoEnd = new Date('2026-05-10T23:59:59+02:00');
+        if (Date.now() > promoEnd.getTime()) return;
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        try {
+            const pdf  = await pdfjsLib.getDocument('assets/mothers%20day%20speisekarte%20pdf.pdf').promise;
+            const page = await pdf.getPage(1);
+            const containerWidth = canvas.parentElement.clientWidth || 480;
+            const baseViewport   = page.getViewport({ scale: 1 });
+            const scale          = containerWidth / baseViewport.width;
+            const viewport       = page.getViewport({ scale });
+
+            canvas.width  = viewport.width;
+            canvas.height = viewport.height;
+
+            await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        } catch (e) {
+            console.warn('PDF preview failed:', e);
+        }
+    }
+
     setupMothersDayPromo() {
         const modal = document.getElementById('mothersday-modal');
         const link = document.getElementById('mothersday-pdf-link');
+        const heroCard = document.getElementById('hero-seasonal-card');
+
+        const promoEnd = new Date('2026-05-10T23:59:59+02:00');
+        const isExpired = Date.now() > promoEnd.getTime();
+
+        // Hide hero seasonal card after deadline
+        if (heroCard) {
+            if (isExpired) {
+                heroCard.style.display = 'none';
+            }
+        }
+
         if (!modal || !link) return;
 
         const promoKey = 'mothersDayPromoDismissed2026';
         const pdfPath = 'assets/mothers day speisekarte pdf.pdf';
-        const promoEnd = new Date('2026-05-10T23:59:59+02:00');
 
         link.href = encodeURI(pdfPath);
 
-        const isExpired = Date.now() > promoEnd.getTime();
         const isDismissed = localStorage.getItem(promoKey) === '1';
 
         if (isExpired || isDismissed) {
