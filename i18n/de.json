@@ -16,7 +16,8 @@
         "mday_kicker": "Nur bis Muttertag",
         "mday_title": "Muttertags-Angebotskarte",
         "mday_desc": "Unsere besondere Karte zum Muttertag entdecken.",
-        "mday_cta": "PDF anzeigen"
+        "mday_cta": "PDF anzeigen",
+        "mday_modal_desc": "Unsere Muttertagskarte ist nur bis Sonntag, 10.05.2026 verfügbar."
     },
     "strip": {
         "club": "Im Schützenverein Wolfegg",

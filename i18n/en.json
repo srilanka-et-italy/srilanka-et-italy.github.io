@@ -16,7 +16,8 @@
         "mday_kicker": "Only until Mother's Day",
         "mday_title": "Mother's Day Special Menu",
         "mday_desc": "Discover our special menu for Mother's Day.",
-        "mday_cta": "Open PDF"
+        "mday_cta": "Open PDF",
+        "mday_modal_desc": "Our Mother's Day menu is only available until Sunday, 10 May 2026."
     },
     "strip": {
         "club": "At the Wolfegg Shooting Club",
