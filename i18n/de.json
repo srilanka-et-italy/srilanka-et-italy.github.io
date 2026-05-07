@@ -57,7 +57,10 @@
         "ambience": "Restaurant",
         "food": "Speisen",
         "drinks": "Getränke & Biere",
-        "note": "Alle Preise in Euro inkl. MwSt. · Vollständige Karte vor Ort erhältlich."
+        "note": "Alle Preise in Euro inkl. MwSt. · Vollständige Karte vor Ort erhältlich.",
+        "pdf_open": "↗ Im neuen Tab öffnen",
+        "pdf_download": "↓ Herunterladen",
+        "mobile_hint": "Auf diesem Gerät kann die Karte nicht direkt angezeigt werden."
     },
     "location": {
         "label": "Besuchen Sie uns",
@@ -75,7 +78,11 @@
     "footer": {
         "imprint": "Impressum",
         "privacy": "Datenschutz",
-        "copy": "© 2025 Sri Lanka ET Italy · Wolfegg"
+        "copy": "© 2025 Sri Lanka ET Italy · Wolfegg",
+        "col_info": "Informationen",
+        "col_links": "Navigation",
+        "hours_val": "Mo, Di, Do–So geöffnet",
+        "kitchen": "Warme Küche bis 21:00 Uhr"
     },
     "legal": {
         "back": "Zurück zur Startseite"
