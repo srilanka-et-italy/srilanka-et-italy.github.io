@@ -1,8 +1,58 @@
 ## Plan: Firebase Admin-Panel für PDF-Verwaltung im Hero-Bereich
 
-**TL;DR:** Integration von Firebase Authentication, Storage und Firestore, um Admins das Hochladen und Zeitplanen von PDFs (max 2MB) für den Hero-Bereich zu ermöglichen. Mehrere PDFs können gleichzeitig aktiv sein und werden als Carousel/Slider dargestellt. Admin-UI wird als versteckter Bereich auf der Hauptseite implementiert (z.B. über `#admin` URL-Hash).
+**TL;DR:** Integration von Firebase Authentication, Storage und Firestore, um Admins das Hochladen und Zeitplanen von PDFs (max 2MB) für den Hero-Bereich zu ermöglichen. Mehrere PDFs können gleichzeitig aktiv sein und werden als Carousel/Slider dargestellt. Admin-Panel unter `/admin.html` als eigene Seite.
 
-**Empfohlener Ansatz:** Firebase SDK v10 (modular) nutzen, Firestore für Metadaten (PDF-URL, Start-/Enddatum, Titel), Storage für PDF-Dateien, Security Rules für Zugriffskontrolle.
+**Empfohlener Ansatz:** Firebase SDK v10 (modular) via **CDN** (kein Build-Step, kein Bundler), Firestore für Metadaten, Storage für PDF-Dateien, Security Rules für Zugriffskontrolle.
+
+---
+
+## ⚠️ Voraussetzungen — MUSS vor Agent-Start erledigt sein
+
+Firebase-Projekt `srilanka-et-italy` existiert bereits. Web-App wurde via CLI erstellt.
+
+### Schritt A: Firebase Console — manuelle Einstellungen
+1. [Firebase Console](https://console.firebase.google.com) → Projekt `srilanka-et-italy`
+2. **Authentication** → E-Mail/Passwort-Provider aktivieren
+3. **Firestore** → Datenbank erstellen (Production-Modus, Region: `eur3`)
+4. **Storage** → Standard-Bucket aktivieren (Bucket: `srilanka-et-italy.firebasestorage.app`)
+5. **Budget Alerts:** $5 / $20 / $50 einrichten (Abrechnung → Budgets)
+6. **App Check** → reCAPTCHA v3 → Site Key generieren → als GitHub Secret `RECAPTCHA_SITE_KEY` hinterlegen
+7. **Authentication → Settings** → E-Mail-Enumeration-Schutz AN + Passwort-Policy (min. 12 Zeichen)
+
+### Schritt B: GitHub Secrets hinterlegen
+Nur diese zwei Werte sind sensitiv und müssen als GitHub Secrets hinterlegt werden:
+
+| Secret Name | Wert | Woher |
+|-------------|------|-------|
+| `FIREBASE_API_KEY` | `AIzaSyDZxJMCh0Ur7Vq2eYIRzJ4H9j6I-VwnUd4` | Firebase CLI (bereits ermittelt) |
+| `RECAPTCHA_SITE_KEY` | `6Lc...` | [reCAPTCHA Console](https://www.google.com/recaptcha/admin) → v3 Key für `srilanka-et-italy.web.app` |
+
+GitHub → Repository Settings → Secrets and variables → Actions → New repository secret
+
+Alle anderen Firebase-Werte sind öffentliche Identifier (per Firebase-Design Client-seitig sicher) und stehen direkt im Code:
+```
+projectId:         srilanka-et-italy
+authDomain:        srilanka-et-italy.firebaseapp.com
+storageBucket:     srilanka-et-italy.firebasestorage.app
+messagingSenderId: 847762650004
+appId:             1:847762650004:web:1b7dccf7ca7cbe51b21581
+```
+
+### Schritt C: Admin-User anlegen
+1. Firebase Console → Authentication → User anlegen (E-Mail + sicheres Passwort)
+2. UID des Users kopieren (Spalte "User UID" in der User-Liste)
+3. Firestore → Collection `admins` → Dokument mit **Dokument-ID = UID** anlegen: `{email: "...", role: "admin", createdAt: <timestamp>}`
+
+### Schritt D: GitHub Actions Workflow anpassen
+Die bestehenden Workflows (`.github/workflows/firebase-hosting-merge.yml` + `firebase-hosting-pull-request.yml`) benötigen einen zusätzlichen Schritt der Secrets vor dem Deploy in `firebase-config.js` injiziert:
+
+```yaml
+# In beiden Workflow-Dateien nach "uses: actions/checkout@v4" einfügen:
+- name: Inject secrets into Firebase config
+  run: |
+    sed -i "s/__FIREBASE_API_KEY__/${{ secrets.FIREBASE_API_KEY }}/g" js/firebase-config.js
+    sed -i "s/__RECAPTCHA_SITE_KEY__/${{ secrets.RECAPTCHA_SITE_KEY }}/g" js/firebase-config.js
+```
 
 ---
 
@@ -19,10 +69,78 @@
    - **Budget Alerts einrichten:** $5, $20, $50/Monat mit E-Mail-Benachrichtigung
    - **App Check aktivieren:** reCAPTCHA v3 für Web, blockiert Bot-Traffic
    - **API Key Restrictions:** Firebase Console → Einstellungen → API-Schlüssel → Nur folgende APIs erlauben: Firestore, Storage, Auth, Remote Config (NICHT Admin SDK)
+   - **E-Mail-Enumeration-Schutz aktivieren:** Firebase Console → Authentication → Settings → "Protect against email enumeration" → ON (verhindert dass Angreifer per Login-Fehlercode gültige Admin-E-Mails erraten)
+   - **Passwort-Policy setzen:** Firebase Console → Authentication → Settings → Password policy → min. 12 Zeichen, Großbuchstaben + Zahlen + Sonderzeichen erzwingen
+   - **Security Headers in `firebase.json`** (stärker als CSP Meta-Tag — greift vor HTML-Parse):
+   ```json
+   "hosting": {
+     "headers": [{
+       "source": "**",
+       "headers": [
+         { "key": "X-Frame-Options", "value": "DENY" },
+         { "key": "X-Content-Type-Options", "value": "nosniff" },
+         { "key": "Referrer-Policy", "value": "no-referrer" },
+         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+         { "key": "Content-Security-Policy",
+           "value": "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://firebasestorage.googleapis.com https://identitytoolkit.googleapis.com; frame-src 'none'; object-src 'none';"
+         }
+       ]
+     }]
+   }
+   ```
+   → CSP Meta-Tag in `index.html` kann danach entfernt werden (Header hat Vorrang)
+   - **WICHTIG: `/admin.html` aus Rewrite-Catch-all ausschließen** — aktuell leitet `"**" → /index.html` auch `/admin.html` auf `index.html` um:
+   ```json
+   "rewrites": [
+     { "source": "/admin.html", "destination": "/admin.html" },
+     { "source": "**", "destination": "/index.html" }
+   ]
+   ```
 
 2. **Firebase SDK in Projekt integrieren**  
-   - Firebase SDK v10 (modular) über CDN oder npm installieren: auth, firestore, storage, **remoteConfig**, **appCheck**
-   - Neue Datei `js/firebase-config.js` erstellen mit Firebase Config und Initialisierung
+   - Firebase SDK v10 (modular) via **CDN** einbinden (kein npm/bundler — Projekt hat keinen Build-Step):
+   ```html
+   <!-- In index.html, vor main.js: -->
+   <script type="module" src="js/firebase-config.js"></script>
+   ```
+   - DOMPurify via CDN für Input-Sanitization:
+   ```html
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+   ```
+   - Luxon via CDN für Timezone-Handling (Europe/Berlin → UTC):
+   ```html
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+   ```
+   - Neue Datei `js/firebase-config.js` — `__FIREBASE_API_KEY__` und `__RECAPTCHA_SITE_KEY__` sind Platzhalter, die GitHub Actions vor dem Deploy ersetzt (siehe Voraussetzungen Schritt D):
+   ```javascript
+   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+   import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+   import { getAuth } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+   import { getStorage } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+   import { getRemoteConfig } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-remote-config.js';
+   import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js';
+
+   const firebaseConfig = {
+     apiKey: "__FIREBASE_API_KEY__",          // wird von GitHub Actions ersetzt
+     authDomain: "srilanka-et-italy.firebaseapp.com",
+     projectId: "srilanka-et-italy",
+     storageBucket: "srilanka-et-italy.firebasestorage.app",
+     messagingSenderId: "847762650004",
+     appId: "1:847762650004:web:1b7dccf7ca7cbe51b21581"
+   };
+
+   export const app = initializeApp(firebaseConfig);
+   export const db = getFirestore(app);
+   export const auth = getAuth(app);
+   export const storage = getStorage(app);
+   export const remoteConfig = getRemoteConfig(app);
+   remoteConfig.settings.minimumFetchIntervalMillis = 60000;
+
+   initializeAppCheck(app, {
+     provider: new ReCaptchaV3Provider('__RECAPTCHA_SITE_KEY__'), // wird von GitHub Actions ersetzt
+     isTokenAutoRefreshEnabled: true
+   });
+   ```
    - In `index.html` vor `main.js` einbinden
    - **Remote Config initialisieren** mit folgenden Parametern:
 
@@ -38,19 +156,23 @@
      | `announcement_text_ta` | string | `""` | Bannertext TA |
 
    - **Remote Config Cache-Interval setzen:** `remoteConfig.settings.minimumFetchIntervalMillis = 60000` (1 Minute statt 12 Stunden!)
-   - **App Check OHNE Fallback:** Entweder funktioniert oder App bricht ab (verhindert absichtlichen Bypass)
+   - **App Check im Monitoring-Modus** (NICHT Enforcement-Modus):
+     - Firebase Console → App Check → Monitoring only (nicht "Enforce")
+     - Grund: Enforcement-Modus bricht den öffentlichen PDF-Carousel für Nutzer mit uBlock/Privacy-Tools, da App Check global für ALLE Firebase-Calls gilt — auch unauthentifizierte Public-Reads
+     - Schreiboperationen sind bereits durch `isAdmin()` in Security Rules geschützt
+     - App Check in Monitoring-Modus gibt Telemetrie über Bot-Traffic ohne echte Nutzer zu blockieren
    
    ```javascript
-   // App Check OHNE Fallback (verhindert Angreifer-Bypass)
-   await initializeAppCheck(app, { 
-     provider: new ReCaptchaV3Provider('SITE_KEY'),
+   // App Check initialisieren (Monitoring-Modus, kein Enforcement)
+   initializeAppCheck(app, { 
+     provider: new ReCaptchaV3Provider('RECAPTCHA_SITE_KEY'), // aus Voraussetzungen Schritt B
      isTokenAutoRefreshEnabled: true 
    });
-   // KEIN catch() → Bei Fehler bricht App ab, kein Bypass möglich
+   // KEIN await, KEIN catch — App Check läuft im Hintergrund, blockiert keine Calls
    ```
 
 3. **Firestore Security Rules definieren**  
-   - Collection `seasonal_pdfs` erstellen für PDF-Metadaten (Schema: `{title, pdfUrl, startDate, endDate, createdBy, createdAt, order}`)
+   - Collection `seasonal_pdfs` erstellen für PDF-Metadaten (Schema: `{title, pdfUrl, startDate, endDate, createdBy, createdAt, order, status: 'draft'|'active'}`)
    - Collection `audit_logs` für Admin-Aktionen (Schema: `{action, userId, timestamp, pdfId, details}`)
    - Collection `admins` für Admin-Liste
    - **WICHTIG:** Konkrete Rules mit Zeitcheck, Admin-Validation, nur aktive PDFs lesbar
@@ -66,10 +188,12 @@
                 exists(/databases/$(database)/documents/admins/$(request.auth.uid));
        }
        
-       // Seasonal PDFs: Read nur wenn aktiv (verhindert Scraping zukünftiger PDFs)
+       // Seasonal PDFs: Admins sehen alles (inkl. Drafts), öffentlich nur aktive PDFs
        match /seasonal_pdfs/{doc} {
-         allow read: if resource.data.startDate.toMillis() <= request.time.toMillis() && 
-                        request.time.toMillis() <= resource.data.endDate.toMillis();
+         allow read: if isAdmin() ||
+                        (resource.data.status == 'active' &&
+                         resource.data.startDate.toMillis() <= request.time.toMillis() && 
+                         request.time.toMillis() <= resource.data.endDate.toMillis());
          allow create, update, delete: if isAdmin();
        }
        
@@ -100,16 +224,12 @@
    service firebase.storage {
      match /b/{bucket}/o {
        match /seasonal-pdfs/{fileName} {
-         // Read: NUR wenn entsprechendes Firestore-Dokument AKTIV ist
-         // Verhindert: 1) Race Condition beim Upload, 2) Direktzugriff auf zukünftige PDFs
-         allow read: if firestore.exists(
+         // Read: NUR wenn Firestore-Dokument existiert UND status == 'active'
+         // Ein Read statt drei (vorher: exists() + 2x get() = 3 Firestore-Reads pro Download!)
+         // Date-Filter ist redundant: Firestore versteckt pdfUrl bereits vor startDate
+         allow read: if firestore.get(
            /databases/(default)/documents/seasonal_pdfs/$(fileName.split('_')[0])
-         ) && firestore.get(
-           /databases/(default)/documents/seasonal_pdfs/$(fileName.split('_')[0])
-         ).data.startDate <= request.time && 
-         firestore.get(
-           /databases/(default)/documents/seasonal_pdfs/$(fileName.split('_')[0])
-         ).data.endDate >= request.time;
+         ).data.status == 'active';
          
          // Write: Nur Admins, max 2MB, nur PDF (aber: MIME kann gefälscht werden!)
          // → Zusätzlich Cloud Function für echte PDF-Magic-Bytes-Prüfung (siehe Step 4b)
@@ -127,7 +247,29 @@
    ```
    - Dateinamen-Schema: `{firestoreDocId}_{timestamp}.pdf` für Firestore-Lookup (nicht mehr `{timestamp}_{uuid}`!)
    
-**4b. Cloud Function für MIME-Type-Validierung** *(depends on 4)*  
+**4b. Storage CORS konfigurieren** *(depends on 4)*
+   - **Pflicht:** PDF.js lädt PDFs via `fetch()` von `firebasestorage.googleapis.com` — andere Domain als die Website → ohne CORS-Konfiguration blockiert der Browser den Download
+   - Einmalig via Firebase CLI setzen:
+
+   ```json
+   // cors.json (im Projekt-Root erstellen)
+   [{
+     "origin": [
+       "https://srilanka-et-italy.web.app",
+       "https://srilanka-et-italy.firebaseapp.com",
+       "https://srilanka-et-italy.github.io",
+       "http://localhost:3000"
+     ],
+     "method": ["GET"],
+     "responseHeader": ["Content-Type"],
+     "maxAgeSeconds": 3600
+   }]
+   ```
+   ```bash
+   gsutil cors set cors.json gs://srilanka-et-italy.firebasestorage.app
+   ```
+
+**4c. Cloud Function für MIME-Type-Validierung** *(depends on 4)*  
    - **Problem:** `contentType` kann vom Client gefälscht werden (`.exe` als PDF)
    - **Lösung:** Cloud Function bei `onFinalize` prüft echte PDF-Magic-Bytes
    
@@ -211,24 +353,27 @@
       let firestoreDocId;
       
       try {
-        // 1. Firestore-Dokument ZUERST erstellen (mit Placeholder-URL)
-        // → Verhindert Race Condition (Storage ist erst nach Firestore-Freigabe lesbar)
+        // 1. Firestore-Dokument ZUERST erstellen mit status: 'draft'
+        // → status: 'draft' verhindert, dass 'pending'-URL im Carousel erscheint
+        // → Storage Rules prüfen status == 'active', also kein Lesezugriff während Upload
         const docRef = await addDoc(collection(db, 'seasonal_pdfs'), {
           ...metadata,
-          pdfUrl: 'pending', // Placeholder
+          pdfUrl: '', // leer bis Upload fertig
+          status: 'draft', // NICHT 'active' — verhindert Anzeige während Upload
           createdBy: auth.currentUser.uid,
           createdAt: serverTimestamp()
         });
         firestoreDocId = docRef.id;
         
         // 2. Upload zu Storage MIT Firestore-Doc-ID im Dateinamen
-        // → Ermöglicht Storage Rules Lookup: firestore.exists(...seasonal_pdfs/$(fileName.split('_')[0]))
+        // → Ermöglicht Storage Rules Lookup: get(...seasonal_pdfs/$(fileName.split('_')[0])).data.status
         storageRef = ref(storage, `seasonal-pdfs/${firestoreDocId}_${Date.now()}.pdf`);
         await uploadBytes(storageRef, file);
         const url = await getDownloadURL(storageRef);
         
-        // 3. Firestore-Dokument mit echter URL updaten
-        await updateDoc(docRef, { pdfUrl: url });
+        // 3. Firestore-Dokument atomisch auf 'active' setzen + URL eintragen
+        // → Erst jetzt wird Storage-Datei lesbar (Storage Rule: status == 'active')
+        await updateDoc(docRef, { pdfUrl: url, status: 'active' });
         
         // 4. Audit Log (userId wird server-seitig validiert in Firestore Rules)
         await addDoc(collection(db, 'audit_logs'), {
@@ -254,7 +399,24 @@
     - **Snapshot Listener für Live-Updates:** `onSnapshot()` statt `getDocs()` → Änderungen sofort sichtbar
     - Bearbeiten: Metadaten (Titel, Daten, Kicker) ändern, PDF nicht austauschbar (nur neu hochladen + altes löschen)
     - **Audit Log bei Bearbeitung:** `{action: 'edit', userId, timestamp, pdfId, changes}`
-    - Löschen: Firestore-Dokument und Storage-Datei entfernen (beide oder keins - Rollback!)
+    - Löschen mit Rollback-Logik:
+    ```javascript
+    async function deletePDF(pdfId, pdfUrl) {
+      // 1. Zuerst auf 'deleting' setzen (verhindert Anzeige im Carousel während Löschvorgang)
+      await updateDoc(doc(db, 'seasonal_pdfs', pdfId), { status: 'deleting' });
+      try {
+        // 2. Storage-Datei löschen
+        const filePath = decodeURIComponent(pdfUrl.split('/o/')[1].split('?')[0]);
+        await deleteObject(ref(storage, filePath));
+        // 3. Firestore-Dokument löschen
+        await deleteDoc(doc(db, 'seasonal_pdfs', pdfId));
+      } catch (error) {
+        // Rollback: status zurück auf 'active' wenn Löschen fehlschlägt
+        await updateDoc(doc(db, 'seasonal_pdfs', pdfId), { status: 'active' });
+        throw error;
+      }
+    }
+    ```
     - **Audit Log bei Löschen:** `{action: 'delete', userId, timestamp, pdfId, title}`
     - **Audit Log Retention:** Cloud Function löscht Logs älter als 90 Tage (DSGVO-Compliance)
     - Bestätigungs-Dialog vor Löschen
@@ -265,25 +427,44 @@
     - `components/hero.html`: Ersetze hardcodiertes `#hero-seasonal-card` durch dynamisches Container-Element: `<div id="hero-seasonal-carousel"></div>`
     - Wenn mehrere aktive PDFs: Carousel/Slider-Struktur erstellen (prev/next Buttons, Dots-Indikator)
     - Wenn nur 1 PDF: Einzelne Card wie bisher
-    - **CSP Meta-Tag in `index.html` hinzufügen:** 
+    - **CSP Meta-Tag in `index.html` hinzufügen** — `connect-src` ist PFLICHT für Firebase SDK:
     ```html
     <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' https://cdnjs.cloudflare.com https://www.gstatic.com; 
+          content="default-src 'self';
+                   script-src 'self' https://cdnjs.cloudflare.com https://www.gstatic.com;
                    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   connect-src 'self'
+                     https://*.googleapis.com
+                     https://*.firebaseio.com
+                     wss://*.firebaseio.com
+                     https://firebasestorage.googleapis.com
+                     https://identitytoolkit.googleapis.com;
                    frame-src 'none';
                    object-src 'none';">
     ```
-    - **Wichtig:** CSP verhindert XSS via PDF-Metadaten und schützt vor Malicious PDFs
+    - **Wichtig:** Ohne `connect-src` blockt der Browser alle Firebase-Calls stumm — Firestore, Auth, Storage, Remote Config funktionieren nicht!
 
 13. **PDF-Daten aus Firestore laden** *(depends on 2, 12)*  
     - **Remote Config Kill-Switch prüfen:** Vor dem Laden Remote Config `feature_pdf_enabled` abfragen, bei `false` → keine PDFs laden
     - Neue Funktion in `js/main.js`: `loadSeasonalPDFs()`
-    - Firestore-Query: Alle Dokumente aus `seasonal_pdfs` wo `startDate <= now <= endDate`, sortiert nach `order`
+    - Firestore-Query (siehe Firestore Indexes Abschnitt — nur ein Range-Filter möglich!):
+    ```javascript
+    const q = query(
+      collection(db, 'seasonal_pdfs'),
+      where('endDate', '>=', Timestamp.now()),
+      orderBy('endDate'),
+      orderBy('order')
+    );
+    const snapshot = await getDocs(q);
+    const pdfs = snapshot.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(pdf => pdf.startDate.toMillis() <= Date.now() && pdf.status === 'active');
+    ```
     - Daten in Array speichern, an Carousel-Renderer übergeben
 
 14. **Carousel-Logik implementieren** *(depends on 13)*  
     - Wenn 0 PDFs: Hero-Visual ausblenden oder Standard-Bild anzeigen (via Remote Config `hero_fallback_mode`)
+    - **Announcement-Banner:** `announcement_text_*` via `el.textContent` rendern, NICHT `innerHTML` — Remote Config-Werte niemals als HTML behandeln
     - Wenn 1 PDF: Einzelne Card rendern (wie bisheriges Muttertagskarte-Beispiel)
     - Wenn 2+ PDFs: Carousel mit Auto-Rotation (Intervall aus Remote Config `carousel_interval_ms`), Prev/Next-Buttons, Swipe-Support (optional)
     - **Lazy Loading:** Nur aktiven Slide rendern, nächsten im Hintergrund prefetchen — nicht alle PDFs gleichzeitig laden
@@ -360,10 +541,11 @@
           .get();
         
         for (const doc of expiredDocs.docs) {
-          // Lösche Storage-Datei
+          // Lösche Storage-Datei (Admin SDK — NICHT storage.refFromURL(), das ist Client-only!)
           const pdfUrl = doc.data().pdfUrl;
-          const fileRef = storage.refFromURL(pdfUrl);
-          await fileRef.delete();
+          const filePath = decodeURIComponent(pdfUrl.split('/o/')[1].split('?')[0]);
+          await admin.storage().bucket().file(filePath).delete();
+
           
           // Lösche Firestore-Dokument
           await doc.ref.delete();
@@ -378,6 +560,17 @@
       });
     ```
     - **Zusätzlich:** Audit Logs älter als 90 Tage löschen (DSGVO)
+    - **Zusätzlich:** Stuck Drafts bereinigen — Dokumente mit `status == 'draft'` älter als 1 Stunde löschen (entsteht wenn Upload in Schritt 3 fehlschlägt):
+    ```javascript
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const stuckDrafts = await db.collection('seasonal_pdfs')
+      .where('status', '==', 'draft')
+      .where('createdAt', '<', oneHourAgo)
+      .get();
+    for (const doc of stuckDrafts.docs) {
+      await doc.ref.delete(); // Storage-Datei existiert bei Stuck-Drafts meist nicht
+    }
+    ```
 
 ### Phase 5: Testing & Refinement
 
@@ -404,24 +597,40 @@
 ## Relevant files
 
 **Neue Dateien:**
-- `js/firebase-config.js` — Firebase SDK Initialisierung (auth, firestore, storage), Config-Objekt
+- `js/firebase-config.js` — Firebase SDK Initialisierung (auth, firestore, storage, remoteConfig, appCheck)
 - `js/auth.js` — Login/Logout, Admin-Check, Auth-State-Listener
-- `js/admin.js` — Admin-Panel-Logik (Upload, Verwaltung, UI)
-- `components/admin-panel.html` (optional) — Admin-UI-HTML, falls als Komponente ausgelagert
-- `css/components/admin.css` (optional) — Admin-spezifische Styles
+- `js/admin.js` — Admin-Panel-Logik (Upload, Verwaltung, UI, Löschen mit Rollback)
+- `admin.html` — Separate Admin-Seite (Login + Panel, Redirect wenn nicht eingeloggt)
+- `components/admin-panel.html` — Admin-UI-HTML als Komponente
+- `css/admin.css` — Admin-spezifische Styles
+- `firestore.rules` — Firestore Security Rules (deployen mit `firebase deploy --only firestore:rules`)
+- `storage.rules` — Storage Security Rules (deployen mit `firebase deploy --only storage`)
+- `firestore.indexes.json` — Composite Index `endDate+order` (deployen mit `firebase deploy --only firestore:indexes`)
+- `cors.json` — Storage CORS-Konfiguration (einmalig via `gsutil cors set`)
+- `functions/index.js` — Cloud Functions Exports
+- `functions/validatePDF.js` — MIME Magic Bytes Validierung (onFinalize Trigger)
+- `functions/scheduledCleanup.js` — Täglich: abgelaufene PDFs + Stuck Drafts + alte Audit Logs löschen
+- `functions/package.json` — Cloud Functions Dependencies (firebase-admin, firebase-functions)
 
 **Zu modifizierende Dateien:**
-- [index.html](index.html#L1) — Firebase SDK einbinden (`<script type="module">`), Admin-Panel-Container hinzufügen
-- [components/hero.html](components/hero.html#L52) — `#hero-seasonal-card` entfernen, durch `#hero-seasonal-carousel` ersetzen, Carousel-Markup
-- [js/main.js](js/main.js#L1) — `setupMothersDayPromo()` und `renderMothersDay()` entfernen, neue Funktionen: `loadSeasonalPDFs()`, `renderCarousel()`, `setupAdminTrigger()`
-- [css/main.css](css/main.css#L1) — Styles für Carousel (`.carousel-container`, `.carousel-item`, `.carousel-nav`, etc.), Admin-Panel-Styles
-- `i18n/de.json`, `i18n/en.json`, `i18n/ta.json` — Admin-UI-Übersetzungen hinzufügen (Fehlermeldungen, Buttons, Labels)
+- [index.html](index.html#L1) — Firebase SDK einbinden, CSP Meta-Tag entfernen (kommt via firebase.json Header)
+- [components/hero.html](components/hero.html#L52) — `#hero-seasonal-card` entfernen, durch `#hero-seasonal-carousel` ersetzen
+- [js/main.js](js/main.js#L1) — `setupMothersDayPromo()` + `renderMothersDay()` entfernen, neue Funktionen: `loadSeasonalPDFs()`, `renderCarousel()`, `renderPDFSlide()`
+- [css/main.css](css/main.css#L1) — Carousel-Styles, PDF-Skeleton + Ladebalken, Announcement-Banner
+- `i18n/de.json`, `i18n/en.json`, `i18n/ta.json` — Keys: `hero.pdf_loading`, `hero.pdf_error`, `admin.*`-Keys
+- `firebase.json` — Security Headers (X-Frame-Options, CSP, etc.) + `functions`-Eintrag + `/admin.html` aus Rewrite-Catch-all ausschließen
+- `package.json` — Firebase Emulator als Dev-Script: `"emulator": "firebase emulators:start --only firestore,storage,auth,functions"`
+- `.github/workflows/firebase-hosting-merge.yml` — Secret-Injection-Schritt ergänzen (siehe Voraussetzungen Schritt D)
+- `.github/workflows/firebase-hosting-pull-request.yml` — Secret-Injection-Schritt ergänzen
 
-**Firebase Console:**
-- **Authentication:** E-Mail/Passwort-Provider aktivieren, Admin-User erstellen
-- **Firestore:** Collections `seasonal_pdfs`, `admins` erstellen, Security Rules deployen
-- **Storage:** Bucket-Rules deployen
-- (Optional) **Cloud Functions:** Scheduled Function für Cleanup (Phase 5, Schritt 15, Ansatz B)
+**Firebase Console (manuelle Schritte vor Go-Live):**
+- **Authentication:** E-Mail/Passwort-Provider aktivieren, E-Mail-Enumeration-Schutz AN, Passwort-Policy setzen
+- **Firestore:** Production-Modus, Rules + Index deployen
+- **Storage:** Rules deployen, CORS setzen via `gsutil`
+- **App Check:** reCAPTCHA v3 Site Key hinterlegen, Monitoring-Modus (kein Enforcement)
+- **Remote Config:** Parameter anlegen (Tabelle in Step 2)
+- **Cloud Functions:** `firebase deploy --only functions`
+- **Budget Alerts:** $5 / $20 / $50 Alerts in Firebase Console → Abrechnung
 
 **Specific Functions/Patterns zu reusieren:**
 - PDF-Rendering: `renderMothersDay()` in [js/main.js](js/main.js#L116) als Vorlage für Canvas-Rendering mit PDF.js
@@ -433,8 +642,14 @@
 
 ## Verification
 
+**Lokal testen mit Firebase Emulator (empfohlen vor Deploy):**
+```bash
+npm run emulator   # startet Firestore + Storage + Auth + Functions Emulator
+# Dann in firebase-config.js connectFirestoreEmulator(), connectStorageEmulator() aktivieren
+```
+
 **Automatisierte Tests (optional, später):**
-1. Firebase Emulator Suite: Firestore + Storage Rules lokal testen
+1. Firebase Emulator Suite: Rules mit `@firebase/rules-unit-testing` testen
 2. Jest/Vitest: Unit-Tests für `auth.js` und `admin.js` Funktionen
 
 **Manuelle Tests (erforderlich):**
@@ -448,7 +663,14 @@
 8. **Zeitsteuerung (Zukunft):** PDF mit `startDate` = morgen hochladen → sollte heute NICHT im Hero-Bereich erscheinen
 9. **Zeitsteuerung (Vergangenheit):** Firestore-Dokument manuell ändern: `endDate` = gestern → PDF sollte automatisch verschwinden (nach Reload oder nach Cleanup-Job)
 10. **Responsive:** Admin-Panel auf iPhone (Safari) öffnen → sollte vollständig nutzbar sein
-11. **Sicherheit:** In Browser-Console: `fetch()` zu Storage ohne Auth-Token → sollte mit 401/403 fehlschlagen (je nach Rules)
+11. **Sicherheit:** In Browser-Console: `fetch()` zu Storage ohne Auth-Token → sollte mit 401/403 fehlschlagen
+12. **CORS:** PDF.js lädt PDF im Hero-Bereich ohne CORS-Fehler in der Console
+13. **Draft-Sichtbarkeit:** PDF hochladen → während Upload ist es im Hero-Bereich NICHT sichtbar (status: 'draft')
+14. **Admin sieht Drafts:** Im Admin-Panel erscheint das PDF sofort nach Erstellen (noch als Draft)
+15. **Löschen-Rollback:** Löschen simulieren mit getrennter Internetverbindung nach Step 1 → status springt zurück auf 'active'
+16. **MIME-Validierung:** `.exe`-Datei mit Content-Type `application/pdf` hochladen → Cloud Function löscht sie innerhalb 5 Sekunden
+17. **Security Headers:** Browser DevTools → Network → Response Headers prüfen: `X-Frame-Options`, `X-Content-Type-Options`, `Content-Security-Policy` vorhanden
+18. **Stuck Draft Cleanup:** Dokument manuell mit `status: 'draft'` und `createdAt: 2 Stunden her` anlegen → nach nächstem Cleanup-Job verschwunden
 
 ---
 
@@ -459,7 +681,7 @@
 3. **Admin-Check via Firestore `admins` Collection:** Einfacher als Custom Claims (keine Cloud Functions nötig für User-Management), flexibel erweiterbar (Rollen, Permissions)
 4. **PDF-Dateien in Storage (nicht als Base64 in Firestore):** Firestore-Dokumente haben 1MB Limit, PDFs können größer sein; Storage ist optimiert für Datei-Hosting
 5. **Carousel mit eigenem JavaScript:** Keine externe Library (z.B. Swiper.js) nötig, volle Kontrolle, konsistent mit bestehendem Code-Stil
-6. **URL-Hash `#admin` als Trigger:** Einfach, keine neue Route nötig, kann in .gitignore verlinkt werden für interne Doku
+6. **`/admin.html` als separate Seite** (nicht `#admin` URL-Hash): Admin-Panel-Existenz ist kein Geheimnis — Sicherheit kommt von Firestore Rules, nicht vom Verstecken. Öffentlicher Login-Link möglich.
 7. **Auto-Delete nach Ablauf (clientseitig zunächst):** Später auf Cloud Function migrieren für Robustheit, aber funktioniert auch ohne Backend-Code
 8. **i18n für Admin-UI:** Konsistenz mit restlicher App, mehrsprachige Admins möglich (Restaurant hat tamilische + italienische Einflüsse)
 
