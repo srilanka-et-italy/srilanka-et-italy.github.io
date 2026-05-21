@@ -2,3 +2,5 @@ node_modules/*
 .firebase/*
 .DS_Store
 .superpowers/
+firebase-debug.log
+functions/node_modules/
