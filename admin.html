@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Sri Lanka ET Italy</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <h1 class="admin-login-title">Admin Login</h1>
+      <form id="login-form" novalidate>
+        <div class="admin-field">
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" autocomplete="email" required>
+        </div>
+        <div class="admin-field">
+          <label for="password">Passwort</label>
+          <input type="password" id="password" autocomplete="current-password" required>
+        </div>
+        <p id="login-error" class="admin-error" hidden></p>
+        <button type="submit" class="btn-dark admin-submit">Anmelden</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Panel (hidden until authenticated) -->
+  <div id="admin-panel" class="admin-panel" hidden>
+    <header class="admin-header">
+      <span class="admin-header-title">Sri Lanka ET Italy — Admin</span>
+      <button id="logout-btn" class="btn-outline">Abmelden</button>
+    </header>
+    <main class="admin-main">
+      <div id="admin-content-placeholder"></div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

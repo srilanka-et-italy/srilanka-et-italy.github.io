@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null &&
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    match /seasonal_pdfs/{doc} {
+      allow read: if isAdmin() ||
+                     (resource.data.status == 'active' &&
+                      resource.data.startDate.toMillis() <= request.time.toMillis() &&
+                      request.time.toMillis() <= resource.data.endDate.toMillis());
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /admins/{userId} {
+      // Only allow a user to read their own document — prevents admin enumeration
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    match /audit_logs/{log} {
+      allow read: if isAdmin();
+      allow create: if isAdmin() &&
+                       request.resource.data.userId == request.auth.uid &&
+                       request.resource.data.timestamp == request.time;
+      allow update, delete: if false;
+    }
+  }
+}

@@ -331,66 +331,95 @@ section {
   border: 1px solid var(--border);
 }
 
-.hero-seasonal {
-  cursor: default;
-  background: transparent;
+/* ── HERO CAROUSEL ── */
+
+.hero-carousel {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
   display: flex;
   flex-direction: column;
   gap: .75rem;
-  padding: 0 !important;
-  box-shadow: none !important;
-  overflow: visible !important;
 }
 
-.hero-seasonal-kicker {
-  font-size: .66rem;
-  font-weight: 500;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--spice);
-  padding-left: .1rem;
-}
-
-.mday-preview-link {
-  display: block;
+.carousel-slide {
+  display: none;
   position: relative;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 18px 48px -10px rgba(28,20,16,.22);
-  transition: transform .3s, box-shadow .3s;
-  text-decoration: none;
 }
 
-.mday-preview-link:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 30px 64px -12px rgba(28,20,16,.32);
-}
+.carousel-slide.active { display: block; }
 
-.mday-preview-link canvas {
+.carousel-slide canvas {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.mday-preview-overlay {
-  position: absolute;
-  inset: 0;
+.carousel-dots {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: rgba(28,20,16,0);
-  color: #fff;
-  font-size: .85rem;
-  font-weight: 500;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: background .25s, opacity .25s;
+  gap: .45rem;
+  padding: .4rem 0;
 }
 
-.mday-preview-link:hover .mday-preview-overlay {
-  background: rgba(28,20,16,.45);
-  opacity: 1;
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border);
+  cursor: pointer;
+  transition: background .2s;
+  padding: 0;
+}
+
+.carousel-dot.active { background: var(--spice); }
+
+/* PDF loading skeleton */
+
+.pdf-skeleton {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--sand);
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: .8rem;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.pdf-loading .pdf-skeleton { display: flex; }
+.pdf-loading canvas { opacity: 0; }
+
+.pdf-error .pdf-skeleton { display: flex; }
+
+.pdf-progress-bar {
+  width: 60%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pdf-progress-fill {
+  height: 100%;
+  background: var(--spice);
+  transition: width .15s ease;
+  width: 0%;
+}
+
+.hero-fallback-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
 }
 
 .hero-visual:hover {
@@ -890,76 +919,6 @@ footer {
   transform: scale(1.1);
 }
 
-/* ── MOTHER'S DAY PDF MODAL ── */
-.md-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  display: none;
-}
-
-.md-modal.active {
-  display: block;
-}
-
-.md-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(28, 20, 16, 0.55);
-  backdrop-filter: blur(4px);
-}
-
-.md-card {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(92vw, 470px);
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 2rem 1.5rem 1.6rem;
-  box-shadow: 0 24px 60px rgba(28, 20, 16, 0.28);
-  text-align: center;
-}
-
-.md-close {
-  position: absolute;
-  right: .75rem;
-  top: .7rem;
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 50%;
-  background: var(--cream);
-  color: var(--ink);
-  font-size: 1.2rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.md-kicker {
-  font-size: .66rem;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--spice);
-  margin-bottom: .7rem;
-}
-
-.md-card h3 {
-  font-family: 'Libre Baskerville', serif;
-  font-size: clamp(1.35rem, 3vw, 1.8rem);
-  font-weight: 400;
-  line-height: 1.25;
-  margin-bottom: .8rem;
-}
-
-.md-text {
-  color: var(--muted);
-  font-size: .92rem;
-  line-height: 1.7;
-  margin-bottom: 1.2rem;
-}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
@@ -987,10 +946,6 @@ footer {
     display: block;
   }
 
-  .hero-seasonal-inner {
-    padding: 1.4rem;
-  }
-
   section {
     padding: 4.5rem 1.5rem;
   }
@@ -1013,8 +968,4 @@ footer {
     padding: 2rem 1.5rem;
   }
 
-  .md-card {
-    padding: 1.8rem 1.1rem 1.2rem;
-    border-radius: 14px;
-  }
 }

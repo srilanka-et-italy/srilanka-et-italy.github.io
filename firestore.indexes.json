@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "seasonal_pdfs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "endDate", "order": "ASCENDING" },
+        { "fieldPath": "order",   "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Inject secrets into Firebase config
+        run: |
+          sed -i "s/__FIREBASE_API_KEY__/${{ secrets.FIREBASE_API_KEY }}/g" js/firebase-config.js
+          sed -i "s/__RECAPTCHA_SITE_KEY__/${{ secrets.RECAPTCHA_SITE_KEY }}/g" js/firebase-config.js
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

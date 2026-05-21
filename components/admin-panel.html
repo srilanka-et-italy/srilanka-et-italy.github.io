@@ -1,0 +1,49 @@
+<div class="admin-section">
+  <h2 class="admin-section-title">PDF hochladen</h2>
+  <form id="upload-form" class="admin-upload-form" novalidate>
+    <div class="admin-field">
+      <label for="pdf-title-de">Titel (DE)</label>
+      <input type="text" id="pdf-title-de" maxlength="80" required>
+    </div>
+    <div class="admin-field">
+      <label for="pdf-title-en">Titel (EN)</label>
+      <input type="text" id="pdf-title-en" maxlength="80">
+    </div>
+    <div class="admin-field">
+      <label for="pdf-title-ta">Titel (TA)</label>
+      <input type="text" id="pdf-title-ta" maxlength="80">
+    </div>
+    <div class="admin-field-row">
+      <div class="admin-field">
+        <label for="pdf-start">Startdatum (Europe/Berlin)</label>
+        <input type="datetime-local" id="pdf-start" required>
+      </div>
+      <div class="admin-field">
+        <label for="pdf-end">Enddatum (Europe/Berlin)</label>
+        <input type="datetime-local" id="pdf-end" required>
+      </div>
+    </div>
+    <div class="admin-field">
+      <label for="pdf-order">Reihenfolge</label>
+      <input type="number" id="pdf-order" value="0" min="0" max="99">
+    </div>
+    <div class="admin-field">
+      <label for="pdf-file">PDF-Datei (max. 2 MB)</label>
+      <input type="file" id="pdf-file" accept="application/pdf" required>
+    </div>
+    <div id="upload-progress-wrap" class="upload-progress-wrap" hidden>
+      <div class="upload-progress-bar"><div id="upload-progress-fill" class="upload-progress-fill"></div></div>
+      <span id="upload-progress-text">0 %</span>
+    </div>
+    <p id="upload-error" class="admin-error" hidden></p>
+    <p id="upload-success" class="admin-success" hidden>PDF erfolgreich hochgeladen.</p>
+    <button type="submit" class="btn-dark">Hochladen</button>
+  </form>
+</div>
+
+<div class="admin-section">
+  <h2 class="admin-section-title">Aktive PDFs</h2>
+  <div id="pdf-list" class="pdf-list">
+    <p class="pdf-list-empty">Keine PDFs vorhanden.</p>
+  </div>
+</div>
