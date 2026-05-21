@@ -1,0 +1,47 @@
+{
+  "parameters": {
+    "feature_pdf_enabled": {
+      "defaultValue": { "value": "true" },
+      "valueType": "BOOLEAN",
+      "description": "Kill-Switch: PDF-Carousel im Hero deaktivieren ohne Deploy"
+    },
+    "carousel_interval_ms": {
+      "defaultValue": { "value": "8000" },
+      "valueType": "NUMBER",
+      "description": "Auto-Rotation des Carousels in Millisekunden"
+    },
+    "max_pdfs_in_carousel": {
+      "defaultValue": { "value": "5" },
+      "valueType": "NUMBER",
+      "description": "Maximale Anzahl Slides im Carousel"
+    },
+    "hero_fallback_mode": {
+      "defaultValue": { "value": "image" },
+      "valueType": "STRING",
+      "description": "Bei 0 aktiven PDFs: 'image' (front.png) oder 'hidden'"
+    },
+    "announcement_enabled": {
+      "defaultValue": { "value": "false" },
+      "valueType": "BOOLEAN",
+      "description": "Kurzfrist-Banner ein/aus (z.B. Ruhetag)"
+    },
+    "announcement_text_de": {
+      "defaultValue": { "value": "" },
+      "valueType": "STRING",
+      "description": "Bannertext Deutsch"
+    },
+    "announcement_text_en": {
+      "defaultValue": { "value": "" },
+      "valueType": "STRING",
+      "description": "Bannertext Englisch"
+    },
+    "announcement_text_ta": {
+      "defaultValue": { "value": "" },
+      "valueType": "STRING",
+      "description": "Bannertext Tamil"
+    }
+  },
+  "version": {
+    "versionNumber": "1"
+  }
+}
