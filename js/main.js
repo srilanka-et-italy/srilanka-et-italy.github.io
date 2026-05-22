@@ -177,7 +177,7 @@ class App {
         }
 
         // Apply i18n to newly injected elements
-        this.i18n.applyTranslations();
+        this.i18n.updateDOM();
 
         // Render first slide, prefetch second
         this.renderSlide(pdfs[0], slides[0]);
