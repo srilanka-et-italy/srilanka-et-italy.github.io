@@ -137,7 +137,8 @@ function setupUploadForm() {
 
     const file = document.getElementById('pdf-file').files[0];
     if (!file) { showError(errorEl, t('admin.err_no_file')); return; }
-    if (file.type !== 'application/pdf') { showError(errorEl, t('admin.err_not_pdf')); return; }
+    const allowed = ['application/pdf', 'image/png', 'image/jpeg'];
+    if (!allowed.includes(file.type)) { showError(errorEl, t('admin.err_not_pdf')); return; }
     if (file.size > 2 * 1024 * 1024) { showError(errorEl, t('admin.err_too_large')); return; }
 
     const titleDe = DOMPurify.sanitize(document.getElementById('pdf-title-de').value.trim());
@@ -172,7 +173,7 @@ function setupUploadForm() {
     });
 
     progressWrap.hidden = false;
-    const uploadTask = uploadBytesResumable(storageRef, file, { contentType: 'application/pdf' });
+    const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
 
     uploadTask.on('state_changed',
       (snapshot) => {
