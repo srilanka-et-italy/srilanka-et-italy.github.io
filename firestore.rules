@@ -8,10 +8,7 @@ service cloud.firestore {
     }
 
     match /seasonal_pdfs/{doc} {
-      allow read: if isAdmin() ||
-                     (resource.data.status == 'active' &&
-                      resource.data.startDate.toMillis() <= request.time.toMillis() &&
-                      request.time.toMillis() <= resource.data.endDate.toMillis());
+      allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
