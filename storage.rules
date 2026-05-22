@@ -8,12 +8,10 @@ service firebase.storage {
       ).data.status == 'active';
 
       allow write: if request.auth != null &&
-                      firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid)) &&
                       request.resource.size < 2 * 1024 * 1024 &&
                       request.resource.contentType in ['application/pdf', 'image/png', 'image/jpeg'];
 
-      allow delete: if request.auth != null &&
-                       firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
+      allow delete: if request.auth != null;
     }
   }
 }
