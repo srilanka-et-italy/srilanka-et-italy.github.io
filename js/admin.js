@@ -377,7 +377,7 @@ function setupDateRangePicker() {
       if (sameDay(date, endDate)   && startDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-end';
       btn.className = cls;
       if (!cls.includes('disabled')) {
-        btn.addEventListener('click', () => pickDay(date));
+        btn.addEventListener('click', (e) => { e.stopPropagation(); pickDay(date); });
       }
       grid.appendChild(btn);
     }
