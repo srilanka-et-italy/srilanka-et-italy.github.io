@@ -1,0 +1,11 @@
+[{
+  "origin": [
+    "https://srilanka-et-italy.web.app",
+    "https://srilanka-et-italy.firebaseapp.com",
+    "https://srilanka-et-italy.github.io",
+    "http://localhost:3000"
+  ],
+  "method": ["GET"],
+  "responseHeader": ["Content-Type"],
+  "maxAgeSeconds": 3600
+}]

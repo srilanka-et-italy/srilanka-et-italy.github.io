@@ -1,0 +1,232 @@
+/* Admin Panel Styles */
+
+.admin-login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sand, #f5f0e8);
+}
+
+.admin-login-card {
+  background: #fff;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.08);
+}
+
+.admin-login-title {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-head, serif);
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  margin-bottom: 1rem;
+}
+
+.admin-field label {
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--ink, #333);
+}
+
+.admin-field input,
+.admin-field select {
+  padding: .55rem .8rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  font-size: .95rem;
+  outline: none;
+  transition: border-color .15s;
+}
+
+.admin-field input:focus,
+.admin-field select:focus {
+  border-color: var(--spice, #b84c1a);
+}
+
+.admin-password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.admin-password-wrap input {
+  flex: 1;
+  padding-right: 2.6rem;
+}
+
+.admin-pw-toggle {
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  opacity: .5;
+  transition: opacity .15s;
+}
+
+.admin-pw-toggle:hover { opacity: 1; }
+
+.admin-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admin-submit {
+  width: 100%;
+  margin-top: .5rem;
+}
+
+.admin-error  { color: #c0392b; font-size: .85rem; margin: .5rem 0; }
+.admin-success { color: #27ae60; font-size: .85rem; margin: .5rem 0; }
+
+/* Admin Panel Layout */
+
+.admin-panel {
+  min-height: 100vh;
+  background: var(--sand, #f5f0e8);
+}
+
+.admin-header {
+  background: #fff;
+  border-bottom: 1px solid var(--border, #ddd);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-header-title {
+  font-weight: 600;
+  font-family: var(--font-head, serif);
+}
+
+.admin-main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.admin-section {
+  background: #fff;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.admin-section-title {
+  font-size: 1.15rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-head, serif);
+}
+
+.admin-upload-form { }
+
+/* Upload progress */
+
+.upload-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin: .75rem 0;
+}
+
+.upload-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--border, #ddd);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.upload-progress-fill {
+  height: 100%;
+  background: var(--spice, #b84c1a);
+  width: 0%;
+  transition: width .15s ease;
+}
+
+/* PDF list */
+
+.pdf-list {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.pdf-list-empty {
+  color: #888;
+  font-size: .9rem;
+}
+
+.pdf-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem 1rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 8px;
+  background: var(--sand, #f5f0e8);
+}
+
+.pdf-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+
+.pdf-item-title {
+  font-weight: 500;
+  font-size: .95rem;
+}
+
+.pdf-item-dates {
+  font-size: .78rem;
+  color: #888;
+}
+
+.pdf-item-status {
+  font-size: .75rem;
+  padding: .15rem .55rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.pdf-item-status.active   { background: #d4edda; color: #155724; }
+.pdf-item-status.draft    { background: #fff3cd; color: #856404; }
+.pdf-item-status.deleting { background: #f8d7da; color: #721c24; }
+
+.pdf-item-actions {
+  display: flex;
+  gap: .5rem;
+}
+
+.btn-delete {
+  padding: .35rem .8rem;
+  border: 1px solid #c0392b;
+  border-radius: 6px;
+  color: #c0392b;
+  background: transparent;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+  color: #fff;
+}

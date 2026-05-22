@@ -1,0 +1,30 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "seasonal_pdfs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "endDate", "order": "ASCENDING" },
+        { "fieldPath": "order",   "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "seasonal_pdfs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",  "order": "ASCENDING" },
+        { "fieldPath": "endDate", "order": "ASCENDING" },
+        { "fieldPath": "order",   "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "seasonal_pdfs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "order",     "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
