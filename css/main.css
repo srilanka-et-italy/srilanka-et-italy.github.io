@@ -362,6 +362,12 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+}
+
+.carousel-slide {
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .carousel-dots {

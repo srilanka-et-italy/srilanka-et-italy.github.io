@@ -160,7 +160,6 @@ class App {
             slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
             slide.dataset.index = i;
             slide.dataset.url = pdf.pdfUrl;
-            slide.style.cursor = 'zoom-in';
             slide.innerHTML = `
                 <div class="pdf-skeleton">
                     <div class="pdf-progress-bar"><div class="pdf-progress-fill"></div></div>
