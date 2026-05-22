@@ -167,7 +167,7 @@ class App {
                     <span data-i18n="hero.pdf_loading">Angebot wird geladen…</span>
                 </div>
                 <canvas class="pdf-canvas"></canvas>`;
-            slide.addEventListener('click', () => window.open(pdf.pdfUrl, '_blank'));
+            slide.addEventListener('click', () => openCarouselLightbox(pdf.pdfUrl, pdf.contentType, pdf.fileName));
             container.appendChild(slide);
             return slide;
         });
