@@ -178,9 +178,9 @@ class App {
         this.i18n.applyTranslations();
 
         // Render first slide, prefetch second
-        this.renderPDFSlide(pdfs[0].pdfUrl, slides[0].querySelector('canvas'));
+        this.renderSlide(pdfs[0], slides[0]);
         if (pdfs.length > 1) {
-            this.renderPDFSlide(pdfs[1].pdfUrl, slides[1].querySelector('canvas'));
+            this.renderSlide(pdfs[1], slides[1]);
 
             this._carouselTimer = setInterval(() => {
                 const active = container.querySelector('.carousel-slide.active');
@@ -191,7 +191,7 @@ class App {
                 // Prefetch slide after next
                 const prefetchIdx = (nextIdx + 1) % pdfs.length;
                 if (prefetchIdx !== currentIdx) {
-                    this.renderPDFSlide(pdfs[prefetchIdx].pdfUrl, slides[prefetchIdx].querySelector('canvas'));
+                    this.renderSlide(pdfs[prefetchIdx], slides[prefetchIdx]);
                 }
             }, intervalMs);
         }
@@ -200,6 +200,29 @@ class App {
     goToSlide(slides, dots, idx) {
         slides.forEach((s, i) => s.classList.toggle('active', i === idx));
         dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    renderSlide(pdf, slide) {
+        const isImage = pdf.contentType && pdf.contentType.startsWith('image/');
+        if (isImage) {
+            this.renderImageSlide(pdf.pdfUrl, slide);
+        } else {
+            this.renderPDFSlide(pdf.pdfUrl, slide.querySelector('canvas'));
+        }
+    }
+
+    renderImageSlide(url, slide) {
+        const canvas = slide.querySelector('canvas');
+        if (!canvas || canvas.dataset.rendered === '1') return;
+        canvas.dataset.rendered = '1';
+        const container = canvas.parentElement;
+        container.classList.add('pdf-loading');
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = '';
+        img.style.cssText = 'width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block;';
+        img.onload  = () => { canvas.replaceWith(img); container.classList.remove('pdf-loading'); };
+        img.onerror = () => { container.classList.remove('pdf-loading'); container.classList.add('pdf-error'); };
     }
 
     async renderPDFSlide(url, canvas) {

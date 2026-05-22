@@ -154,7 +154,8 @@ function setupUploadForm() {
 
     const order = parseInt(document.getElementById('pdf-order').value) || 0;
     const docId = Date.now().toString();
-    const fileName = `${docId}_${crypto.randomUUID()}.pdf`;
+    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/jpeg' ? 'jpg' : 'pdf';
+    const fileName = `${docId}_${crypto.randomUUID()}.${ext}`;
     const storageRef = ref(storage, `seasonal-pdfs/${fileName}`);
 
     const docRef = await addDoc(collection(db, 'seasonal_pdfs'), {
@@ -168,6 +169,7 @@ function setupUploadForm() {
       order,
       status: 'draft',
       fileName,
+      contentType: file.type,
       pdfUrl: 'pending',
       createdAt: serverTimestamp()
     });
