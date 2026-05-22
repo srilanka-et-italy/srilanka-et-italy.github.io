@@ -281,5 +281,53 @@ class App {
     }
 }
 
+function openCarouselLightbox(url, contentType, fileName) {
+    const lb    = document.getElementById('carousel-lightbox');
+    const inner = document.getElementById('carousel-lightbox-inner');
+    const close = document.getElementById('carousel-lightbox-close');
+    if (!lb) return;
+
+    inner.innerHTML = '';
+    lb.hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    const isImage = (contentType && contentType.startsWith('image/'))
+        || /\.(png|jpe?g)$/i.test(fileName || '');
+
+    if (isImage) {
+        const img = document.createElement('img');
+        img.src = url;
+        inner.appendChild(img);
+    } else {
+        const canvas = document.createElement('canvas');
+        inner.appendChild(canvas);
+        (async () => {
+            try {
+                if (typeof pdfjsLib === 'undefined') return;
+                pdfjsLib.GlobalWorkerOptions.workerSrc =
+                    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                const pdf  = await pdfjsLib.getDocument({ url }).promise;
+                const page = await pdf.getPage(1);
+                const scale = Math.min(window.innerWidth * .88, 840) / page.getViewport({ scale: 1 }).width;
+                const vp = page.getViewport({ scale });
+                canvas.width  = vp.width;
+                canvas.height = vp.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+            } catch { inner.innerHTML = ''; }
+        })();
+    }
+
+    const closeModal = () => {
+        lb.hidden = true;
+        inner.innerHTML = '';
+        document.body.style.overflow = '';
+    };
+    close.onclick = closeModal;
+    lb.onclick = (e) => { if (e.target === lb) closeModal(); };
+    document.addEventListener('keydown', function esc(e) {
+        if (e.key === 'Escape') { closeModal(); document.removeEventListener('keydown', esc); }
+    });
+}
+
 const app = new App();
 document.addEventListener('DOMContentLoaded', () => app.init());
