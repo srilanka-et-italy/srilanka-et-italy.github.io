@@ -129,17 +129,19 @@ class App {
             const q = query(
                 collection(db, 'seasonal_pdfs'),
                 where('endDate', '>=', now),
-                where('status', '==', 'active'),
                 orderBy('endDate'),
                 orderBy('order')
             );
             const snap = await getDocs(q);
             return snap.docs
                 .map(d => ({ id: d.id, ...d.data() }))
-                .filter(pdf => pdf.startDate && pdf.startDate.toMillis() <= now.toMillis())
+                .filter(pdf =>
+                    pdf.status === 'active' &&
+                    pdf.startDate && pdf.startDate.toMillis() <= now.toMillis()
+                )
                 .slice(0, maxPdfs);
         } catch (err) {
-            console.warn('Could not load seasonal PDFs:', err);
+            console.error('Could not load seasonal PDFs:', err);
             return [];
         }
     }
