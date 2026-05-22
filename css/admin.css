@@ -409,19 +409,20 @@
 }
 
 .pdf-item {
-  display: grid;
-  grid-template-columns: 48px 1fr auto;
+  display: flex;
   align-items: center;
-  gap: .75rem;
-  padding: .85rem 1rem;
+  gap: .9rem;
+  padding: .75rem 1rem;
+  background: #fff;
   border: 1px solid var(--border, #E8DFD0);
   border-radius: 10px;
-  background: var(--cream, #FDFAF5);
+  transition: box-shadow .15s;
 }
+.pdf-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,.07); }
 
 .pdf-item-thumb {
-  width: 48px;
-  height: 56px;
+  width: 52px;
+  height: 60px;
   border-radius: 6px;
   background: var(--sand, #F2EBD9);
   overflow: hidden;
@@ -444,47 +445,69 @@
   display: block;
 }
 
-.pdf-item-info { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+.pdf-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-width: 0;
+  flex: 1;
+}
 
 .pdf-item-title {
   font-weight: 600;
-  font-size: .88rem;
+  font-size: .9rem;
   color: var(--ink, #1C1410);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.pdf-item-meta {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
 .pdf-item-dates { font-size: .72rem; color: var(--muted, #7A6E64); }
 
-.pdf-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; }
-
 .pdf-item-status {
-  font-size: .68rem;
-  padding: .15rem .55rem;
+  font-size: .65rem;
+  padding: .1rem .45rem;
   border-radius: 20px;
   font-weight: 700;
   letter-spacing: .03em;
   white-space: nowrap;
+  text-transform: uppercase;
 }
-.pdf-item-status.active   { background: #d4edda; color: #155724; }
-.pdf-item-status.draft    { background: #fff3cd; color: #856404; }
-.pdf-item-status.deleting { background: #f8d7da; color: #721c24; }
+.pdf-item-status.active   { background: #e6f4ea; color: #1a7a3c; }
+.pdf-item-status.draft    { background: #fff8e1; color: #8a6d0b; }
+.pdf-item-status.deleting { background: #fce8e8; color: #8b1c1c; }
 
-.btn-delete {
-  padding: .3rem .7rem;
+.pdf-item-right {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+
+.btn-delete, .btn-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 7px;
   border: 1px solid var(--border, #E8DFD0);
-  border-radius: 6px;
-  color: var(--muted, #7A6E64);
   background: transparent;
-  font-size: .75rem;
-  font-weight: 500;
-  font-family: 'Outfit', sans-serif;
   cursor: pointer;
-  white-space: nowrap;
+  font-size: .9rem;
+  color: var(--muted, #7A6E64);
   transition: border-color .15s, color .15s, background .15s;
 }
-.btn-delete:hover { border-color: #b83232; color: #b83232; background: rgba(184,50,50,.05); }
+.btn-edit:hover    { border-color: var(--spice, #C45C26); color: var(--spice, #C45C26); background: rgba(196,92,38,.06); }
+.btn-delete:hover  { border-color: #c0392b; color: #c0392b; background: rgba(192,57,43,.06); }
 
 /* ── Date Range Picker ── */
 
@@ -702,20 +725,6 @@
   transition: opacity .15s, transform .15s;
 }
 .pdf-item-thumb:hover { opacity: .8; transform: scale(1.04); }
-
-/* ── Edit button ── */
-.btn-edit {
-  padding: .3rem .55rem;
-  border: 1px solid var(--border, #E8DFD0);
-  border-radius: 6px;
-  color: var(--muted, #7A6E64);
-  background: transparent;
-  font-size: .9rem;
-  cursor: pointer;
-  line-height: 1;
-  transition: border-color .15s, color .15s, background .15s;
-}
-.btn-edit:hover { border-color: var(--spice, #C45C26); color: var(--spice, #C45C26); background: rgba(196,92,38,.05); }
 
 /* ── Edit modal ── */
 .edit-modal-backdrop {

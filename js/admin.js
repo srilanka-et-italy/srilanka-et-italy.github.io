@@ -236,12 +236,14 @@ function renderPdfItem(id, d) {
     </div>
     <div class="pdf-item-info">
       <span class="pdf-item-title">${DOMPurify.sanitize(titleText)}</span>
-      <span class="pdf-item-dates">${dateStr}</span>
+      <div class="pdf-item-meta">
+        <span class="pdf-item-dates">${dateStr}</span>
+        <span class="pdf-item-status ${d.status}">${d.status}</span>
+      </div>
     </div>
     <div class="pdf-item-right">
-      <span class="pdf-item-status ${d.status}">${d.status}</span>
       <button class="btn-edit" aria-label="Bearbeiten">✎</button>
-      <button class="btn-delete">${t('admin.delete_btn')}</button>
+      <button class="btn-delete" aria-label="${t('admin.delete_btn')}">✕</button>
     </div>`;
 
   const thumb = item.querySelector('.pdf-item-thumb');
