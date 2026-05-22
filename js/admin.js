@@ -133,9 +133,10 @@ function setupUploadForm() {
   // Auto-open end date picker after start date is chosen
   document.getElementById('pdf-start').addEventListener('change', () => {
     const endInput = document.getElementById('pdf-end');
-    if (endInput && !endInput.value) {
+    if (!endInput) return;
+    setTimeout(() => {
       try { endInput.showPicker(); } catch { endInput.focus(); }
-    }
+    }, 150);
   });
 
   form.addEventListener('submit', async (e) => {
