@@ -52,6 +52,32 @@
   border-color: var(--spice, #b84c1a);
 }
 
+.admin-password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.admin-password-wrap input {
+  flex: 1;
+  padding-right: 2.6rem;
+}
+
+.admin-pw-toggle {
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  opacity: .5;
+  transition: opacity .15s;
+}
+
+.admin-pw-toggle:hover { opacity: 1; }
+
 .admin-field-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

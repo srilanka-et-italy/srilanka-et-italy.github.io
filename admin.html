@@ -22,7 +22,10 @@
         </div>
         <div class="admin-field">
           <label for="password">Passwort</label>
-          <input type="password" id="password" autocomplete="current-password" required>
+          <div class="admin-password-wrap">
+            <input type="password" id="password" autocomplete="current-password" required>
+            <button type="button" id="toggle-password" class="admin-pw-toggle" aria-label="Passwort anzeigen">👁</button>
+          </div>
         </div>
         <p id="login-error" class="admin-error" hidden></p>
         <button type="submit" class="btn-dark admin-submit">Anmelden</button>

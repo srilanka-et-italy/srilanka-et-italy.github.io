@@ -27,6 +27,13 @@ onAdminAuthStateChanged(async (user) => {
   }
 });
 
+document.getElementById('toggle-password').addEventListener('click', () => {
+  const pw = document.getElementById('password');
+  const btn = document.getElementById('toggle-password');
+  if (pw.type === 'password') { pw.type = 'text'; btn.textContent = '🙈'; }
+  else { pw.type = 'password'; btn.textContent = '👁'; }
+});
+
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.hidden = true;
