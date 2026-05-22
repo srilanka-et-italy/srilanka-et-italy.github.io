@@ -1,5 +1,7 @@
 /* Admin Panel Styles */
 
+[hidden] { display: none !important; }
+
 .admin-login-screen {
   min-height: 100vh;
   display: flex;
