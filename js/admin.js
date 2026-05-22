@@ -1,7 +1,7 @@
 import { db, storage } from './firebase-config.js';
 import { login, logout, onAdminAuthStateChanged } from './auth.js';
 import {
-  collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot,
+  collection, doc, addDoc, updateDoc, deleteDoc, getDocs,
   query, orderBy, serverTimestamp, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
@@ -134,6 +134,7 @@ function setupUploadForm() {
         progressWrap.hidden = true;
         successEl.hidden = false;
         form.reset();
+        await refreshPdfList(document.getElementById('pdf-list'));
       }
     );
   });
@@ -141,20 +142,22 @@ function setupUploadForm() {
 
 // ── PDF list ─────────────────────────────────────────────────────────────────
 
-function setupPdfList() {
+async function setupPdfList() {
   const listEl = document.getElementById('pdf-list');
-  const q = query(collection(db, 'seasonal_pdfs'), orderBy('order'), orderBy('createdAt'));
+  await refreshPdfList(listEl);
+}
 
-  onSnapshot(q, (snap) => {
-    if (snap.empty) {
-      listEl.innerHTML = '<p class="pdf-list-empty">Keine PDFs vorhanden.</p>';
-      return;
-    }
-    listEl.innerHTML = '';
-    snap.forEach((docSnap) => {
-      const d = docSnap.data();
-      listEl.appendChild(renderPdfItem(docSnap.id, d));
-    });
+async function refreshPdfList(listEl) {
+  const q = query(collection(db, 'seasonal_pdfs'), orderBy('order'), orderBy('createdAt'));
+  const snap = await getDocs(q);
+  if (snap.empty) {
+    listEl.innerHTML = '<p class="pdf-list-empty">Keine PDFs vorhanden.</p>';
+    return;
+  }
+  listEl.innerHTML = '';
+  snap.forEach((docSnap) => {
+    const d = docSnap.data();
+    listEl.appendChild(renderPdfItem(docSnap.id, d));
   });
 }
 
@@ -201,6 +204,7 @@ async function deletePdf(docId, fileName) {
 
   await deleteDoc(docRef);
   await writeAuditLog('delete', docId, fileName);
+  await refreshPdfList(document.getElementById('pdf-list'));
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
