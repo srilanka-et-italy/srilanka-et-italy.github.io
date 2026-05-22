@@ -16,11 +16,13 @@ exports.validatePDFUpload = functions.storage.object().onFinalize(async (object)
     return; // File may have already been deleted
   }
 
-  // PDF magic bytes: %PDF = 0x25 0x50 0x44 0x46
-  const isPDF = buffer[0] === 0x25 && buffer[1] === 0x50 && buffer[2] === 0x44 && buffer[3] === 0x46;
+  // PDF: %PDF  PNG: \x89PNG  JPEG: \xFF\xD8\xFF
+  const isPDF  = buffer[0] === 0x25 && buffer[1] === 0x50 && buffer[2] === 0x44 && buffer[3] === 0x46;
+  const isPNG  = buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47;
+  const isJPEG = buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF;
 
-  if (!isPDF) {
-    console.warn(`Invalid file rejected (not a PDF): ${object.name}`);
+  if (!isPDF && !isPNG && !isJPEG) {
+    console.warn(`Invalid file rejected (not PDF/PNG/JPEG): ${object.name}`);
     await file.delete().catch(() => {});
 
     // Find and delete associated Firestore document
