@@ -203,6 +203,9 @@
         "list_empty": "No files available.",
         "delete_btn": "Delete",
         "delete_confirm": "Really delete this PDF?",
-        "delete_storage_error": "Storage deletion failed: "
+        "delete_storage_error": "Storage deletion failed: ",
+        "edit_title": "Edit",
+        "edit_save": "Save",
+        "edit_cancel": "Cancel"
     }
 }

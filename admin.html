@@ -71,6 +71,55 @@
     </main>
   </div>
 
+  <!-- Edit modal -->
+  <div id="edit-modal-backdrop" class="edit-modal-backdrop" hidden></div>
+  <div id="edit-modal" class="edit-modal" hidden role="dialog" aria-modal="true">
+    <div class="edit-modal-header">
+      <h2 class="edit-modal-title" data-i18n="admin.edit_title">Bearbeiten</h2>
+      <button class="edit-modal-close" id="edit-modal-close" aria-label="Schließen">✕</button>
+    </div>
+    <div class="edit-modal-body">
+      <div class="admin-field">
+        <label for="edit-title" data-i18n="admin.title_label">Titel</label>
+        <input type="text" id="edit-title" maxlength="80">
+      </div>
+      <div class="admin-field">
+        <label data-i18n="admin.date_range_label">Zeitraum (Europe/Berlin)</label>
+        <div class="daterange-trigger" id="edit-daterange-trigger" tabindex="0" role="button">
+          <span class="daterange-icon">📅</span>
+          <span id="edit-daterange-display" class="daterange-placeholder" data-i18n="admin.date_range_placeholder">Zeitraum wählen</span>
+        </div>
+        <div id="edit-daterange-picker" class="daterange-picker" hidden>
+          <div class="cal-header">
+            <button type="button" class="cal-nav" id="edit-cal-prev">‹</button>
+            <span id="edit-cal-month-label" class="cal-month-label"></span>
+            <button type="button" class="cal-nav" id="edit-cal-next">›</button>
+          </div>
+          <div class="cal-weekdays">
+            <span>Mo</span><span>Di</span><span>Mi</span>
+            <span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+          </div>
+          <div class="cal-grid" id="edit-cal-grid"></div>
+          <div class="cal-footer">
+            <span id="edit-cal-hint" class="cal-hint" data-i18n="admin.date_pick_start">Startdatum wählen</span>
+            <button type="button" id="edit-cal-clear" class="cal-clear" data-i18n="admin.date_clear">Löschen</button>
+          </div>
+        </div>
+        <input type="hidden" id="edit-pdf-start">
+        <input type="hidden" id="edit-pdf-end">
+      </div>
+      <div class="admin-field">
+        <label for="edit-order" data-i18n="admin.order_label">Reihenfolge</label>
+        <input type="number" id="edit-order" value="0" min="0" max="99" style="max-width:120px">
+      </div>
+      <p id="edit-error" class="admin-error" hidden></p>
+    </div>
+    <div class="edit-modal-footer">
+      <button id="edit-cancel-btn" class="btn-outline" data-i18n="admin.edit_cancel">Abbrechen</button>
+      <button id="edit-save-btn" class="btn-dark" data-i18n="admin.edit_save">Speichern</button>
+    </div>
+  </div>
+
   <!-- Preview lightbox -->
   <div id="admin-lightbox" class="admin-lightbox" hidden>
     <button class="admin-lightbox-close" id="admin-lightbox-close">✕</button>

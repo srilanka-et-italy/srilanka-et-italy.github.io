@@ -4,23 +4,9 @@
   </div>
   <form id="upload-form" class="admin-upload-form" novalidate>
 
-    <!-- Title fields with language tabs -->
     <div class="admin-field">
-      <label data-i18n="admin.title_label">Titel</label>
-      <div class="admin-lang-tabs">
-        <button type="button" class="admin-lang-tab active" data-title-lang="de">DE</button>
-        <button type="button" class="admin-lang-tab" data-title-lang="en">EN</button>
-        <button type="button" class="admin-lang-tab" data-title-lang="ta">TA</button>
-      </div>
-      <div class="admin-title-pane active" id="title-pane-de">
-        <input type="text" id="pdf-title-de" maxlength="80" required data-i18n-placeholder="admin.title_placeholder_de">
-      </div>
-      <div class="admin-title-pane" id="title-pane-en">
-        <input type="text" id="pdf-title-en" maxlength="80" data-i18n-placeholder="admin.title_placeholder_en">
-      </div>
-      <div class="admin-title-pane" id="title-pane-ta">
-        <input type="text" id="pdf-title-ta" maxlength="80" data-i18n-placeholder="admin.title_placeholder_ta">
-      </div>
+      <label for="pdf-title" data-i18n="admin.title_label">Titel</label>
+      <input type="text" id="pdf-title" maxlength="80">
     </div>
 
     <div class="admin-field">

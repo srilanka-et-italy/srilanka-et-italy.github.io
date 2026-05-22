@@ -203,6 +203,9 @@
         "list_empty": "கோப்புகள் இல்லை.",
         "delete_btn": "நீக்கு",
         "delete_confirm": "இந்த PDF ஐ நீக்கவா?",
-        "delete_storage_error": "சேமிப்பக நீக்கம் தோல்வியடைந்தது: "
+        "delete_storage_error": "சேமிப்பக நீக்கம் தோல்வியடைந்தது: ",
+        "edit_title": "திருத்து",
+        "edit_save": "சேமி",
+        "edit_cancel": "ரத்து"
     }
 }

@@ -3,7 +3,7 @@ import { login, logout, onAdminAuthStateChanged } from './auth.js';
 import { I18n } from './i18n.js';
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, getDocs,
-  query, orderBy, serverTimestamp, Timestamp
+  query, orderBy, serverTimestamp, Timestamp, deleteField
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   ref, uploadBytesResumable, getDownloadURL, deleteObject
@@ -101,23 +101,8 @@ async function loadAdminPanel() {
   i18n.updateDOM();
   applyPanelPlaceholders();
 
-  setupTitleTabs();
   setupUploadForm();
   setupPdfList();
-}
-
-// ── Title language tabs ───────────────────────────────────────────────────
-
-function setupTitleTabs() {
-  document.querySelectorAll('.admin-lang-tab[data-title-lang]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const lang = tab.getAttribute('data-title-lang');
-      document.querySelectorAll('.admin-lang-tab[data-title-lang]').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelectorAll('.admin-title-pane').forEach(p => p.classList.remove('active'));
-      document.getElementById('title-pane-' + lang).classList.add('active');
-    });
-  });
 }
 
 // ── Upload ───────────────────────────────────────────────────────────────────
@@ -160,13 +145,9 @@ function setupUploadForm() {
     const fileName = `${docId}_${crypto.randomUUID()}.${ext}`;
     const storageRef = ref(storage, `seasonal-pdfs/${fileName}`);
 
-    const titleDe = DOMPurify.sanitize(document.getElementById('pdf-title-de').value.trim());
+    const title = DOMPurify.sanitize(document.getElementById('pdf-title').value.trim());
     const docData = {
-      title: {
-        de: titleDe,
-        en: DOMPurify.sanitize(document.getElementById('pdf-title-en').value.trim()),
-        ta: DOMPurify.sanitize(document.getElementById('pdf-title-ta').value.trim())
-      },
+      title,
       order,
       permanent: !hasDates,
       status: 'draft',
@@ -200,13 +181,6 @@ function setupUploadForm() {
         progressWrap.hidden = true;
         successEl.hidden = false;
         form.reset();
-        // reset title tabs back to DE
-        document.querySelectorAll('.admin-lang-tab[data-title-lang]').forEach(t => t.classList.remove('active'));
-        const deTab = document.querySelector('.admin-lang-tab[data-title-lang="de"]');
-        if (deTab) deTab.classList.add('active');
-        document.querySelectorAll('.admin-title-pane').forEach(p => p.classList.remove('active'));
-        const dePane = document.getElementById('title-pane-de');
-        if (dePane) dePane.classList.add('active');
         await refreshPdfList(document.getElementById('pdf-list'));
       }
     );
@@ -250,7 +224,7 @@ function renderPdfItem(id, d) {
   const startStr = d.startDate ? d.startDate.toDate().toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }) : null;
   const endStr   = d.endDate   ? d.endDate.toDate().toLocaleDateString('de-DE',   { timeZone: 'Europe/Berlin' }) : null;
   const dateStr  = startStr && endStr ? `${startStr} – ${endStr}` : '∞ immer aktiv';
-  const titleText = d.title?.[i18n.lang] || d.title?.de || id;
+  const titleText = typeof d.title === 'string' ? d.title : (d.title?.[i18n.lang] || d.title?.de || id);
 
   const isImage = d.contentType && d.contentType.startsWith('image/');
 
@@ -266,6 +240,7 @@ function renderPdfItem(id, d) {
     </div>
     <div class="pdf-item-right">
       <span class="pdf-item-status ${d.status}">${d.status}</span>
+      <button class="btn-edit" aria-label="Bearbeiten">✎</button>
       <button class="btn-delete">${t('admin.delete_btn')}</button>
     </div>`;
 
@@ -276,6 +251,7 @@ function renderPdfItem(id, d) {
   if (d.pdfUrl && d.pdfUrl !== 'pending') {
     thumb.addEventListener('click', () => openPreview(d.pdfUrl, isImage));
   }
+  item.querySelector('.btn-edit').addEventListener('click', () => openEditModal(id, d));
   item.querySelector('.btn-delete').addEventListener('click', () => deletePdf(id, d.fileName));
   return item;
 }
@@ -510,6 +486,254 @@ function setupDateRangePicker() {
     }
   });
 
+  updateDisplay();
+}
+
+// ── Edit modal ────────────────────────────────────────────────────────────────
+
+let editDateRangeReady = false;
+
+function openEditModal(docId, d) {
+  const modal    = document.getElementById('edit-modal');
+  const backdrop = document.getElementById('edit-modal-backdrop');
+  if (!modal) return;
+
+  // Populate fields
+  const titleText = typeof d.title === 'string' ? d.title : (d.title?.[i18n.lang] || d.title?.de || '');
+  document.getElementById('edit-title').value = titleText;
+  document.getElementById('edit-order').value = d.order ?? 0;
+
+  // Populate date range
+  const startVal = d.startDate ? (() => {
+    const dt = d.startDate.toDate();
+    const pad = n => String(n).padStart(2,'0');
+    return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T00:00`;
+  })() : '';
+  const endVal = d.endDate ? (() => {
+    const dt = d.endDate.toDate();
+    const pad = n => String(n).padStart(2,'0');
+    return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T23:59`;
+  })() : '';
+  document.getElementById('edit-pdf-start').value = startVal;
+  document.getElementById('edit-pdf-end').value   = endVal;
+
+  if (!editDateRangeReady) {
+    setupEditDateRangePicker();
+    editDateRangeReady = true;
+  }
+  const editTrigger = document.getElementById('edit-daterange-trigger');
+  if (editTrigger?._syncDates) {
+    editTrigger._syncDates(startVal, endVal);
+  } else {
+    syncEditDateRangeDisplay(startVal, endVal);
+  }
+
+  modal.hidden    = false;
+  backdrop.hidden = false;
+  document.getElementById('edit-title').focus();
+
+  const saveBtn   = document.getElementById('edit-save-btn');
+  const cancelBtn = document.getElementById('edit-cancel-btn');
+  const closeBtn  = document.getElementById('edit-modal-close');
+  const errorEl   = document.getElementById('edit-error');
+
+  const close = () => { modal.hidden = true; backdrop.hidden = true; };
+
+  closeBtn.onclick  = close;
+  cancelBtn.onclick = close;
+  backdrop.onclick  = close;
+
+  saveBtn.onclick = async () => {
+    errorEl.hidden = true;
+    const newTitle = DOMPurify.sanitize(document.getElementById('edit-title').value.trim());
+    const newOrder = parseInt(document.getElementById('edit-order').value) || 0;
+    const startLocal = document.getElementById('edit-pdf-start').value;
+    const endLocal   = document.getElementById('edit-pdf-end').value;
+    const hasDates   = startLocal && endLocal;
+
+    let startTs, endTs;
+    if (hasDates) {
+      startTs = localBerlinToTimestamp(startLocal);
+      endTs   = localBerlinToTimestamp(endLocal);
+      if (endTs.toMillis() <= startTs.toMillis()) {
+        errorEl.textContent = t('admin.err_date_order');
+        errorEl.hidden = false;
+        return;
+      }
+    }
+
+    saveBtn.disabled = true;
+    try {
+      const updates = {
+        title: newTitle,
+        order: newOrder,
+        permanent: !hasDates
+      };
+      if (hasDates) {
+        updates.startDate = startTs;
+        updates.endDate   = endTs;
+      } else {
+        updates.startDate = deleteField();
+        updates.endDate   = deleteField();
+      }
+      await updateDoc(doc(db, 'seasonal_pdfs', docId), updates);
+      await writeAuditLog('edit', docId, d.fileName || '');
+      close();
+      await refreshPdfList(document.getElementById('pdf-list'));
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.hidden = false;
+    } finally {
+      saveBtn.disabled = false;
+    }
+  };
+}
+
+function syncEditDateRangeDisplay(startVal, endVal) {
+  const display = document.getElementById('edit-daterange-display');
+  const startInput = document.getElementById('edit-pdf-start');
+  const endInput   = document.getElementById('edit-pdf-end');
+  if (!display) return;
+  startInput.value = startVal;
+  endInput.value   = endVal;
+  if (startVal && endVal) {
+    const fmt = v => {
+      const d = new Date(v);
+      return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' });
+    };
+    display.textContent = `${fmt(startVal)} – ${fmt(endVal)}`;
+    display.className = 'daterange-value';
+  } else {
+    display.textContent = t('admin.date_range_placeholder') || 'Zeitraum wählen';
+    display.className = 'daterange-placeholder';
+  }
+}
+
+function setupEditDateRangePicker() {
+  const trigger  = document.getElementById('edit-daterange-trigger');
+  const picker   = document.getElementById('edit-daterange-picker');
+  const display  = document.getElementById('edit-daterange-display');
+  const grid     = document.getElementById('edit-cal-grid');
+  const label    = document.getElementById('edit-cal-month-label');
+  const hint     = document.getElementById('edit-cal-hint');
+  const clearBtn = document.getElementById('edit-cal-clear');
+  const startInput = document.getElementById('edit-pdf-start');
+  const endInput   = document.getElementById('edit-pdf-end');
+  if (!trigger) return;
+
+  const MONTHS = ['Januar','Februar','März','April','Mai','Juni',
+                  'Juli','August','September','Oktober','November','Dezember'];
+  let viewYear  = new Date().getFullYear();
+  let viewMonth = new Date().getMonth();
+  let startDate = null;
+  let endDate   = null;
+
+  function fmt(d) {
+    return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' });
+  }
+  function isoDate(d, endOfDay = false) {
+    const pad = n => String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${endOfDay ? '23:59' : '00:00'}`;
+  }
+  function sameDay(a, b) { return a && b && a.toDateString() === b.toDateString(); }
+
+  function updateDisplay() {
+    if (startDate && endDate) {
+      display.textContent = `${fmt(startDate)} – ${fmt(endDate)}`;
+      display.className = 'daterange-value';
+    } else if (startDate) {
+      display.textContent = `${fmt(startDate)} – ?`;
+      display.className = 'daterange-value';
+    } else {
+      display.textContent = t('admin.date_range_placeholder') || 'Zeitraum wählen';
+      display.className = 'daterange-placeholder';
+    }
+    startInput.value = startDate ? isoDate(startDate, false) : '';
+    endInput.value   = endDate   ? isoDate(endDate, true)    : '';
+  }
+
+  // Allow syncing from outside (pre-fill)
+  trigger._syncDates = (startVal, endVal) => {
+    startDate = startVal ? new Date(startVal) : null;
+    endDate   = startVal && endVal ? new Date(endVal) : null;
+    if (startDate) { viewYear = startDate.getFullYear(); viewMonth = startDate.getMonth(); }
+    updateDisplay();
+  };
+
+  function renderGrid() {
+    label.textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+    grid.innerHTML = '';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const firstDay = new Date(viewYear, viewMonth, 1);
+    let offset = (firstDay.getDay() + 6) % 7;
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
+    for (let i = offset - 1; i >= 0; i--) {
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'cal-day cal-day--other-month';
+      btn.textContent = daysInPrev - i; grid.appendChild(btn);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(viewYear, viewMonth, d);
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.textContent = d;
+      let cls = 'cal-day';
+      if (date < today) cls += ' cal-day--disabled';
+      if (sameDay(date, today)) cls += ' cal-day--today';
+      if (sameDay(date, startDate) || sameDay(date, endDate)) cls += ' cal-day--selected';
+      if (startDate && endDate && date > startDate && date < endDate) cls += ' cal-day--in-range';
+      if (sameDay(date, startDate) && endDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-start';
+      if (sameDay(date, endDate) && startDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-end';
+      btn.className = cls;
+      if (!cls.includes('disabled')) {
+        btn.addEventListener('click', (e) => { e.stopPropagation(); pickDay(date); });
+      }
+      grid.appendChild(btn);
+    }
+    const total = offset + daysInMonth;
+    const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let i = 1; i <= remaining; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'cal-day cal-day--other-month';
+      btn.textContent = i; grid.appendChild(btn);
+    }
+    hint.textContent = startDate && !endDate
+      ? (t('admin.date_pick_end') || 'Enddatum wählen')
+      : (t('admin.date_pick_start') || 'Startdatum wählen');
+  }
+
+  function pickDay(date) {
+    if (!startDate || (startDate && endDate)) {
+      startDate = date; endDate = null;
+    } else if (date < startDate) {
+      endDate = startDate; startDate = date;
+    } else {
+      endDate = date;
+      setTimeout(() => { picker.hidden = true; trigger.classList.remove('open'); }, 200);
+    }
+    updateDisplay(); renderGrid();
+  }
+
+  document.getElementById('edit-cal-prev').addEventListener('click', () => {
+    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderGrid();
+  });
+  document.getElementById('edit-cal-next').addEventListener('click', () => {
+    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderGrid();
+  });
+  clearBtn.addEventListener('click', () => {
+    startDate = null; endDate = null; updateDisplay(); renderGrid();
+  });
+  trigger.addEventListener('click', () => {
+    const open = picker.hidden;
+    picker.hidden = !open;
+    trigger.classList.toggle('open', open);
+    if (open) renderGrid();
+  });
+  document.addEventListener('click', (e) => {
+    if (!trigger.contains(e.target) && !picker.contains(e.target)) {
+      picker.hidden = true; trigger.classList.remove('open');
+    }
+  });
   updateDisplay();
 }
 

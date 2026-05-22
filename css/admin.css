@@ -702,3 +702,49 @@
   transition: opacity .15s, transform .15s;
 }
 .pdf-item-thumb:hover { opacity: .8; transform: scale(1.04); }
+
+/* ── Edit button ── */
+.btn-edit {
+  padding: .3rem .55rem;
+  border: 1px solid var(--border, #E8DFD0);
+  border-radius: 6px;
+  color: var(--muted, #7A6E64);
+  background: transparent;
+  font-size: .9rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.btn-edit:hover { border-color: var(--spice, #C45C26); color: var(--spice, #C45C26); background: rgba(196,92,38,.05); }
+
+/* ── Edit modal ── */
+.edit-modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 200;
+}
+.edit-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  z-index: 201; width: min(480px, calc(100vw - 2rem));
+  background: #fff; border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  display: flex; flex-direction: column; overflow: hidden;
+  max-height: calc(100dvh - 3rem);
+}
+.edit-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.25rem .8rem;
+  border-bottom: 1px solid var(--border, #E8DFD0);
+}
+.edit-modal-title { font-size: 1rem; font-weight: 600; margin: 0; }
+.edit-modal-close {
+  background: none; border: none; font-size: 1.1rem; cursor: pointer;
+  color: var(--muted, #7A6E64); padding: .2rem .4rem; border-radius: 4px;
+  transition: background .15s;
+}
+.edit-modal-close:hover { background: var(--sand, #F8F3EE); }
+.edit-modal-body {
+  padding: 1.1rem 1.25rem; overflow-y: auto; flex: 1;
+}
+.edit-modal-footer {
+  display: flex; justify-content: flex-end; gap: .6rem;
+  padding: .9rem 1.25rem; border-top: 1px solid var(--border, #E8DFD0);
+}

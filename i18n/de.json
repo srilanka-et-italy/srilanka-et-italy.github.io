@@ -203,6 +203,9 @@
         "list_empty": "Keine Dateien vorhanden.",
         "delete_btn": "Löschen",
         "delete_confirm": "PDF wirklich löschen?",
-        "delete_storage_error": "Storage-Löschen fehlgeschlagen: "
+        "delete_storage_error": "Storage-Löschen fehlgeschlagen: ",
+        "edit_title": "Bearbeiten",
+        "edit_save": "Speichern",
+        "edit_cancel": "Abbrechen"
     }
 }
