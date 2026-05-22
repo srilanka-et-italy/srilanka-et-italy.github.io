@@ -221,7 +221,7 @@ class App {
         const img = document.createElement('img');
         img.src = url;
         img.alt = '';
-        img.style.cssText = 'width:100%;height:auto;display:block;';
+        img.className = 'carousel-img';
         img.onload  = () => { canvas.replaceWith(img); container.classList.remove('pdf-loading'); };
         img.onerror = () => { container.classList.remove('pdf-loading'); container.classList.add('pdf-error'); };
     }
