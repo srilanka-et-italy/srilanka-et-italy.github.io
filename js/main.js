@@ -153,12 +153,15 @@ class App {
             const slide = document.createElement('div');
             slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
             slide.dataset.index = i;
+            slide.dataset.url = pdf.pdfUrl;
+            slide.style.cursor = 'zoom-in';
             slide.innerHTML = `
                 <div class="pdf-skeleton">
                     <div class="pdf-progress-bar"><div class="pdf-progress-fill"></div></div>
                     <span data-i18n="hero.pdf_loading">Angebot wird geladen…</span>
                 </div>
                 <canvas class="pdf-canvas"></canvas>`;
+            slide.addEventListener('click', () => window.open(pdf.pdfUrl, '_blank'));
             container.appendChild(slide);
             return slide;
         });
