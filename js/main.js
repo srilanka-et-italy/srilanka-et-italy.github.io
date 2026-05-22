@@ -203,7 +203,8 @@ class App {
     }
 
     renderSlide(pdf, slide) {
-        const isImage = pdf.contentType && pdf.contentType.startsWith('image/');
+        const ct = pdf.contentType || '';
+        const isImage = ct.startsWith('image/') || /\.(png|jpe?g)$/i.test(pdf.fileName || '');
         if (isImage) {
             this.renderImageSlide(pdf.pdfUrl, slide);
         } else {
