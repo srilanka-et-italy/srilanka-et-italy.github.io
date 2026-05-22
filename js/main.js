@@ -221,7 +221,7 @@ class App {
         const img = document.createElement('img');
         img.src = url;
         img.alt = '';
-        img.style.cssText = 'width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block;';
+        img.style.cssText = 'width:100%;height:auto;display:block;';
         img.onload  = () => { canvas.replaceWith(img); container.classList.remove('pdf-loading'); };
         img.onerror = () => { container.classList.remove('pdf-loading'); container.classList.add('pdf-error'); };
     }
