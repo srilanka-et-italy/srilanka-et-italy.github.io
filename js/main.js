@@ -126,20 +126,26 @@ class App {
     async loadSeasonalPDFs(maxPdfs) {
         try {
             const now = Timestamp.now();
-            const q = query(
-                collection(db, 'seasonal_pdfs'),
-                where('endDate', '>=', now),
-                orderBy('endDate'),
-                orderBy('order')
-            );
-            const snap = await getDocs(q);
-            return snap.docs
+            const [datedSnap, permanentSnap] = await Promise.all([
+                getDocs(query(
+                    collection(db, 'seasonal_pdfs'),
+                    where('endDate', '>=', now),
+                    orderBy('endDate'),
+                    orderBy('order')
+                )),
+                getDocs(query(
+                    collection(db, 'seasonal_pdfs'),
+                    where('permanent', '==', true),
+                    orderBy('order')
+                ))
+            ]);
+            const dated = datedSnap.docs
                 .map(d => ({ id: d.id, ...d.data() }))
-                .filter(pdf =>
-                    pdf.status === 'active' &&
-                    pdf.startDate && pdf.startDate.toMillis() <= now.toMillis()
-                )
-                .slice(0, maxPdfs);
+                .filter(p => p.status === 'active' && p.startDate && p.startDate.toMillis() <= now.toMillis());
+            const permanent = permanentSnap.docs
+                .map(d => ({ id: d.id, ...d.data() }))
+                .filter(p => p.status === 'active');
+            return [...dated, ...permanent].slice(0, maxPdfs);
         } catch (err) {
             console.error('Could not load seasonal PDFs:', err);
             return [];

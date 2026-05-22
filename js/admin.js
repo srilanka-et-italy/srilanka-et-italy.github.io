@@ -143,16 +143,16 @@ function setupUploadForm() {
     if (!allowed.includes(file.type)) { showError(errorEl, t('admin.err_not_pdf')); return; }
     if (file.size > 2 * 1024 * 1024) { showError(errorEl, t('admin.err_too_large')); return; }
 
-    const titleDe = DOMPurify.sanitize(document.getElementById('pdf-title-de').value.trim());
-    if (!titleDe) { showError(errorEl, t('admin.err_no_title')); return; }
-
     const startLocal = document.getElementById('pdf-start').value;
     const endLocal   = document.getElementById('pdf-end').value;
-    if (!startLocal || !endLocal) { showError(errorEl, t('admin.err_no_dates')); return; }
+    const hasDates   = startLocal && endLocal;
 
-    const startTs = localBerlinToTimestamp(startLocal);
-    const endTs   = localBerlinToTimestamp(endLocal);
-    if (endTs.toMillis() <= startTs.toMillis()) { showError(errorEl, t('admin.err_date_order')); return; }
+    let startTs, endTs;
+    if (hasDates) {
+      startTs = localBerlinToTimestamp(startLocal);
+      endTs   = localBerlinToTimestamp(endLocal);
+      if (endTs.toMillis() <= startTs.toMillis()) { showError(errorEl, t('admin.err_date_order')); return; }
+    }
 
     const order = parseInt(document.getElementById('pdf-order').value) || 0;
     const docId = Date.now().toString();
@@ -160,21 +160,24 @@ function setupUploadForm() {
     const fileName = `${docId}_${crypto.randomUUID()}.${ext}`;
     const storageRef = ref(storage, `seasonal-pdfs/${fileName}`);
 
-    const docRef = await addDoc(collection(db, 'seasonal_pdfs'), {
+    const titleDe = DOMPurify.sanitize(document.getElementById('pdf-title-de').value.trim());
+    const docData = {
       title: {
         de: titleDe,
         en: DOMPurify.sanitize(document.getElementById('pdf-title-en').value.trim()),
         ta: DOMPurify.sanitize(document.getElementById('pdf-title-ta').value.trim())
       },
-      startDate: startTs,
-      endDate: endTs,
       order,
+      permanent: !hasDates,
       status: 'draft',
       fileName,
       contentType: file.type,
       pdfUrl: 'pending',
       createdAt: serverTimestamp()
-    });
+    };
+    if (hasDates) { docData.startDate = startTs; docData.endDate = endTs; }
+
+    const docRef = await addDoc(collection(db, 'seasonal_pdfs'), docData);
 
     progressWrap.hidden = false;
     const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
@@ -244,15 +247,16 @@ function renderPdfItem(id, d) {
   const item = document.createElement('div');
   item.className = 'pdf-item';
 
-  const startStr = d.startDate ? d.startDate.toDate().toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }) : '?';
-  const endStr   = d.endDate   ? d.endDate.toDate().toLocaleDateString('de-DE',   { timeZone: 'Europe/Berlin' }) : '?';
+  const startStr = d.startDate ? d.startDate.toDate().toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }) : null;
+  const endStr   = d.endDate   ? d.endDate.toDate().toLocaleDateString('de-DE',   { timeZone: 'Europe/Berlin' }) : null;
+  const dateStr  = startStr && endStr ? `${startStr} – ${endStr}` : '∞ immer aktiv';
   const titleText = d.title?.[i18n.lang] || d.title?.de || id;
 
   item.innerHTML = `
     <div class="pdf-item-icon">📄</div>
     <div class="pdf-item-info">
       <span class="pdf-item-title">${DOMPurify.sanitize(titleText)}</span>
-      <span class="pdf-item-dates">${startStr} – ${endStr}</span>
+      <span class="pdf-item-dates">${dateStr}</span>
     </div>
     <div class="pdf-item-right">
       <span class="pdf-item-status ${d.status}">${d.status}</span>
