@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, initializeFirestore, CACHE_SIZE_UNLIMITED } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 import { getRemoteConfig } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-remote-config.js';
@@ -14,8 +14,7 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-// Use REST transport instead of gRPC-WebChannel to avoid long-polling CORS issues
-export const db = initializeFirestore(app, { experimentalForceLongPolling: false, useFetchStreams: false });
+export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const remoteConfig = getRemoteConfig(app);
