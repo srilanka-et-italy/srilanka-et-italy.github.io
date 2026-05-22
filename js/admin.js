@@ -1,5 +1,6 @@
 import { db, storage } from './firebase-config.js';
 import { login, logout, onAdminAuthStateChanged } from './auth.js';
+import { I18n } from './i18n.js';
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, getDocs,
   query, orderBy, serverTimestamp, Timestamp
@@ -13,6 +14,38 @@ const adminPanel   = document.getElementById('admin-panel');
 const loginForm    = document.getElementById('login-form');
 const loginError   = document.getElementById('login-error');
 const logoutBtn    = document.getElementById('logout-btn');
+
+// ── i18n ────────────────────────────────────────────────────────────────────
+
+const i18n = new I18n();
+await i18n.init();
+
+function t(key) {
+  return i18n.getValueByPath(i18n.translations, key) || key;
+}
+
+function setupLangButtons() {
+  document.querySelectorAll('.admin-lang-btn[data-lang]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await i18n.setLanguage(btn.getAttribute('data-lang'));
+      // sync active state across all lang button groups
+      document.querySelectorAll('.admin-lang-btn[data-lang]').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-lang') === i18n.lang);
+      });
+      // re-apply placeholders for dynamically-loaded panel
+      applyPanelPlaceholders();
+    });
+  });
+}
+
+function applyPanelPlaceholders() {
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const val = t(el.getAttribute('data-i18n-placeholder'));
+    if (val) el.placeholder = val;
+  });
+}
+
+setupLangButtons();
 
 // ── Auth state ──────────────────────────────────────────────────────────────
 
@@ -43,7 +76,7 @@ loginForm.addEventListener('submit', async (e) => {
     await login(email, password);
   } catch (err) {
     loginError.textContent = err.code === 'auth/invalid-credential' || err.message === 'not-admin'
-      ? 'Ungültige Anmeldedaten oder fehlende Berechtigung.'
+      ? t('admin.login_error_invalid')
       : 'Fehler: ' + err.message;
     loginError.hidden = false;
   }
@@ -57,10 +90,34 @@ async function loadAdminPanel() {
   const placeholder = document.getElementById('admin-content-placeholder');
   const res  = await fetch('components/admin-panel.html');
   const html = await res.text();
-  placeholder.innerHTML = DOMPurify.sanitize(html, { ADD_TAGS: ['form', 'input', 'label', 'button', 'select', 'option'], ADD_ATTR: ['for', 'type', 'id', 'name', 'value', 'accept', 'required', 'min', 'max', 'maxlength', 'hidden'] });
+  placeholder.innerHTML = DOMPurify.sanitize(html, {
+    ADD_TAGS: ['form', 'input', 'label', 'button', 'select', 'option'],
+    ADD_ATTR: ['for', 'type', 'id', 'name', 'value', 'accept', 'required',
+               'min', 'max', 'maxlength', 'hidden', 'data-i18n', 'data-i18n-placeholder',
+               'data-title-lang', 'style']
+  });
 
+  // Apply i18n to the newly injected HTML
+  i18n.updateDOM();
+  applyPanelPlaceholders();
+
+  setupTitleTabs();
   setupUploadForm();
   setupPdfList();
+}
+
+// ── Title language tabs ───────────────────────────────────────────────────
+
+function setupTitleTabs() {
+  document.querySelectorAll('.admin-lang-tab[data-title-lang]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const lang = tab.getAttribute('data-title-lang');
+      document.querySelectorAll('.admin-lang-tab[data-title-lang]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.admin-title-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById('title-pane-' + lang).classList.add('active');
+    });
+  });
 }
 
 // ── Upload ───────────────────────────────────────────────────────────────────
@@ -79,30 +136,32 @@ function setupUploadForm() {
     successEl.hidden = true;
 
     const file = document.getElementById('pdf-file').files[0];
-    if (!file) { showError(errorEl, 'Bitte wähle eine PDF-Datei.'); return; }
-    if (file.type !== 'application/pdf') { showError(errorEl, 'Nur PDF-Dateien erlaubt.'); return; }
-    if (file.size > 2 * 1024 * 1024) { showError(errorEl, 'Datei zu groß (max. 2 MB).'); return; }
+    if (!file) { showError(errorEl, t('admin.err_no_file')); return; }
+    if (file.type !== 'application/pdf') { showError(errorEl, t('admin.err_not_pdf')); return; }
+    if (file.size > 2 * 1024 * 1024) { showError(errorEl, t('admin.err_too_large')); return; }
 
     const titleDe = DOMPurify.sanitize(document.getElementById('pdf-title-de').value.trim());
-    if (!titleDe) { showError(errorEl, 'Titel (DE) ist erforderlich.'); return; }
+    if (!titleDe) { showError(errorEl, t('admin.err_no_title')); return; }
 
-    // Convert local Berlin time to UTC Timestamp
     const startLocal = document.getElementById('pdf-start').value;
     const endLocal   = document.getElementById('pdf-end').value;
-    if (!startLocal || !endLocal) { showError(errorEl, 'Start- und Enddatum sind erforderlich.'); return; }
+    if (!startLocal || !endLocal) { showError(errorEl, t('admin.err_no_dates')); return; }
 
     const startTs = localBerlinToTimestamp(startLocal);
     const endTs   = localBerlinToTimestamp(endLocal);
-    if (endTs.toMillis() <= startTs.toMillis()) { showError(errorEl, 'Enddatum muss nach Startdatum liegen.'); return; }
+    if (endTs.toMillis() <= startTs.toMillis()) { showError(errorEl, t('admin.err_date_order')); return; }
 
     const order = parseInt(document.getElementById('pdf-order').value) || 0;
     const docId = Date.now().toString();
     const fileName = `${docId}_${crypto.randomUUID()}.pdf`;
     const storageRef = ref(storage, `seasonal-pdfs/${fileName}`);
 
-    // Create Firestore doc with status 'draft' first (prevents public visibility during upload)
     const docRef = await addDoc(collection(db, 'seasonal_pdfs'), {
-      title: { de: titleDe, en: DOMPurify.sanitize(document.getElementById('pdf-title-en').value.trim()), ta: DOMPurify.sanitize(document.getElementById('pdf-title-ta').value.trim()) },
+      title: {
+        de: titleDe,
+        en: DOMPurify.sanitize(document.getElementById('pdf-title-en').value.trim()),
+        ta: DOMPurify.sanitize(document.getElementById('pdf-title-ta').value.trim())
+      },
       startDate: startTs,
       endDate: endTs,
       order,
@@ -112,7 +171,6 @@ function setupUploadForm() {
       createdAt: serverTimestamp()
     });
 
-    // Upload with progress
     progressWrap.hidden = false;
     const uploadTask = uploadBytesResumable(storageRef, file, { contentType: 'application/pdf' });
 
@@ -134,6 +192,13 @@ function setupUploadForm() {
         progressWrap.hidden = true;
         successEl.hidden = false;
         form.reset();
+        // reset title tabs back to DE
+        document.querySelectorAll('.admin-lang-tab[data-title-lang]').forEach(t => t.classList.remove('active'));
+        const deTab = document.querySelector('.admin-lang-tab[data-title-lang="de"]');
+        if (deTab) deTab.classList.add('active');
+        document.querySelectorAll('.admin-title-pane').forEach(p => p.classList.remove('active'));
+        const dePane = document.getElementById('title-pane-de');
+        if (dePane) dePane.classList.add('active');
         await refreshPdfList(document.getElementById('pdf-list'));
       }
     );
@@ -150,8 +215,17 @@ async function setupPdfList() {
 async function refreshPdfList(listEl) {
   const q = query(collection(db, 'seasonal_pdfs'), orderBy('order'), orderBy('createdAt'));
   const snap = await getDocs(q);
+
+  const countEl = document.getElementById('pdf-count');
+  if (!snap.empty && countEl) {
+    countEl.textContent = snap.size;
+    countEl.hidden = false;
+  } else if (countEl) {
+    countEl.hidden = true;
+  }
+
   if (snap.empty) {
-    listEl.innerHTML = '<p class="pdf-list-empty">Keine PDFs vorhanden.</p>';
+    listEl.innerHTML = `<p class="pdf-list-empty">${t('admin.list_empty')}</p>`;
     return;
   }
   listEl.innerHTML = '';
@@ -167,17 +241,17 @@ function renderPdfItem(id, d) {
 
   const startStr = d.startDate ? d.startDate.toDate().toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }) : '?';
   const endStr   = d.endDate   ? d.endDate.toDate().toLocaleDateString('de-DE',   { timeZone: 'Europe/Berlin' }) : '?';
+  const titleText = d.title?.[i18n.lang] || d.title?.de || id;
 
   item.innerHTML = `
+    <div class="pdf-item-icon">📄</div>
     <div class="pdf-item-info">
-      <span class="pdf-item-title">${DOMPurify.sanitize(d.title?.de || id)}</span>
+      <span class="pdf-item-title">${DOMPurify.sanitize(titleText)}</span>
       <span class="pdf-item-dates">${startStr} – ${endStr}</span>
     </div>
-    <div style="display:flex;align-items:center;gap:.75rem">
+    <div class="pdf-item-right">
       <span class="pdf-item-status ${d.status}">${d.status}</span>
-      <div class="pdf-item-actions">
-        <button class="btn-delete" data-id="${id}" data-filename="${d.fileName}">Löschen</button>
-      </div>
+      <button class="btn-delete" data-id="${id}" data-filename="${d.fileName}">${t('admin.delete_btn')}</button>
     </div>`;
 
   item.querySelector('.btn-delete').addEventListener('click', () => deletePdf(id, d.fileName));
@@ -185,9 +259,8 @@ function renderPdfItem(id, d) {
 }
 
 async function deletePdf(docId, fileName) {
-  if (!confirm('PDF wirklich löschen?')) return;
+  if (!confirm(t('admin.delete_confirm'))) return;
 
-  // Mark as deleting first
   const docRef = doc(db, 'seasonal_pdfs', docId);
   await updateDoc(docRef, { status: 'deleting' });
 
@@ -196,7 +269,7 @@ async function deletePdf(docId, fileName) {
     await deleteObject(fileRef);
   } catch (err) {
     if (err.code !== 'storage/object-not-found') {
-      alert('Storage-Löschen fehlgeschlagen: ' + err.message);
+      alert(t('admin.delete_storage_error') + err.message);
       await updateDoc(docRef, { status: 'active' });
       return;
     }
@@ -215,8 +288,6 @@ function showError(el, msg) {
 }
 
 function localBerlinToTimestamp(localDatetimeStr) {
-  // localDatetimeStr = "YYYY-MM-DDTHH:mm" interpreted as Europe/Berlin
-  // Luxon is loaded globally via CDN in admin.html
   const dt = luxon.DateTime.fromISO(localDatetimeStr, { zone: 'Europe/Berlin' });
   return Timestamp.fromMillis(dt.toMillis());
 }

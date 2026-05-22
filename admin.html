@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin — Sri Lanka ET Italy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/admin.css">
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
@@ -14,21 +17,29 @@
   <!-- Login Screen -->
   <div id="login-screen" class="admin-login-screen">
     <div class="admin-login-card">
-      <h1 class="admin-login-title">Admin Login</h1>
+      <p class="admin-login-eyebrow">Sri Lanka ET Italy</p>
+      <h1 class="admin-login-title" data-i18n="admin.login_title">Admin Login</h1>
+
+      <div class="admin-lang-switch">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
       <form id="login-form" novalidate>
         <div class="admin-field">
-          <label for="email">E-Mail</label>
+          <label for="email" data-i18n="admin.email_label">E-Mail</label>
           <input type="email" id="email" autocomplete="email" required>
         </div>
         <div class="admin-field">
-          <label for="password">Passwort</label>
+          <label for="password" data-i18n="admin.password_label">Passwort</label>
           <div class="admin-password-wrap">
             <input type="password" id="password" autocomplete="current-password" required>
             <button type="button" id="toggle-password" class="admin-pw-toggle" aria-label="Passwort anzeigen">👁</button>
           </div>
         </div>
         <p id="login-error" class="admin-error" hidden></p>
-        <button type="submit" class="btn-dark admin-submit">Anmelden</button>
+        <button type="submit" class="btn-dark admin-submit" data-i18n="admin.login_btn">Anmelden</button>
       </form>
     </div>
   </div>
@@ -36,8 +47,18 @@
   <!-- Admin Panel (hidden until authenticated) -->
   <div id="admin-panel" class="admin-panel" hidden>
     <header class="admin-header">
-      <span class="admin-header-title">Sri Lanka ET Italy — Admin</span>
-      <button id="logout-btn" class="btn-outline">Abmelden</button>
+      <div class="admin-header-brand">
+        <span class="admin-header-logo">Sri Lanka <em>ET</em> Italy</span>
+        <span class="admin-header-badge" data-i18n="admin.header_badge">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <div class="admin-header-langs">
+          <button class="admin-lang-btn active" data-lang="de">DE</button>
+          <button class="admin-lang-btn" data-lang="en">EN</button>
+          <button class="admin-lang-btn" data-lang="ta">TA</button>
+        </div>
+        <button id="logout-btn" class="btn-outline" data-i18n="admin.logout_btn">Abmelden</button>
+      </div>
     </header>
     <main class="admin-main">
       <div id="admin-content-placeholder"></div>

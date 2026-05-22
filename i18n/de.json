@@ -168,5 +168,36 @@
             "content": "Diese Seite nutzt den Kartendienst Google Maps. Anbieter ist die Google Ireland Limited („Google“), Gordon House, Barrow Street, Dublin 4, Irland. Zur Nutzung der Funktionen von Google Maps ist es notwendig, Ihre IP-Adresse zu speichern. Diese Informationen werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert. Der Anbieter dieser Seite hat keinen Einfluss auf diese Datenübertragung. Wenn Google Maps aktiviert ist, kann Google zum Zwecke der einheitlichen Darstellung der Schriftarten Google Web Fonts verwenden. Beim Aufruf von Google Maps lädt Ihr Browser die benötigten Web Fonts in ihren Browsercache, um Texte und Schriftarten korrekt anzuzeigen. Die Nutzung von Google Maps erfolgt im Interesse einer leichten Auffindbarkeit der von uns auf der Website angegebenen Orte. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar."
         },
         "date": "Stand: März 2025"
+    },
+    "admin": {
+        "login_title": "Admin Login",
+        "email_label": "E-Mail",
+        "password_label": "Passwort",
+        "login_btn": "Anmelden",
+        "login_error_invalid": "Ungültige Anmeldedaten oder fehlende Berechtigung.",
+        "header_badge": "Admin",
+        "logout_btn": "Abmelden",
+        "upload_title": "PDF hochladen",
+        "title_label": "Titel",
+        "title_placeholder_de": "Titel auf Deutsch",
+        "title_placeholder_en": "Title in English",
+        "title_placeholder_ta": "தமிழில் தலைப்பு",
+        "start_label": "Startdatum (Europe/Berlin)",
+        "end_label": "Enddatum (Europe/Berlin)",
+        "order_label": "Reihenfolge",
+        "file_label": "PDF-Datei (max. 2 MB)",
+        "upload_btn": "Hochladen",
+        "upload_success": "PDF erfolgreich hochgeladen.",
+        "err_no_file": "Bitte wähle eine PDF-Datei.",
+        "err_not_pdf": "Nur PDF-Dateien erlaubt.",
+        "err_too_large": "Datei zu groß (max. 2 MB).",
+        "err_no_title": "Titel (DE) ist erforderlich.",
+        "err_no_dates": "Start- und Enddatum sind erforderlich.",
+        "err_date_order": "Enddatum muss nach Startdatum liegen.",
+        "list_title": "Aktive PDFs",
+        "list_empty": "Keine PDFs vorhanden.",
+        "delete_btn": "Löschen",
+        "delete_confirm": "PDF wirklich löschen?",
+        "delete_storage_error": "Storage-Löschen fehlgeschlagen: "
     }
 }

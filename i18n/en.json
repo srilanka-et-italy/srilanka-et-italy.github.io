@@ -168,5 +168,36 @@
             "content": "This site uses the Google Maps mapping service. The provider is Google Ireland Limited (\"Google\"), Gordon House, Barrow Street, Dublin 4, Ireland. To use the functions of Google Maps, it is necessary to store your IP address. This information is usually transmitted to a Google server in the USA and stored there. The provider of this page has no influence on this data transmission."
         },
         "date": "Last updated: March 2025"
+    },
+    "admin": {
+        "login_title": "Admin Login",
+        "email_label": "Email",
+        "password_label": "Password",
+        "login_btn": "Sign in",
+        "login_error_invalid": "Invalid credentials or missing permission.",
+        "header_badge": "Admin",
+        "logout_btn": "Sign out",
+        "upload_title": "Upload PDF",
+        "title_label": "Title",
+        "title_placeholder_de": "Title in German",
+        "title_placeholder_en": "Title in English",
+        "title_placeholder_ta": "தமிழில் தலைப்பு",
+        "start_label": "Start date (Europe/Berlin)",
+        "end_label": "End date (Europe/Berlin)",
+        "order_label": "Display order",
+        "file_label": "PDF file (max. 2 MB)",
+        "upload_btn": "Upload",
+        "upload_success": "PDF uploaded successfully.",
+        "err_no_file": "Please select a PDF file.",
+        "err_not_pdf": "Only PDF files are allowed.",
+        "err_too_large": "File too large (max. 2 MB).",
+        "err_no_title": "Title (DE) is required.",
+        "err_no_dates": "Start and end date are required.",
+        "err_date_order": "End date must be after start date.",
+        "list_title": "Active PDFs",
+        "list_empty": "No PDFs available.",
+        "delete_btn": "Delete",
+        "delete_confirm": "Really delete this PDF?",
+        "delete_storage_error": "Storage deletion failed: "
     }
 }

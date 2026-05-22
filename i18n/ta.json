@@ -168,5 +168,36 @@
             "content": "இந்த இணையதளம் API மூலம் கூகுள் மேப்ஸ் வரைபட சேவையைப் பயன்படுத்துகிறது. வழங்குநர் Google Ireland Limited (\"Google\"), Gordon House, Barrow Street, Dublin 4, அயர்லாந்து. கூகுள் மேப்ஸின் செயல்பாடுகளைப் பயன்படுத்த, உங்கள் IP முகவரியைச் சேமிப்பது அவசியம்."
         },
         "date": "கடைசியாக புதுப்பிக்கப்பட்டது: மார்ச் 2024"
+    },
+    "admin": {
+        "login_title": "நிர்வாக உள்நுழைவு",
+        "email_label": "மின்னஞ்சல்",
+        "password_label": "கடவுச்சொல்",
+        "login_btn": "உள்நுழைக",
+        "login_error_invalid": "தவறான நற்சான்றிதழ்கள் அல்லது அனுமதி இல்லை.",
+        "header_badge": "நிர்வாகி",
+        "logout_btn": "வெளியேறு",
+        "upload_title": "PDF பதிவேற்றம்",
+        "title_label": "தலைப்பு",
+        "title_placeholder_de": "Titel auf Deutsch",
+        "title_placeholder_en": "Title in English",
+        "title_placeholder_ta": "தமிழில் தலைப்பு",
+        "start_label": "தொடக்க தேதி (Europe/Berlin)",
+        "end_label": "முடிவு தேதி (Europe/Berlin)",
+        "order_label": "வரிசை",
+        "file_label": "PDF கோப்பு (அதிகபட்சம் 2 MB)",
+        "upload_btn": "பதிவேற்று",
+        "upload_success": "PDF வெற்றிகரமாக பதிவேற்றப்பட்டது.",
+        "err_no_file": "ஒரு PDF கோப்பை தேர்ந்தெடுக்கவும்.",
+        "err_not_pdf": "PDF கோப்புகள் மட்டுமே அனுமதிக்கப்படும்.",
+        "err_too_large": "கோப்பு மிகவும் பெரியது (அதிகபட்சம் 2 MB).",
+        "err_no_title": "தலைப்பு (DE) அவசியம்.",
+        "err_no_dates": "தொடக்க மற்றும் முடிவு தேதி தேவை.",
+        "err_date_order": "முடிவு தேதி தொடக்க தேதிக்கு பிறகு இருக்க வேண்டும்.",
+        "list_title": "செயலில் உள்ள PDFகள்",
+        "list_empty": "PDF இல்லை.",
+        "delete_btn": "நீக்கு",
+        "delete_confirm": "இந்த PDF ஐ நீக்கவா?",
+        "delete_storage_error": "சேமிப்பக நீக்கம் தோல்வியடைந்தது: "
     }
 }

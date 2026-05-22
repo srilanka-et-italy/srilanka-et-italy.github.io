@@ -1,49 +1,65 @@
 <div class="admin-section">
-  <h2 class="admin-section-title">PDF hochladen</h2>
+  <div class="admin-section-header">
+    <h2 class="admin-section-title" data-i18n="admin.upload_title">PDF hochladen</h2>
+  </div>
   <form id="upload-form" class="admin-upload-form" novalidate>
+
+    <!-- Title fields with language tabs -->
     <div class="admin-field">
-      <label for="pdf-title-de">Titel (DE)</label>
-      <input type="text" id="pdf-title-de" maxlength="80" required>
+      <label data-i18n="admin.title_label">Titel</label>
+      <div class="admin-lang-tabs">
+        <button type="button" class="admin-lang-tab active" data-title-lang="de">DE</button>
+        <button type="button" class="admin-lang-tab" data-title-lang="en">EN</button>
+        <button type="button" class="admin-lang-tab" data-title-lang="ta">TA</button>
+      </div>
+      <div class="admin-title-pane active" id="title-pane-de">
+        <input type="text" id="pdf-title-de" maxlength="80" required data-i18n-placeholder="admin.title_placeholder_de">
+      </div>
+      <div class="admin-title-pane" id="title-pane-en">
+        <input type="text" id="pdf-title-en" maxlength="80" data-i18n-placeholder="admin.title_placeholder_en">
+      </div>
+      <div class="admin-title-pane" id="title-pane-ta">
+        <input type="text" id="pdf-title-ta" maxlength="80" data-i18n-placeholder="admin.title_placeholder_ta">
+      </div>
     </div>
-    <div class="admin-field">
-      <label for="pdf-title-en">Titel (EN)</label>
-      <input type="text" id="pdf-title-en" maxlength="80">
-    </div>
-    <div class="admin-field">
-      <label for="pdf-title-ta">Titel (TA)</label>
-      <input type="text" id="pdf-title-ta" maxlength="80">
-    </div>
+
     <div class="admin-field-row">
       <div class="admin-field">
-        <label for="pdf-start">Startdatum (Europe/Berlin)</label>
+        <label for="pdf-start" data-i18n="admin.start_label">Startdatum (Europe/Berlin)</label>
         <input type="datetime-local" id="pdf-start" required>
       </div>
       <div class="admin-field">
-        <label for="pdf-end">Enddatum (Europe/Berlin)</label>
+        <label for="pdf-end" data-i18n="admin.end_label">Enddatum (Europe/Berlin)</label>
         <input type="datetime-local" id="pdf-end" required>
       </div>
     </div>
+
     <div class="admin-field">
-      <label for="pdf-order">Reihenfolge</label>
-      <input type="number" id="pdf-order" value="0" min="0" max="99">
+      <label for="pdf-order" data-i18n="admin.order_label">Reihenfolge</label>
+      <input type="number" id="pdf-order" value="0" min="0" max="99" style="max-width:120px">
     </div>
+
     <div class="admin-field">
-      <label for="pdf-file">PDF-Datei (max. 2 MB)</label>
+      <label for="pdf-file" data-i18n="admin.file_label">PDF-Datei (max. 2 MB)</label>
       <input type="file" id="pdf-file" accept="application/pdf" required>
     </div>
+
     <div id="upload-progress-wrap" class="upload-progress-wrap" hidden>
       <div class="upload-progress-bar"><div id="upload-progress-fill" class="upload-progress-fill"></div></div>
-      <span id="upload-progress-text">0 %</span>
+      <span id="upload-progress-text" class="upload-progress-label">0 %</span>
     </div>
     <p id="upload-error" class="admin-error" hidden></p>
-    <p id="upload-success" class="admin-success" hidden>PDF erfolgreich hochgeladen.</p>
-    <button type="submit" class="btn-dark">Hochladen</button>
+    <p id="upload-success" class="admin-success" hidden data-i18n="admin.upload_success">PDF erfolgreich hochgeladen.</p>
+    <button type="submit" class="btn-dark" data-i18n="admin.upload_btn">Hochladen</button>
   </form>
 </div>
 
 <div class="admin-section">
-  <h2 class="admin-section-title">Aktive PDFs</h2>
+  <div class="admin-section-header">
+    <h2 class="admin-section-title" data-i18n="admin.list_title">Aktive PDFs</h2>
+    <span id="pdf-count" class="admin-section-count" hidden></span>
+  </div>
   <div id="pdf-list" class="pdf-list">
-    <p class="pdf-list-empty">Keine PDFs vorhanden.</p>
+    <p class="pdf-list-empty" data-i18n="admin.list_empty">Keine PDFs vorhanden.</p>
   </div>
 </div>
