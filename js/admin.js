@@ -252,17 +252,26 @@ function renderPdfItem(id, d) {
   const dateStr  = startStr && endStr ? `${startStr} – ${endStr}` : '∞ immer aktiv';
   const titleText = d.title?.[i18n.lang] || d.title?.de || id;
 
+  const isImage = d.contentType && d.contentType.startsWith('image/');
+
   item.innerHTML = `
-    <div class="pdf-item-icon">📄</div>
+    <div class="pdf-item-thumb">
+      ${isImage
+        ? `<img src="${DOMPurify.sanitize(d.pdfUrl)}" alt="" class="pdf-thumb-img">`
+        : `<canvas class="pdf-thumb-canvas"></canvas>`}
+    </div>
     <div class="pdf-item-info">
       <span class="pdf-item-title">${DOMPurify.sanitize(titleText)}</span>
       <span class="pdf-item-dates">${dateStr}</span>
     </div>
     <div class="pdf-item-right">
       <span class="pdf-item-status ${d.status}">${d.status}</span>
-      <button class="btn-delete" data-id="${id}" data-filename="${d.fileName}">${t('admin.delete_btn')}</button>
+      <button class="btn-delete">${t('admin.delete_btn')}</button>
     </div>`;
 
+  if (!isImage && d.pdfUrl && d.pdfUrl !== 'pending') {
+    renderPdfThumb(d.pdfUrl, item.querySelector('.pdf-thumb-canvas'));
+  }
   item.querySelector('.btn-delete').addEventListener('click', () => deletePdf(id, d.fileName));
   return item;
 }
@@ -287,6 +296,24 @@ async function deletePdf(docId, fileName) {
   await deleteDoc(docRef);
   await writeAuditLog('delete', docId, fileName);
   await refreshPdfList(document.getElementById('pdf-list'));
+}
+
+// ── PDF thumbnail ─────────────────────────────────────────────────────────────
+
+async function renderPdfThumb(url, canvas) {
+  if (!canvas || typeof pdfjsLib === 'undefined') return;
+  try {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf  = await pdfjsLib.getDocument({ url }).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 1 });
+    const scale = 56 / viewport.width;
+    const vp = page.getViewport({ scale });
+    canvas.width  = vp.width;
+    canvas.height = vp.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+  } catch { /* show nothing on error */ }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
