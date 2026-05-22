@@ -7,14 +7,9 @@ async function checkAdminStatus(uid) {
   return snap.exists();
 }
 
+// Only authenticate — admin check happens in onAdminAuthStateChanged
 export async function login(email, password) {
-  const cred = await signInWithEmailAndPassword(auth, email, password);
-  const isAdmin = await checkAdminStatus(cred.user.uid);
-  if (!isAdmin) {
-    await signOut(auth);
-    throw new Error('not-admin');
-  }
-  return cred.user;
+  await signInWithEmailAndPassword(auth, email, password);
 }
 
 export function logout() {
@@ -24,7 +19,18 @@ export function logout() {
 export function onAdminAuthStateChanged(callback) {
   return onAuthStateChanged(auth, async (user) => {
     if (!user) { callback(null); return; }
-    const isAdmin = await checkAdminStatus(user.uid);
-    callback(isAdmin ? user : null);
+    try {
+      const isAdmin = await checkAdminStatus(user.uid);
+      if (isAdmin) {
+        callback(user);
+      } else {
+        await signOut(auth);
+        callback(null);
+      }
+    } catch {
+      // Firestore read failed — deny access
+      await signOut(auth);
+      callback(null);
+    }
   });
 }
