@@ -269,8 +269,12 @@ function renderPdfItem(id, d) {
       <button class="btn-delete">${t('admin.delete_btn')}</button>
     </div>`;
 
+  const thumb = item.querySelector('.pdf-item-thumb');
   if (!isImage && d.pdfUrl && d.pdfUrl !== 'pending') {
     renderPdfThumb(d.pdfUrl, item.querySelector('.pdf-thumb-canvas'));
+  }
+  if (d.pdfUrl && d.pdfUrl !== 'pending') {
+    thumb.addEventListener('click', () => openPreview(d.pdfUrl, isImage));
   }
   item.querySelector('.btn-delete').addEventListener('click', () => deletePdf(id, d.fileName));
   return item;
@@ -296,6 +300,45 @@ async function deletePdf(docId, fileName) {
   await deleteDoc(docRef);
   await writeAuditLog('delete', docId, fileName);
   await refreshPdfList(document.getElementById('pdf-list'));
+}
+
+// ── Preview lightbox ──────────────────────────────────────────────────────────
+
+function openPreview(url, isImage) {
+  const lb      = document.getElementById('admin-lightbox');
+  const content = document.getElementById('admin-lightbox-content');
+  const closeBtn = document.getElementById('admin-lightbox-close');
+  if (!lb) return;
+
+  content.innerHTML = '';
+  lb.hidden = false;
+
+  if (isImage) {
+    const img = document.createElement('img');
+    img.src = url;
+    content.appendChild(img);
+  } else {
+    // Full PDF render at readable scale
+    const canvas = document.createElement('canvas');
+    content.appendChild(canvas);
+    (async () => {
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const pdf  = await pdfjsLib.getDocument({ url }).promise;
+        const page = await pdf.getPage(1);
+        const scale = Math.min(window.innerWidth * .85, 820) / page.getViewport({ scale: 1 }).width;
+        const vp = page.getViewport({ scale });
+        canvas.width  = vp.width;
+        canvas.height = vp.height;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+      } catch { content.innerHTML = '<p style="color:#fff">Vorschau nicht verfügbar</p>'; }
+    })();
+  }
+
+  const close = () => { lb.hidden = true; content.innerHTML = ''; };
+  closeBtn.onclick = close;
+  lb.onclick = (e) => { if (e.target === lb) close(); };
 }
 
 // ── PDF thumbnail ─────────────────────────────────────────────────────────────
