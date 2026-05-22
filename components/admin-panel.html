@@ -23,15 +23,31 @@
       </div>
     </div>
 
-    <div class="admin-field-row">
-      <div class="admin-field">
-        <label for="pdf-start" data-i18n="admin.start_label">Startdatum (Europe/Berlin)</label>
-        <input type="datetime-local" id="pdf-start" required>
+    <div class="admin-field">
+      <label data-i18n="admin.date_range_label">Zeitraum (Europe/Berlin)</label>
+      <div class="daterange-trigger" id="daterange-trigger" tabindex="0" role="button">
+        <span class="daterange-icon">📅</span>
+        <span id="daterange-display" class="daterange-placeholder" data-i18n="admin.date_range_placeholder">Zeitraum wählen</span>
       </div>
-      <div class="admin-field">
-        <label for="pdf-end" data-i18n="admin.end_label">Enddatum (Europe/Berlin)</label>
-        <input type="datetime-local" id="pdf-end" required>
+      <div id="daterange-picker" class="daterange-picker" hidden>
+        <div class="cal-header">
+          <button type="button" class="cal-nav" id="cal-prev">‹</button>
+          <span id="cal-month-label" class="cal-month-label"></span>
+          <button type="button" class="cal-nav" id="cal-next">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>Mo</span><span>Di</span><span>Mi</span>
+          <span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-footer">
+          <span id="cal-hint" class="cal-hint" data-i18n="admin.date_pick_start">Startdatum wählen</span>
+          <button type="button" id="cal-clear" class="cal-clear" data-i18n="admin.date_clear">Löschen</button>
+        </div>
       </div>
+      <!-- Hidden inputs consumed by upload logic -->
+      <input type="hidden" id="pdf-start">
+      <input type="hidden" id="pdf-end">
     </div>
 
     <div class="admin-field">

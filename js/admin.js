@@ -94,7 +94,7 @@ async function loadAdminPanel() {
     ADD_TAGS: ['form', 'input', 'label', 'button', 'select', 'option'],
     ADD_ATTR: ['for', 'type', 'id', 'name', 'value', 'accept', 'required',
                'min', 'max', 'maxlength', 'hidden', 'data-i18n', 'data-i18n-placeholder',
-               'data-title-lang', 'style']
+               'data-title-lang', 'style', 'tabindex', 'role']
   });
 
   // Apply i18n to the newly injected HTML
@@ -130,14 +130,7 @@ function setupUploadForm() {
   const errorEl     = document.getElementById('upload-error');
   const successEl   = document.getElementById('upload-success');
 
-  // Auto-open end date picker after start date is chosen
-  document.getElementById('pdf-start').addEventListener('change', () => {
-    const endInput = document.getElementById('pdf-end');
-    if (!endInput) return;
-    setTimeout(() => {
-      try { endInput.showPicker(); } catch { endInput.focus(); }
-    }, 150);
-  });
+  setupDateRangePicker();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -302,6 +295,148 @@ function showError(el, msg) {
 function localBerlinToTimestamp(localDatetimeStr) {
   const dt = luxon.DateTime.fromISO(localDatetimeStr, { zone: 'Europe/Berlin' });
   return Timestamp.fromMillis(dt.toMillis());
+}
+
+function setupDateRangePicker() {
+  const trigger  = document.getElementById('daterange-trigger');
+  const picker   = document.getElementById('daterange-picker');
+  const display  = document.getElementById('daterange-display');
+  const grid     = document.getElementById('cal-grid');
+  const label    = document.getElementById('cal-month-label');
+  const hint     = document.getElementById('cal-hint');
+  const clearBtn = document.getElementById('cal-clear');
+  const startInput = document.getElementById('pdf-start');
+  const endInput   = document.getElementById('pdf-end');
+  if (!trigger) return;
+
+  const MONTHS = ['Januar','Februar','März','April','Mai','Juni',
+                  'Juli','August','September','Oktober','November','Dezember'];
+  let viewYear  = new Date().getFullYear();
+  let viewMonth = new Date().getMonth();
+  let startDate = null;
+  let endDate   = null;
+
+  function fmt(d) {
+    return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' });
+  }
+
+  function isoDate(d, endOfDay = false) {
+    const pad = n => String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${endOfDay ? '23:59' : '00:00'}`;
+  }
+
+  function sameDay(a, b) {
+    return a && b && a.toDateString() === b.toDateString();
+  }
+
+  function updateDisplay() {
+    if (startDate && endDate) {
+      display.textContent = `${fmt(startDate)} – ${fmt(endDate)}`;
+      display.className = 'daterange-value';
+    } else if (startDate) {
+      display.textContent = `${fmt(startDate)} – ?`;
+      display.className = 'daterange-value';
+    } else {
+      display.textContent = t('admin.date_range_placeholder') || 'Zeitraum wählen';
+      display.className = 'daterange-placeholder';
+    }
+    startInput.value = startDate ? isoDate(startDate, false) : '';
+    endInput.value   = endDate   ? isoDate(endDate, true)    : '';
+  }
+
+  function renderGrid() {
+    label.textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+    grid.innerHTML = '';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const firstDay = new Date(viewYear, viewMonth, 1);
+    // Mon=0 offset
+    let offset = (firstDay.getDay() + 6) % 7;
+    const daysInMonth  = new Date(viewYear, viewMonth+1, 0).getDate();
+    const daysInPrev   = new Date(viewYear, viewMonth, 0).getDate();
+
+    // Prev month padding
+    for (let i = offset - 1; i >= 0; i--) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-day cal-day--other-month';
+      btn.textContent = daysInPrev - i;
+      grid.appendChild(btn);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(viewYear, viewMonth, d);
+      const btn  = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = d;
+      let cls = 'cal-day';
+      if (date < today) cls += ' cal-day--disabled';
+      if (sameDay(date, today)) cls += ' cal-day--today';
+      if (sameDay(date, startDate) || sameDay(date, endDate)) cls += ' cal-day--selected';
+      if (startDate && endDate && date > startDate && date < endDate) cls += ' cal-day--in-range';
+      if (sameDay(date, startDate) && endDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-start';
+      if (sameDay(date, endDate)   && startDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-end';
+      btn.className = cls;
+      if (!cls.includes('disabled')) {
+        btn.addEventListener('click', () => pickDay(date));
+      }
+      grid.appendChild(btn);
+    }
+
+    // Next month padding
+    const total = offset + daysInMonth;
+    const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let i = 1; i <= remaining; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-day cal-day--other-month';
+      btn.textContent = i;
+      grid.appendChild(btn);
+    }
+
+    hint.textContent = startDate && !endDate
+      ? (t('admin.date_pick_end') || 'Enddatum wählen')
+      : (t('admin.date_pick_start') || 'Startdatum wählen');
+  }
+
+  function pickDay(date) {
+    if (!startDate || (startDate && endDate)) {
+      startDate = date; endDate = null;
+    } else if (date < startDate) {
+      endDate = startDate; startDate = date;
+    } else {
+      endDate = date;
+      setTimeout(() => { picker.hidden = true; trigger.classList.remove('open'); }, 200);
+    }
+    updateDisplay();
+    renderGrid();
+  }
+
+  document.getElementById('cal-prev').addEventListener('click', () => {
+    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderGrid();
+  });
+  document.getElementById('cal-next').addEventListener('click', () => {
+    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderGrid();
+  });
+  clearBtn.addEventListener('click', () => {
+    startDate = null; endDate = null; updateDisplay(); renderGrid();
+  });
+
+  trigger.addEventListener('click', () => {
+    const open = picker.hidden;
+    picker.hidden = !open;
+    trigger.classList.toggle('open', open);
+    if (open) renderGrid();
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!trigger.contains(e.target) && !picker.contains(e.target)) {
+      picker.hidden = true;
+      trigger.classList.remove('open');
+    }
+  });
+
+  updateDisplay();
 }
 
 async function writeAuditLog(action, docId, fileName) {
