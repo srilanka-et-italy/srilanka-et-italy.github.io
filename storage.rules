@@ -2,10 +2,8 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     match /seasonal-pdfs/{fileName} {
-      // Public read only when Firestore doc is active
-      allow read: if firestore.get(
-        /databases/(default)/documents/seasonal_pdfs/$(fileName.split('_')[0])
-      ).data.status == 'active';
+      // Authenticated reads (admin panel); public access uses tokenised download URLs
+      allow read: if request.auth != null;
 
       allow write: if request.auth != null &&
                       request.resource.size < 2 * 1024 * 1024 &&
