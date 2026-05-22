@@ -1,13 +1,16 @@
-import { auth, db } from './firebase-config.js';
+import { auth } from './firebase-config.js';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-async function checkAdminStatus(uid) {
-  const snap = await getDoc(doc(db, 'admins', uid));
-  return snap.exists();
+// Check admin status via REST API — avoids Firestore SDK WebChannel hang
+async function checkAdminStatus(user) {
+  const token = await user.getIdToken();
+  const url = `https://firestore.googleapis.com/v1/projects/srilanka-et-italy/databases/(default)/documents/admins/${user.uid}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return res.status === 200;
 }
 
-// Only authenticate — admin check happens in onAdminAuthStateChanged
 export async function login(email, password) {
   await signInWithEmailAndPassword(auth, email, password);
 }
@@ -20,7 +23,7 @@ export function onAdminAuthStateChanged(callback) {
   return onAuthStateChanged(auth, async (user) => {
     if (!user) { callback(null); return; }
     try {
-      const isAdmin = await checkAdminStatus(user.uid);
+      const isAdmin = await checkAdminStatus(user);
       if (isAdmin) {
         callback(user);
       } else {
@@ -28,7 +31,6 @@ export function onAdminAuthStateChanged(callback) {
         callback(null);
       }
     } catch {
-      // Firestore read failed — deny access
       await signOut(auth);
       callback(null);
     }
