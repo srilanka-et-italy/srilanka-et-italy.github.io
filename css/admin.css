@@ -485,3 +485,61 @@
   color: #b83232;
   background: rgba(184, 50, 50, .05);
 }
+
+/* ── Mobile ── */
+
+@media (max-width: 600px) {
+  .admin-login-card {
+    padding: 2rem 1.25rem 1.75rem;
+    border-radius: 12px;
+    margin: 1rem;
+  }
+
+  .admin-header {
+    padding: 0 1rem;
+  }
+
+  .admin-header-logo { font-size: .8rem; }
+
+  .admin-header-langs { display: none; }
+
+  .admin-main {
+    padding: 1.25rem 1rem;
+  }
+
+  .admin-section {
+    padding: 1.25rem 1rem 1.5rem;
+    border-radius: 12px;
+  }
+
+  .admin-field-row {
+    grid-template-columns: 1fr;
+    gap: .75rem;
+  }
+
+  .admin-field input,
+  .admin-field select {
+    padding: .75rem .9rem;
+    font-size: 1rem; /* prevents iOS zoom */
+  }
+
+  .btn-dark {
+    padding: .85rem 1.2rem;
+    font-size: .92rem;
+    width: 100%;
+  }
+
+  .pdf-item {
+    flex-wrap: wrap;
+    gap: .6rem;
+  }
+
+  .pdf-item-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .admin-field input[type="file"] {
+    font-size: .85rem;
+  }
+}

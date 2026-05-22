@@ -130,6 +130,14 @@ function setupUploadForm() {
   const errorEl     = document.getElementById('upload-error');
   const successEl   = document.getElementById('upload-success');
 
+  // Auto-open end date picker after start date is chosen
+  document.getElementById('pdf-start').addEventListener('change', () => {
+    const endInput = document.getElementById('pdf-end');
+    if (endInput && !endInput.value) {
+      try { endInput.showPicker(); } catch { endInput.focus(); }
+    }
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorEl.hidden   = true;
