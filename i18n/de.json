@@ -52,10 +52,8 @@
         "label": "Speisekarte",
         "title": "Eine Reise auf dem Teller",
         "sub": "Von Kottu Roti bis Carbonara — entdecken Sie unsere Karte.",
-        "ambience": "Restaurant",
-        "food": "Speisen",
-        "drinks": "Getränke & Biere",
-        "note": "Alle Preise in Euro inkl. MwSt. · Vollständige Karte vor Ort erhältlich.",
+        "full_menu": "Speisekarte",
+        "note": "Alle Preise in Euro inkl. MwSt.",
         "pdf_open": "↗ Im neuen Tab öffnen",
         "pdf_download": "↓ Herunterladen",
         "mobile_hint": "Auf diesem Gerät kann die Karte nicht direkt angezeigt werden."

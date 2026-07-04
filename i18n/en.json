@@ -52,10 +52,8 @@
         "label": "Menu",
         "title": "A Journey on Your Plate",
         "sub": "From Kottu Roti to Carbonara — discover our menu.",
-        "ambience": "Restaurant",
-        "food": "Dishes",
-        "drinks": "Drinks & Beers",
-        "note": "All prices in Euro incl. VAT · Full menu available on site.",
+        "full_menu": "Menu",
+        "note": "All prices in Euro incl. VAT.",
         "pdf_open": "↗ Open in new tab",
         "pdf_download": "↓ Download",
         "mobile_hint": "The menu cannot be displayed directly on this device."
