@@ -281,6 +281,10 @@
   padding: 1rem;
 }
 
+.admin-main:has(.launcher-wrap) {
+  max-width: 1400px;
+}
+
 @media (min-width: 640px) {
   .admin-main { padding: 2rem 1.5rem; }
 }
@@ -761,9 +765,12 @@ a.tile-panel-back { text-decoration: none; }
 
 .launcher-wrap {
   min-height: calc(100dvh - 52px - 2rem);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   text-align: center;
 }
@@ -775,16 +782,17 @@ a.tile-panel-back { text-decoration: none; }
 .launcher-columns {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: center;
-  gap: 3.5rem;
+  gap: 2rem;
 }
 
 .launcher-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 2.5rem;
+  flex: 1 1 320px;
+  padding: 2.5rem 2.5rem;
   border-radius: 20px;
   background: #fff;
   border: 1px solid var(--border, #E8DFD0);
