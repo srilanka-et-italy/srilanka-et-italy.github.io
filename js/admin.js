@@ -2,8 +2,8 @@ import { db, storage } from './firebase-config.js';
 import { login, logout, onAdminAuthStateChanged } from './auth.js';
 import { I18n } from './i18n.js';
 import {
-  collection, doc, addDoc, updateDoc, deleteDoc, getDocs,
-  query, orderBy, serverTimestamp, Timestamp, deleteField
+  collection, doc, addDoc, updateDoc, deleteDoc, deleteField, getDoc, getDocs, setDoc,
+  query, orderBy, serverTimestamp, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   ref, uploadBytesResumable, getDownloadURL, deleteObject
@@ -103,6 +103,7 @@ async function loadAdminPanel() {
 
   setupUploadForm();
   setupPdfList();
+  setupMainMenuSection();
 }
 
 // ── Upload ───────────────────────────────────────────────────────────────────
@@ -278,6 +279,120 @@ async function deletePdf(docId, fileName) {
   await deleteDoc(docRef);
   await writeAuditLog('delete', docId, fileName);
   await refreshPdfList(document.getElementById('pdf-list'));
+}
+
+// ── Main menu card ────────────────────────────────────────────────────────
+
+async function setupMainMenuSection() {
+  await refreshMainMenuCurrent();
+
+  const form         = document.getElementById('main-menu-form');
+  const progressWrap = document.getElementById('main-menu-progress-wrap');
+  const progressFill = document.getElementById('main-menu-progress-fill');
+  const progressText = document.getElementById('main-menu-progress-text');
+  const errorEl      = document.getElementById('main-menu-error');
+  const successEl    = document.getElementById('main-menu-success');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.hidden   = true;
+    successEl.hidden = true;
+
+    const file = document.getElementById('main-menu-file').files[0];
+    if (!file) { showError(errorEl, t('admin.err_no_file')); return; }
+    const allowed = ['application/pdf', 'image/png', 'image/jpeg'];
+    if (!allowed.includes(file.type)) { showError(errorEl, t('admin.err_not_pdf')); return; }
+    if (file.size > 2 * 1024 * 1024) { showError(errorEl, t('admin.err_too_large')); return; }
+
+    const docRef  = doc(db, 'main_menu', 'current');
+    const prevSnap = await getDoc(docRef);
+    const prevData = prevSnap.exists() ? prevSnap.data() : null;
+
+    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/jpeg' ? 'jpg' : 'pdf';
+    const fileName = `${crypto.randomUUID()}.${ext}`;
+    const storageRef = ref(storage, `main-menu/${fileName}`);
+
+    progressWrap.hidden = false;
+    const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const pct = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100);
+        progressFill.style.width = pct + '%';
+        progressText.textContent = pct + ' %';
+      },
+      (err) => {
+        progressWrap.hidden = true;
+        showError(errorEl, 'Upload fehlgeschlagen: ' + err.message);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        await setDoc(docRef, {
+          pdfUrl: downloadURL,
+          fileName,
+          contentType: file.type,
+          updatedAt: serverTimestamp()
+        });
+
+        if (prevData?.fileName) {
+          try {
+            await deleteObject(ref(storage, `main-menu/${prevData.fileName}`));
+          } catch (err) {
+            if (err.code !== 'storage/object-not-found') {
+              console.warn('Old main menu file delete failed:', err.message);
+            }
+          }
+        }
+
+        await writeAuditLog('main_menu_replace', 'current', fileName);
+        progressWrap.hidden = true;
+        successEl.hidden = false;
+        form.reset();
+        await refreshMainMenuCurrent();
+      }
+    );
+  });
+}
+
+async function refreshMainMenuCurrent() {
+  const container = document.getElementById('main-menu-current');
+  const docSnap = await getDoc(doc(db, 'main_menu', 'current'));
+  renderMainMenuCurrent(container, docSnap.exists() ? docSnap.data() : null);
+}
+
+function renderMainMenuCurrent(container, d) {
+  if (!d || !d.pdfUrl) {
+    container.innerHTML = `<p class="pdf-list-empty" data-i18n="admin.main_menu_empty">${t('admin.main_menu_empty')}</p>`;
+    return;
+  }
+
+  const isImage = d.contentType && d.contentType.startsWith('image/');
+  const updatedStr = d.updatedAt?.toDate
+    ? d.updatedAt.toDate().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })
+    : '';
+
+  const item = document.createElement('div');
+  item.className = 'pdf-item';
+  item.innerHTML = `
+    <div class="pdf-item-thumb">
+      ${isImage
+        ? `<img src="${DOMPurify.sanitize(d.pdfUrl)}" alt="" class="pdf-thumb-img">`
+        : `<canvas class="pdf-thumb-canvas"></canvas>`}
+    </div>
+    <div class="pdf-item-info">
+      <span class="pdf-item-title">${DOMPurify.sanitize(d.fileName || '')}</span>
+      <div class="pdf-item-meta">
+        <span class="pdf-item-dates">${t('admin.main_menu_updated_label')}: ${updatedStr}</span>
+      </div>
+    </div>`;
+
+  container.innerHTML = '';
+  container.appendChild(item);
+
+  if (!isImage) {
+    renderPdfThumb(d.pdfUrl, item.querySelector('.pdf-thumb-canvas'));
+  }
+  item.querySelector('.pdf-item-thumb').addEventListener('click', () => openPreview(d.pdfUrl, isImage));
 }
 
 // ── Preview lightbox ──────────────────────────────────────────────────────────
