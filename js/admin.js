@@ -186,7 +186,7 @@ function setupUploadForm() {
         progressWrap.hidden = true;
         successEl.hidden = false;
         form.reset();
-        await refreshPdfList(document.getElementById('pdf-list'));
+        await refreshPdfList(document.getElementById('pdf-tile-grid'));
       }
     );
   });
@@ -195,11 +195,11 @@ function setupUploadForm() {
 // ── PDF list ─────────────────────────────────────────────────────────────────
 
 async function setupPdfList() {
-  const listEl = document.getElementById('pdf-list');
-  await refreshPdfList(listEl);
+  const gridEl = document.getElementById('pdf-tile-grid');
+  await refreshPdfList(gridEl);
 }
 
-async function refreshPdfList(listEl) {
+async function refreshPdfList(gridEl) {
   const q = query(collection(db, 'seasonal_pdfs'), orderBy('order'), orderBy('createdAt'));
   const snap = await getDocs(q);
 
@@ -212,55 +212,41 @@ async function refreshPdfList(listEl) {
   }
 
   if (snap.empty) {
-    listEl.innerHTML = `<p class="pdf-list-empty">${t('admin.list_empty')}</p>`;
+    gridEl.innerHTML = `<p class="pdf-list-empty pdf-tile-empty">${t('admin.list_empty')}</p>`;
     return;
   }
-  listEl.innerHTML = '';
+  gridEl.innerHTML = '';
   snap.forEach((docSnap) => {
     const d = docSnap.data();
-    listEl.appendChild(renderPdfItem(docSnap.id, d));
+    gridEl.appendChild(renderPdfTile(docSnap.id, d));
   });
 }
 
-function renderPdfItem(id, d) {
-  const item = document.createElement('div');
-  item.className = 'pdf-item';
+function renderPdfTile(id, d) {
+  const tile = document.createElement('div');
+  tile.className = 'pdf-tile';
 
-  const startStr = d.startDate ? d.startDate.toDate().toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }) : null;
-  const endStr   = d.endDate   ? d.endDate.toDate().toLocaleDateString('de-DE',   { timeZone: 'Europe/Berlin' }) : null;
-  const dateStr  = startStr && endStr ? `${startStr} – ${endStr}` : '∞ immer aktiv';
   const titleText = typeof d.title === 'string' ? d.title : (d.title?.[i18n.lang] || d.title?.de || id);
-
   const isImage = d.contentType && d.contentType.startsWith('image/');
 
-  item.innerHTML = `
-    <div class="pdf-item-thumb">
+  tile.innerHTML = `
+    <div class="pdf-tile-thumb">
       ${isImage
-        ? `<img src="${DOMPurify.sanitize(d.pdfUrl)}" alt="" class="pdf-thumb-img">`
-        : `<canvas class="pdf-thumb-canvas"></canvas>`}
+        ? `<img src="${DOMPurify.sanitize(d.pdfUrl)}" alt="">`
+        : `<canvas></canvas>`}
     </div>
-    <div class="pdf-item-info">
-      <span class="pdf-item-title">${DOMPurify.sanitize(titleText)}</span>
-      <div class="pdf-item-meta">
-        <span class="pdf-item-dates">${dateStr}</span>
-        <span class="pdf-item-status ${d.status}">${d.status}</span>
+    <div class="pdf-tile-info">
+      <span class="pdf-tile-title">${DOMPurify.sanitize(titleText)}</span>
+      <div class="pdf-tile-meta">
+        <span class="pdf-tile-status ${d.status}">${d.status}</span>
       </div>
-    </div>
-    <div class="pdf-item-right">
-      <button class="btn-edit" aria-label="Bearbeiten">✎</button>
-      <button class="btn-delete" aria-label="${t('admin.delete_btn')}">✕</button>
     </div>`;
 
-  const thumb = item.querySelector('.pdf-item-thumb');
   if (!isImage && d.pdfUrl && d.pdfUrl !== 'pending') {
-    renderPdfThumb(d.pdfUrl, item.querySelector('.pdf-thumb-canvas'));
+    renderPdfThumb(d.pdfUrl, tile.querySelector('canvas'));
   }
-  if (d.pdfUrl && d.pdfUrl !== 'pending') {
-    thumb.addEventListener('click', () => openPreview(d.pdfUrl, isImage));
-  }
-  item.querySelector('.btn-edit').addEventListener('click', () => openEditModal(id, d));
-  item.querySelector('.btn-delete').addEventListener('click', () => deletePdf(id, d.fileName));
-  return item;
+  tile.addEventListener('click', () => openTilePanel('seasonal', id, d));
+  return tile;
 }
 
 async function deletePdf(docId, fileName) {
@@ -282,96 +268,31 @@ async function deletePdf(docId, fileName) {
 
   await deleteDoc(docRef);
   await writeAuditLog('delete', docId, fileName);
-  await refreshPdfList(document.getElementById('pdf-list'));
+  await refreshPdfList(document.getElementById('pdf-tile-grid'));
 }
 
 // ── Main menu card ────────────────────────────────────────────────────────
 
 async function setupMainMenuSection() {
-  const form         = document.getElementById('main-menu-form');
-  const progressWrap = document.getElementById('main-menu-progress-wrap');
-  const progressFill = document.getElementById('main-menu-progress-fill');
-  const progressText = document.getElementById('main-menu-progress-text');
-  const errorEl      = document.getElementById('main-menu-error');
-  const successEl    = document.getElementById('main-menu-success');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errorEl.hidden   = true;
-    successEl.hidden = true;
-
-    const file = document.getElementById('main-menu-file').files[0];
-    if (!file) { showError(errorEl, t('admin.err_no_file')); return; }
-    const allowed = ['application/pdf', 'image/png', 'image/jpeg'];
-    if (!allowed.includes(file.type)) { showError(errorEl, t('admin.err_not_pdf')); return; }
-    if (file.size > 2 * 1024 * 1024) { showError(errorEl, t('admin.err_too_large')); return; }
-
-    const docRef  = doc(db, 'main_menu', 'current');
-    const prevSnap = await getDoc(docRef);
-    const prevData = prevSnap.exists() ? prevSnap.data() : null;
-
-    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/jpeg' ? 'jpg' : 'pdf';
-    const fileName = `${crypto.randomUUID()}.${ext}`;
-    const storageRef = ref(storage, `main-menu/${fileName}`);
-
-    progressWrap.hidden = false;
-    const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
-
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const pct = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100);
-        progressFill.style.width = pct + '%';
-        progressText.textContent = pct + ' %';
-      },
-      (err) => {
-        progressWrap.hidden = true;
-        showError(errorEl, 'Upload fehlgeschlagen: ' + err.message);
-      },
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        await setDoc(docRef, {
-          pdfUrl: downloadURL,
-          fileName,
-          contentType: file.type,
-          updatedAt: serverTimestamp()
-        });
-
-        if (prevData?.fileName) {
-          try {
-            await deleteObject(ref(storage, `main-menu/${prevData.fileName}`));
-          } catch (err) {
-            if (err.code !== 'storage/object-not-found') {
-              console.warn('Old main menu file delete failed:', err.message);
-            }
-          }
-        }
-
-        await writeAuditLog('main_menu_replace', 'current', fileName);
-        progressWrap.hidden = true;
-        successEl.hidden = false;
-        form.reset();
-        await refreshMainMenuCurrent();
-      }
-    );
-  });
-
-  await refreshMainMenuCurrent();
+  await refreshMainMenuTile();
 }
 
-async function refreshMainMenuCurrent() {
-  const container = document.getElementById('main-menu-current');
+async function refreshMainMenuTile() {
+  const container = document.getElementById('main-menu-tile-wrap');
   try {
     const docSnap = await getDoc(doc(db, 'main_menu', 'current'));
-    renderMainMenuCurrent(container, docSnap.exists() ? docSnap.data() : null);
+    renderMainMenuTile(container, docSnap.exists() ? docSnap.data() : null);
   } catch (err) {
     console.warn('Could not load main menu card:', err.message);
     container.innerHTML = `<p class="pdf-list-empty">${t('admin.main_menu_empty')}</p>`;
   }
 }
 
-function renderMainMenuCurrent(container, d) {
+function renderMainMenuTile(container, d) {
   if (!d || !d.pdfUrl) {
     container.innerHTML = `<p class="pdf-list-empty" data-i18n="admin.main_menu_empty">${t('admin.main_menu_empty')}</p>`;
+    container.querySelector('p').addEventListener('click', () => openTilePanel('mainMenu', 'current', d || {}));
+    container.querySelector('p').style.cursor = 'pointer';
     return;
   }
 
@@ -380,72 +301,59 @@ function renderMainMenuCurrent(container, d) {
     ? d.updatedAt.toDate().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })
     : '';
 
-  const item = document.createElement('div');
-  item.className = 'pdf-item';
-  item.innerHTML = `
-    <div class="pdf-item-thumb">
+  const tile = document.createElement('div');
+  tile.className = 'pdf-tile';
+  tile.style.maxWidth = '220px';
+  tile.innerHTML = `
+    <div class="pdf-tile-thumb">
       ${isImage
-        ? `<img src="${DOMPurify.sanitize(d.pdfUrl)}" alt="" class="pdf-thumb-img">`
-        : `<canvas class="pdf-thumb-canvas"></canvas>`}
+        ? `<img src="${DOMPurify.sanitize(d.pdfUrl)}" alt="">`
+        : `<canvas></canvas>`}
     </div>
-    <div class="pdf-item-info">
-      <span class="pdf-item-title">${DOMPurify.sanitize(d.fileName || '')}</span>
-      <div class="pdf-item-meta">
-        <span class="pdf-item-dates">${t('admin.main_menu_updated_label')}: ${updatedStr}</span>
+    <div class="pdf-tile-info">
+      <span class="pdf-tile-title">${DOMPurify.sanitize(d.fileName || '')}</span>
+      <div class="pdf-tile-meta">
+        <span class="pdf-tile-dates">${t('admin.main_menu_updated_label')}: ${updatedStr}</span>
       </div>
     </div>`;
 
   container.innerHTML = '';
-  container.appendChild(item);
+  container.appendChild(tile);
 
   if (!isImage) {
-    renderPdfThumb(d.pdfUrl, item.querySelector('.pdf-thumb-canvas'));
+    renderPdfThumb(d.pdfUrl, tile.querySelector('canvas'));
   }
-  item.querySelector('.pdf-item-thumb').addEventListener('click', () => openPreview(d.pdfUrl, isImage));
-}
-
-// ── Preview lightbox ──────────────────────────────────────────────────────────
-
-function openPreview(url, isImage) {
-  const lb      = document.getElementById('admin-lightbox');
-  const content = document.getElementById('admin-lightbox-content');
-  const closeBtn = document.getElementById('admin-lightbox-close');
-  if (!lb) return;
-
-  content.innerHTML = '';
-  lb.hidden = false;
-
-  if (isImage) {
-    const img = document.createElement('img');
-    img.src = url;
-    content.appendChild(img);
-  } else {
-    // Full PDF render at readable scale
-    const canvas = document.createElement('canvas');
-    content.appendChild(canvas);
-    (async () => {
-      try {
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const pdf  = await pdfjsLib.getDocument({ url }).promise;
-        const page = await pdf.getPage(1);
-        const scale = Math.min(window.innerWidth * .85, 820) / page.getViewport({ scale: 1 }).width;
-        const vp = page.getViewport({ scale });
-        canvas.width  = vp.width;
-        canvas.height = vp.height;
-        await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
-      } catch { content.innerHTML = '<p style="color:#fff">Vorschau nicht verfügbar</p>'; }
-    })();
-  }
-
-  const close = () => { lb.hidden = true; content.innerHTML = ''; };
-  closeBtn.onclick = close;
-  lb.onclick = (e) => { if (e.target === lb) close(); };
+  tile.addEventListener('click', () => openTilePanel('mainMenu', 'current', d));
 }
 
 // ── PDF thumbnail ─────────────────────────────────────────────────────────────
 
-async function renderPdfThumb(url, canvas) {
+async function renderLargePreview(container, url, isImage) {
+  container.innerHTML = '';
+  if (isImage) {
+    const img = document.createElement('img');
+    img.src = url;
+    container.appendChild(img);
+    return;
+  }
+  const canvas = document.createElement('canvas');
+  container.appendChild(canvas);
+  try {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf  = await pdfjsLib.getDocument({ url }).promise;
+    const page = await pdf.getPage(1);
+    const scale = Math.min(window.innerWidth * .8, 680) / page.getViewport({ scale: 1 }).width;
+    const vp = page.getViewport({ scale });
+    canvas.width  = vp.width;
+    canvas.height = vp.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+  } catch {
+    container.innerHTML = `<p style="color:var(--muted,#7A6E64)">Vorschau nicht verfügbar</p>`;
+  }
+}
+
+async function renderPdfThumb(url, canvas, targetWidth = 220) {
   if (!canvas || typeof pdfjsLib === 'undefined') return;
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -453,7 +361,7 @@ async function renderPdfThumb(url, canvas) {
     const pdf  = await pdfjsLib.getDocument({ url }).promise;
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 1 });
-    const scale = 56 / viewport.width;
+    const scale = targetWidth / viewport.width;
     const vp = page.getViewport({ scale });
     canvas.width  = vp.width;
     canvas.height = vp.height;
@@ -626,252 +534,206 @@ function createDateRangePicker({
   };
 }
 
-// ── Edit modal ────────────────────────────────────────────────────────────────
+// ── Tile detail panel ──────────────────────────────────────────────────────
 
-let editDateRangeReady = false;
+let tileDateRangePicker = null;
+let tilePanelState = null; // { type: 'seasonal'|'mainMenu', docId, data }
 
-function openEditModal(docId, d) {
-  const modal    = document.getElementById('edit-modal');
-  const backdrop = document.getElementById('edit-modal-backdrop');
-  if (!modal) return;
+function ensureTileDateRangePicker() {
+  if (tileDateRangePicker) return tileDateRangePicker;
+  tileDateRangePicker = createDateRangePicker({
+    triggerId: 'tile-daterange-trigger', pickerId: 'tile-daterange-picker', displayId: 'tile-daterange-display',
+    gridId: 'tile-cal-grid', monthLabelId: 'tile-cal-month-label', hintId: 'tile-cal-hint', clearBtnId: 'tile-cal-clear',
+    prevBtnId: 'tile-cal-prev', nextBtnId: 'tile-cal-next', startInputId: 'tile-pdf-start', endInputId: 'tile-pdf-end'
+  });
+  return tileDateRangePicker;
+}
 
-  // Populate fields
-  const titleText = typeof d.title === 'string' ? d.title : (d.title?.[i18n.lang] || d.title?.de || '');
-  document.getElementById('edit-title').value = titleText;
-  document.getElementById('edit-order').value = d.order ?? 0;
+async function openTilePanel(type, docId, d) {
+  tilePanelState = { type, docId, data: d };
 
-  // Populate date range
-  const startVal = d.startDate ? (() => {
-    const dt = d.startDate.toDate();
-    const pad = n => String(n).padStart(2,'0');
-    return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T00:00`;
-  })() : '';
-  const endVal = d.endDate ? (() => {
-    const dt = d.endDate.toDate();
-    const pad = n => String(n).padStart(2,'0');
-    return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T23:59`;
-  })() : '';
-  document.getElementById('edit-pdf-start').value = startVal;
-  document.getElementById('edit-pdf-end').value   = endVal;
+  const panel        = document.getElementById('tile-panel');
+  const title         = document.getElementById('tile-panel-title');
+  const preview       = document.getElementById('tile-panel-preview');
+  const seasonalFields = document.getElementById('tile-seasonal-fields');
+  const mainMenuFields  = document.getElementById('tile-mainmenu-fields');
+  const deleteBtn     = document.getElementById('tile-delete-btn');
+  const saveBtn       = document.getElementById('tile-save-btn');
 
-  if (!editDateRangeReady) {
-    setupEditDateRangePicker();
-    editDateRangeReady = true;
-  }
-  const editTrigger = document.getElementById('edit-daterange-trigger');
-  if (editTrigger?._syncDates) {
-    editTrigger._syncDates(startVal, endVal);
+  const isImage = d.contentType && d.contentType.startsWith('image/');
+  if (d.pdfUrl && d.pdfUrl !== 'pending') {
+    renderLargePreview(preview, d.pdfUrl, isImage);
   } else {
-    syncEditDateRangeDisplay(startVal, endVal);
+    preview.innerHTML = `<p style="color:var(--muted,#7A6E64)">${t('admin.main_menu_empty')}</p>`;
   }
 
-  modal.hidden    = false;
-  backdrop.hidden = false;
-  document.getElementById('edit-title').focus();
+  if (type === 'seasonal') {
+    title.textContent = typeof d.title === 'string' ? d.title : (d.title?.[i18n.lang] || d.title?.de || docId);
+    seasonalFields.hidden = false;
+    mainMenuFields.hidden = true;
+    deleteBtn.hidden = false;
+    saveBtn.textContent = t('admin.edit_save');
 
-  const saveBtn   = document.getElementById('edit-save-btn');
-  const cancelBtn = document.getElementById('edit-cancel-btn');
-  const closeBtn  = document.getElementById('edit-modal-close');
-  const errorEl   = document.getElementById('edit-error');
+    document.getElementById('tile-title').value = typeof d.title === 'string' ? d.title : '';
+    document.getElementById('tile-order').value = d.order ?? 0;
 
-  const close = () => { modal.hidden = true; backdrop.hidden = true; };
+    const startVal = d.startDate ? isoLocalFromTimestamp(d.startDate, false) : '';
+    const endVal   = d.endDate   ? isoLocalFromTimestamp(d.endDate, true)    : '';
+    ensureTileDateRangePicker().syncDates(startVal, endVal);
+    document.getElementById('tile-seasonal-error').hidden = true;
 
-  closeBtn.onclick  = close;
-  cancelBtn.onclick = close;
-  backdrop.onclick  = close;
+    saveBtn.onclick = () => saveSeasonalTile(docId, d);
+    deleteBtn.onclick = () => deleteTileAndClose(docId, d.fileName);
+  } else {
+    title.textContent = t('admin.main_menu_title');
+    seasonalFields.hidden = true;
+    mainMenuFields.hidden = false;
+    deleteBtn.hidden = true;
+    saveBtn.textContent = t('admin.main_menu_replace_btn');
 
-  saveBtn.onclick = async () => {
-    errorEl.hidden = true;
-    const newTitle = DOMPurify.sanitize(document.getElementById('edit-title').value.trim());
-    const newOrder = parseInt(document.getElementById('edit-order').value) || 0;
-    const startLocal = document.getElementById('edit-pdf-start').value;
-    const endLocal   = document.getElementById('edit-pdf-end').value;
-    const hasDates   = startLocal && endLocal;
+    document.getElementById('tile-mainmenu-file').value = '';
+    document.getElementById('tile-mainmenu-error').hidden = true;
+    document.getElementById('tile-mainmenu-success').hidden = true;
+    document.getElementById('tile-mainmenu-progress-wrap').hidden = true;
 
-    let startTs, endTs;
-    if (hasDates) {
-      startTs = localBerlinToTimestamp(startLocal);
-      endTs   = localBerlinToTimestamp(endLocal);
-      if (endTs.toMillis() <= startTs.toMillis()) {
-        errorEl.textContent = t('admin.err_date_order');
-        errorEl.hidden = false;
-        return;
-      }
-    }
+    saveBtn.onclick = () => replaceMainMenuFile(d);
+  }
 
-    saveBtn.disabled = true;
-    try {
-      const updates = {
-        title: newTitle,
-        order: newOrder,
-        permanent: !hasDates
-      };
-      if (hasDates) {
-        updates.startDate = startTs;
-        updates.endDate   = endTs;
-      } else {
-        updates.startDate = deleteField();
-        updates.endDate   = deleteField();
-      }
-      await updateDoc(doc(db, 'seasonal_pdfs', docId), updates);
-      await writeAuditLog('edit', docId, d.fileName || '');
-      close();
-      await refreshPdfList(document.getElementById('pdf-list'));
-    } catch (err) {
-      errorEl.textContent = err.message;
+  panel.hidden = false;
+}
+
+function closeTilePanel() {
+  document.getElementById('tile-panel').hidden = true;
+  document.getElementById('tile-panel-preview').innerHTML = '';
+  tilePanelState = null;
+}
+
+document.getElementById('tile-panel-back').addEventListener('click', closeTilePanel);
+
+function isoLocalFromTimestamp(ts, endOfDay) {
+  const dt = ts.toDate();
+  const pad = n => String(n).padStart(2, '0');
+  return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}T${endOfDay ? '23:59' : '00:00'}`;
+}
+
+async function saveSeasonalTile(docId, d) {
+  const errorEl = document.getElementById('tile-seasonal-error');
+  errorEl.hidden = true;
+  const saveBtn  = document.getElementById('tile-save-btn');
+
+  const newTitle = DOMPurify.sanitize(document.getElementById('tile-title').value.trim());
+  const newOrder = parseInt(document.getElementById('tile-order').value) || 0;
+  const startLocal = document.getElementById('tile-pdf-start').value;
+  const endLocal   = document.getElementById('tile-pdf-end').value;
+  const hasDates   = startLocal && endLocal;
+
+  let startTs, endTs;
+  if (hasDates) {
+    startTs = localBerlinToTimestamp(startLocal);
+    endTs   = localBerlinToTimestamp(endLocal);
+    if (endTs.toMillis() <= startTs.toMillis()) {
+      errorEl.textContent = t('admin.err_date_order');
       errorEl.hidden = false;
-    } finally {
-      saveBtn.disabled = false;
+      return;
     }
-  };
-}
+  }
 
-function syncEditDateRangeDisplay(startVal, endVal) {
-  const display = document.getElementById('edit-daterange-display');
-  const startInput = document.getElementById('edit-pdf-start');
-  const endInput   = document.getElementById('edit-pdf-end');
-  if (!display) return;
-  startInput.value = startVal;
-  endInput.value   = endVal;
-  if (startVal && endVal) {
-    const fmt = v => {
-      const d = new Date(v);
-      return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' });
+  saveBtn.disabled = true;
+  try {
+    const updates = {
+      title: newTitle,
+      order: newOrder,
+      permanent: !hasDates
     };
-    display.textContent = `${fmt(startVal)} – ${fmt(endVal)}`;
-    display.className = 'daterange-value';
-  } else {
-    display.textContent = t('admin.date_range_placeholder') || 'Zeitraum wählen';
-    display.className = 'daterange-placeholder';
+    if (hasDates) {
+      updates.startDate = startTs;
+      updates.endDate   = endTs;
+    } else {
+      updates.startDate = deleteField();
+      updates.endDate   = deleteField();
+    }
+    await updateDoc(doc(db, 'seasonal_pdfs', docId), updates);
+    await writeAuditLog('edit', docId, d.fileName || '');
+    closeTilePanel();
+    await refreshPdfList(document.getElementById('pdf-tile-grid'));
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.hidden = false;
+  } finally {
+    saveBtn.disabled = false;
   }
 }
 
-function setupEditDateRangePicker() {
-  const trigger  = document.getElementById('edit-daterange-trigger');
-  const picker   = document.getElementById('edit-daterange-picker');
-  const display  = document.getElementById('edit-daterange-display');
-  const grid     = document.getElementById('edit-cal-grid');
-  const label    = document.getElementById('edit-cal-month-label');
-  const hint     = document.getElementById('edit-cal-hint');
-  const clearBtn = document.getElementById('edit-cal-clear');
-  const startInput = document.getElementById('edit-pdf-start');
-  const endInput   = document.getElementById('edit-pdf-end');
-  if (!trigger) return;
+async function deleteTileAndClose(docId, fileName) {
+  await deletePdf(docId, fileName);
+  closeTilePanel();
+}
 
-  const MONTHS = ['Januar','Februar','März','April','Mai','Juni',
-                  'Juli','August','September','Oktober','November','Dezember'];
-  let viewYear  = new Date().getFullYear();
-  let viewMonth = new Date().getMonth();
-  let startDate = null;
-  let endDate   = null;
+async function replaceMainMenuFile(prevData) {
+  const errorEl      = document.getElementById('tile-mainmenu-error');
+  const successEl    = document.getElementById('tile-mainmenu-success');
+  const progressWrap = document.getElementById('tile-mainmenu-progress-wrap');
+  const progressFill = document.getElementById('tile-mainmenu-progress-fill');
+  const progressText = document.getElementById('tile-mainmenu-progress-text');
+  errorEl.hidden   = true;
+  successEl.hidden = true;
 
-  function fmt(d) {
-    return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' });
-  }
-  function isoDate(d, endOfDay = false) {
-    const pad = n => String(n).padStart(2,'0');
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${endOfDay ? '23:59' : '00:00'}`;
-  }
-  function sameDay(a, b) { return a && b && a.toDateString() === b.toDateString(); }
+  const file = document.getElementById('tile-mainmenu-file').files[0];
+  if (!file) { showError(errorEl, t('admin.err_no_file')); return; }
+  const allowed = ['application/pdf', 'image/png', 'image/jpeg'];
+  if (!allowed.includes(file.type)) { showError(errorEl, t('admin.err_not_pdf')); return; }
+  if (file.size > 2 * 1024 * 1024) { showError(errorEl, t('admin.err_too_large')); return; }
 
-  function updateDisplay() {
-    if (startDate && endDate) {
-      display.textContent = `${fmt(startDate)} – ${fmt(endDate)}`;
-      display.className = 'daterange-value';
-    } else if (startDate) {
-      display.textContent = `${fmt(startDate)} – ?`;
-      display.className = 'daterange-value';
-    } else {
-      display.textContent = t('admin.date_range_placeholder') || 'Zeitraum wählen';
-      display.className = 'daterange-placeholder';
-    }
-    startInput.value = startDate ? isoDate(startDate, false) : '';
-    endInput.value   = endDate   ? isoDate(endDate, true)    : '';
-  }
+  const docRef = doc(db, 'main_menu', 'current');
+  const ext = file.type === 'image/png' ? 'png' : file.type === 'image/jpeg' ? 'jpg' : 'pdf';
+  const fileName = `${crypto.randomUUID()}.${ext}`;
+  const storageRef = ref(storage, `main-menu/${fileName}`);
 
-  // Allow syncing from outside (pre-fill)
-  trigger._syncDates = (startVal, endVal) => {
-    startDate = startVal ? new Date(startVal) : null;
-    endDate   = startVal && endVal ? new Date(endVal) : null;
-    if (startDate) { viewYear = startDate.getFullYear(); viewMonth = startDate.getMonth(); }
-    updateDisplay();
-  };
+  progressWrap.hidden = false;
+  const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
 
-  function renderGrid() {
-    label.textContent = `${MONTHS[viewMonth]} ${viewYear}`;
-    grid.innerHTML = '';
-    const today = new Date(); today.setHours(0,0,0,0);
-    const firstDay = new Date(viewYear, viewMonth, 1);
-    let offset = (firstDay.getDay() + 6) % 7;
-    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
-    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
-    for (let i = offset - 1; i >= 0; i--) {
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'cal-day cal-day--other-month';
-      btn.textContent = daysInPrev - i; grid.appendChild(btn);
-    }
-    for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(viewYear, viewMonth, d);
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.textContent = d;
-      let cls = 'cal-day';
-      if (date < today) cls += ' cal-day--disabled';
-      if (sameDay(date, today)) cls += ' cal-day--today';
-      if (sameDay(date, startDate) || sameDay(date, endDate)) cls += ' cal-day--selected';
-      if (startDate && endDate && date > startDate && date < endDate) cls += ' cal-day--in-range';
-      if (sameDay(date, startDate) && endDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-start';
-      if (sameDay(date, endDate) && startDate && startDate < endDate) cls += ' cal-day--in-range cal-day--range-end';
-      btn.className = cls;
-      if (!cls.includes('disabled')) {
-        btn.addEventListener('click', (e) => { e.stopPropagation(); pickDay(date); });
+  uploadTask.on('state_changed',
+    (snapshot) => {
+      const pct = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = pct + ' %';
+    },
+    (err) => {
+      progressWrap.hidden = true;
+      showError(errorEl, 'Upload fehlgeschlagen: ' + err.message);
+    },
+    async () => {
+      const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+      await setDoc(docRef, {
+        pdfUrl: downloadURL,
+        fileName,
+        contentType: file.type,
+        updatedAt: serverTimestamp()
+      });
+
+      if (prevData?.fileName) {
+        try {
+          await deleteObject(ref(storage, `main-menu/${prevData.fileName}`));
+        } catch (err) {
+          if (err.code !== 'storage/object-not-found') {
+            console.warn('Old main menu file delete failed:', err.message);
+          }
+        }
       }
-      grid.appendChild(btn);
-    }
-    const total = offset + daysInMonth;
-    const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
-    for (let i = 1; i <= remaining; i++) {
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'cal-day cal-day--other-month';
-      btn.textContent = i; grid.appendChild(btn);
-    }
-    hint.textContent = startDate && !endDate
-      ? (t('admin.date_pick_end') || 'Enddatum wählen')
-      : (t('admin.date_pick_start') || 'Startdatum wählen');
-  }
 
-  function pickDay(date) {
-    if (!startDate || (startDate && endDate)) {
-      startDate = date; endDate = null;
-    } else if (date < startDate) {
-      endDate = startDate; startDate = date;
-    } else {
-      endDate = date;
-      setTimeout(() => { picker.hidden = true; trigger.classList.remove('open'); }, 200);
+      await writeAuditLog('main_menu_replace', 'current', fileName);
+      progressWrap.hidden = true;
+      successEl.hidden = false;
+      await refreshMainMenuTile();
+      const refreshedDoc = await getDoc(docRef);
+      renderLargePreview(
+        document.getElementById('tile-panel-preview'),
+        downloadURL,
+        file.type.startsWith('image/')
+      );
+      tilePanelState = { type: 'mainMenu', docId: 'current', data: refreshedDoc.data() };
     }
-    updateDisplay(); renderGrid();
-  }
-
-  document.getElementById('edit-cal-prev').addEventListener('click', () => {
-    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderGrid();
-  });
-  document.getElementById('edit-cal-next').addEventListener('click', () => {
-    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderGrid();
-  });
-  clearBtn.addEventListener('click', () => {
-    startDate = null; endDate = null; updateDisplay(); renderGrid();
-  });
-  trigger.addEventListener('click', () => {
-    const open = picker.hidden;
-    picker.hidden = !open;
-    trigger.classList.toggle('open', open);
-    if (open) renderGrid();
-  });
-  document.addEventListener('click', (e) => {
-    if (!trigger.contains(e.target) && !picker.contains(e.target)) {
-      picker.hidden = true; trigger.classList.remove('open');
-    }
-  });
-  updateDisplay();
+  );
 }
 
 async function writeAuditLog(action, docId, fileName) {
