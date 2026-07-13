@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hauptspeisekarte — Admin — Sri Lanka ET Italy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <p class="admin-login-eyebrow">Sri Lanka ET Italy</p>
+      <h1 class="admin-login-title" data-i18n="admin.login_title">Admin Login</h1>
+
+      <div class="admin-lang-switch">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
+      <form id="login-form" novalidate>
+        <div class="admin-field">
+          <label for="email" data-i18n="admin.email_label">E-Mail</label>
+          <input type="email" id="email" autocomplete="email" required>
+        </div>
+        <div class="admin-field">
+          <label for="password" data-i18n="admin.password_label">Passwort</label>
+          <div class="admin-password-wrap">
+            <input type="password" id="password" autocomplete="current-password" required>
+            <button type="button" id="toggle-password" class="admin-pw-toggle" aria-label="Passwort anzeigen">👁</button>
+          </div>
+        </div>
+        <p id="login-error" class="admin-error" hidden></p>
+        <button type="submit" class="btn-dark admin-submit" data-i18n="admin.login_btn">Anmelden</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Panel (hidden until authenticated) -->
+  <div id="admin-panel" class="admin-panel" hidden>
+    <header class="admin-header">
+      <div class="admin-header-brand">
+        <a href="admin.html" class="tile-panel-back" aria-label="Zurück">←</a>
+        <span class="admin-header-logo">Sri Lanka <em>ET</em> Italy</span>
+        <span class="admin-header-badge" data-i18n="admin.header_badge">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <div class="admin-header-langs">
+          <button class="admin-lang-btn active" data-lang="de">DE</button>
+          <button class="admin-lang-btn" data-lang="en">EN</button>
+          <button class="admin-lang-btn" data-lang="ta">TA</button>
+        </div>
+        <button id="logout-btn" class="btn-outline" data-i18n="admin.logout_btn">Abmelden</button>
+      </div>
+    </header>
+    <main class="admin-main">
+      <div class="admin-panel-langs">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2 class="admin-section-title" data-i18n="admin.main_menu_title">Hauptspeisekarte</h2>
+        </div>
+
+        <div class="tile-panel-preview" id="main-menu-preview"></div>
+        <p id="main-menu-updated" class="pdf-tile-dates" style="margin-bottom:1.25rem"></p>
+
+        <div class="admin-field">
+          <label for="main-menu-file" data-i18n="admin.main_menu_file_label">Neue Datei (max. 2 MB)</label>
+          <input type="file" id="main-menu-file" accept="application/pdf,image/png,image/jpeg">
+        </div>
+        <div id="main-menu-progress-wrap" class="upload-progress-wrap" hidden>
+          <div class="upload-progress-bar"><div id="main-menu-progress-fill" class="upload-progress-fill"></div></div>
+          <span id="main-menu-progress-text" class="upload-progress-label">0 %</span>
+        </div>
+        <p id="main-menu-error" class="admin-error" hidden></p>
+        <p id="main-menu-success" class="admin-success" hidden data-i18n="admin.main_menu_success">Hauptspeisekarte aktualisiert.</p>
+        <button id="main-menu-save-btn" type="button" class="btn-dark" data-i18n="admin.main_menu_replace_btn">Ersetzen</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script type="module" src="js/admin-main-menu.js"></script>
+</body>
+</html>
