@@ -71,59 +71,69 @@
     </main>
   </div>
 
-  <!-- Edit modal -->
-  <div id="edit-modal-backdrop" class="edit-modal-backdrop" hidden></div>
-  <div id="edit-modal" class="edit-modal" hidden role="dialog" aria-modal="true">
-    <div class="edit-modal-header">
-      <h2 class="edit-modal-title" data-i18n="admin.edit_title">Bearbeiten</h2>
-      <button class="edit-modal-close" id="edit-modal-close" aria-label="Schließen">✕</button>
+  <!-- Tile detail panel (fullscreen, replaces the old edit modal + preview lightbox) -->
+  <div id="tile-panel" class="tile-panel" hidden role="dialog" aria-modal="true">
+    <div class="tile-panel-header">
+      <button class="tile-panel-back" id="tile-panel-back" aria-label="Zurück">←</button>
+      <h2 class="tile-panel-title" id="tile-panel-title"></h2>
     </div>
-    <div class="edit-modal-body">
-      <div class="admin-field">
-        <label for="edit-title" data-i18n="admin.title_label">Titel</label>
-        <input type="text" id="edit-title" maxlength="80">
-      </div>
-      <div class="admin-field">
-        <label data-i18n="admin.date_range_label">Zeitraum (Europe/Berlin)</label>
-        <div class="daterange-trigger" id="edit-daterange-trigger" tabindex="0" role="button">
-          <span class="daterange-icon">📅</span>
-          <span id="edit-daterange-display" class="daterange-placeholder" data-i18n="admin.date_range_placeholder">Zeitraum wählen</span>
-        </div>
-        <div id="edit-daterange-picker" class="daterange-picker" hidden>
-          <div class="cal-header">
-            <button type="button" class="cal-nav" id="edit-cal-prev">‹</button>
-            <span id="edit-cal-month-label" class="cal-month-label"></span>
-            <button type="button" class="cal-nav" id="edit-cal-next">›</button>
-          </div>
-          <div class="cal-weekdays">
-            <span>Mo</span><span>Di</span><span>Mi</span>
-            <span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
-          </div>
-          <div class="cal-grid" id="edit-cal-grid"></div>
-          <div class="cal-footer">
-            <span id="edit-cal-hint" class="cal-hint" data-i18n="admin.date_pick_start">Startdatum wählen</span>
-            <button type="button" id="edit-cal-clear" class="cal-clear" data-i18n="admin.date_clear">Löschen</button>
-          </div>
-        </div>
-        <input type="hidden" id="edit-pdf-start">
-        <input type="hidden" id="edit-pdf-end">
-      </div>
-      <div class="admin-field">
-        <label for="edit-order" data-i18n="admin.order_label">Reihenfolge</label>
-        <input type="number" id="edit-order" value="0" min="0" max="99" style="max-width:120px">
-      </div>
-      <p id="edit-error" class="admin-error" hidden></p>
-    </div>
-    <div class="edit-modal-footer">
-      <button id="edit-cancel-btn" class="btn-outline" data-i18n="admin.edit_cancel">Abbrechen</button>
-      <button id="edit-save-btn" class="btn-dark" data-i18n="admin.edit_save">Speichern</button>
-    </div>
-  </div>
+    <div class="tile-panel-body">
+      <div class="tile-panel-preview" id="tile-panel-preview"></div>
 
-  <!-- Preview lightbox -->
-  <div id="admin-lightbox" class="admin-lightbox" hidden>
-    <button class="admin-lightbox-close" id="admin-lightbox-close">✕</button>
-    <div class="admin-lightbox-content" id="admin-lightbox-content"></div>
+      <div id="tile-seasonal-fields" hidden>
+        <div class="admin-field">
+          <label for="tile-title" data-i18n="admin.title_label">Titel</label>
+          <input type="text" id="tile-title" maxlength="80">
+        </div>
+        <div class="admin-field">
+          <label data-i18n="admin.date_range_label">Zeitraum (Europe/Berlin)</label>
+          <div class="daterange-trigger" id="tile-daterange-trigger" tabindex="0" role="button">
+            <span class="daterange-icon">📅</span>
+            <span id="tile-daterange-display" class="daterange-placeholder" data-i18n="admin.date_range_placeholder">Zeitraum wählen</span>
+          </div>
+          <div id="tile-daterange-picker" class="daterange-picker" hidden>
+            <div class="cal-header">
+              <button type="button" class="cal-nav" id="tile-cal-prev">‹</button>
+              <span id="tile-cal-month-label" class="cal-month-label"></span>
+              <button type="button" class="cal-nav" id="tile-cal-next">›</button>
+            </div>
+            <div class="cal-weekdays">
+              <span>Mo</span><span>Di</span><span>Mi</span>
+              <span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+            </div>
+            <div class="cal-grid" id="tile-cal-grid"></div>
+            <div class="cal-footer">
+              <span id="tile-cal-hint" class="cal-hint" data-i18n="admin.date_pick_start">Startdatum wählen</span>
+              <button type="button" id="tile-cal-clear" class="cal-clear" data-i18n="admin.date_clear">Löschen</button>
+            </div>
+          </div>
+          <input type="hidden" id="tile-pdf-start">
+          <input type="hidden" id="tile-pdf-end">
+        </div>
+        <div class="admin-field">
+          <label for="tile-order" data-i18n="admin.order_label">Reihenfolge</label>
+          <input type="number" id="tile-order" value="0" min="0" max="99" style="max-width:120px">
+        </div>
+        <p id="tile-seasonal-error" class="admin-error" hidden></p>
+      </div>
+
+      <div id="tile-mainmenu-fields" hidden>
+        <div class="admin-field">
+          <label for="tile-mainmenu-file" data-i18n="admin.main_menu_file_label">Neue Datei (max. 2 MB)</label>
+          <input type="file" id="tile-mainmenu-file" accept="application/pdf,image/png,image/jpeg">
+        </div>
+        <div id="tile-mainmenu-progress-wrap" class="upload-progress-wrap" hidden>
+          <div class="upload-progress-bar"><div id="tile-mainmenu-progress-fill" class="upload-progress-fill"></div></div>
+          <span id="tile-mainmenu-progress-text" class="upload-progress-label">0 %</span>
+        </div>
+        <p id="tile-mainmenu-error" class="admin-error" hidden></p>
+        <p id="tile-mainmenu-success" class="admin-success" hidden data-i18n="admin.main_menu_success">Hauptspeisekarte aktualisiert.</p>
+      </div>
+    </div>
+    <div class="tile-panel-footer">
+      <button id="tile-delete-btn" class="btn-outline" data-i18n="admin.delete_btn" hidden>Löschen</button>
+      <button id="tile-save-btn" class="btn-dark" data-i18n="admin.edit_save">Speichern</button>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
