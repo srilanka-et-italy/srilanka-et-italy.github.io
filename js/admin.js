@@ -116,7 +116,11 @@ function setupUploadForm() {
   const errorEl     = document.getElementById('upload-error');
   const successEl   = document.getElementById('upload-success');
 
-  setupDateRangePicker();
+  createDateRangePicker({
+    triggerId: 'daterange-trigger', pickerId: 'daterange-picker', displayId: 'daterange-display',
+    gridId: 'cal-grid', monthLabelId: 'cal-month-label', hintId: 'cal-hint', clearBtnId: 'cal-clear',
+    prevBtnId: 'cal-prev', nextBtnId: 'cal-next', startInputId: 'pdf-start', endInputId: 'pdf-end'
+  });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -469,17 +473,20 @@ function localBerlinToTimestamp(localDatetimeStr) {
   return Timestamp.fromMillis(dt.toMillis());
 }
 
-function setupDateRangePicker() {
-  const trigger  = document.getElementById('daterange-trigger');
-  const picker   = document.getElementById('daterange-picker');
-  const display  = document.getElementById('daterange-display');
-  const grid     = document.getElementById('cal-grid');
-  const label    = document.getElementById('cal-month-label');
-  const hint     = document.getElementById('cal-hint');
-  const clearBtn = document.getElementById('cal-clear');
-  const startInput = document.getElementById('pdf-start');
-  const endInput   = document.getElementById('pdf-end');
-  if (!trigger) return;
+function createDateRangePicker({
+  triggerId, pickerId, displayId, gridId, monthLabelId, hintId, clearBtnId,
+  prevBtnId, nextBtnId, startInputId, endInputId
+}) {
+  const trigger  = document.getElementById(triggerId);
+  const picker   = document.getElementById(pickerId);
+  const display  = document.getElementById(displayId);
+  const grid     = document.getElementById(gridId);
+  const label    = document.getElementById(monthLabelId);
+  const hint     = document.getElementById(hintId);
+  const clearBtn = document.getElementById(clearBtnId);
+  const startInput = document.getElementById(startInputId);
+  const endInput   = document.getElementById(endInputId);
+  if (!trigger) return { syncDates() {} };
 
   const MONTHS = ['Januar','Februar','März','April','Mai','Juni',
                   'Juli','August','September','Oktober','November','Dezember'];
@@ -583,10 +590,10 @@ function setupDateRangePicker() {
     renderGrid();
   }
 
-  document.getElementById('cal-prev').addEventListener('click', () => {
+  document.getElementById(prevBtnId).addEventListener('click', () => {
     viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderGrid();
   });
-  document.getElementById('cal-next').addEventListener('click', () => {
+  document.getElementById(nextBtnId).addEventListener('click', () => {
     viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderGrid();
   });
   clearBtn.addEventListener('click', () => {
@@ -600,7 +607,6 @@ function setupDateRangePicker() {
     if (open) renderGrid();
   });
 
-  // Close on outside click
   document.addEventListener('click', (e) => {
     if (!trigger.contains(e.target) && !picker.contains(e.target)) {
       picker.hidden = true;
@@ -609,6 +615,15 @@ function setupDateRangePicker() {
   });
 
   updateDisplay();
+
+  return {
+    syncDates(startVal, endVal) {
+      startDate = startVal ? new Date(startVal) : null;
+      endDate   = startVal && endVal ? new Date(endVal) : null;
+      if (startDate) { viewYear = startDate.getFullYear(); viewMonth = startDate.getMonth(); }
+      updateDisplay();
+    }
+  };
 }
 
 // ── Edit modal ────────────────────────────────────────────────────────────────
