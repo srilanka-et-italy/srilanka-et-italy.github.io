@@ -9,9 +9,10 @@ import { t, initAuthGate, showError, writeAuditLog, renderLargePreview } from '.
 
 let currentData = null;
 
+document.getElementById('main-menu-save-btn').addEventListener('click', () => replaceMainMenuFile());
+
 initAuthGate(async () => {
   await refreshMainMenuPage();
-  document.getElementById('main-menu-save-btn').addEventListener('click', () => replaceMainMenuFile());
 });
 
 async function refreshMainMenuPage() {

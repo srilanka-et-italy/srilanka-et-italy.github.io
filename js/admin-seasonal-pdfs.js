@@ -11,8 +11,9 @@ import {
   createDateRangePicker, writeAuditLog, renderLargePreview, renderPdfThumb
 } from './admin-shared.js';
 
+setupUploadForm();
+
 initAuthGate(async () => {
-  setupUploadForm();
   await refreshPdfList(document.getElementById('pdf-tile-grid'));
 });
 
