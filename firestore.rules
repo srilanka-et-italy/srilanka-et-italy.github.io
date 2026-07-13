@@ -17,6 +17,11 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    match /site_content/{doc} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
     match /rate_limits/{ip} {
       allow read, write: if false;
     }
