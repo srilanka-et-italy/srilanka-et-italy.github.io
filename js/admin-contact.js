@@ -24,6 +24,12 @@ function setupLangTabs(fieldWrapperId, tabsId) {
   });
 }
 
+// Inverse of nlToBr — so a textarea shows real line breaks for editing
+// instead of literal "<br>" text when re-populated from saved data.
+function brToNl(value) {
+  return value.replace(/<br\s*\/?>/gi, '\n');
+}
+
 async function loadContact() {
   try {
     const docSnap = await getDoc(doc(db, 'site_content', 'contact'));
@@ -33,15 +39,23 @@ async function loadContact() {
     document.getElementById('contact-email').value  = data.email  || '';
     document.getElementById('contact-phone1').value = data.phone1 || '';
     document.getElementById('contact-phone2').value = data.phone2 || '';
-    document.getElementById('hours-de').value   = data.hours?.de   || '';
-    document.getElementById('hours-en').value   = data.hours?.en   || '';
-    document.getElementById('hours-ta').value   = data.hours?.ta   || '';
-    document.getElementById('address-de').value = data.address?.de || '';
-    document.getElementById('address-en').value = data.address?.en || '';
-    document.getElementById('address-ta').value = data.address?.ta || '';
+    document.getElementById('hours-de').value   = brToNl(data.hours?.de   || '');
+    document.getElementById('hours-en').value   = brToNl(data.hours?.en   || '');
+    document.getElementById('hours-ta').value   = brToNl(data.hours?.ta   || '');
+    document.getElementById('address-de').value = brToNl(data.address?.de || '');
+    document.getElementById('address-en').value = brToNl(data.address?.en || '');
+    document.getElementById('address-ta').value = brToNl(data.address?.ta || '');
   } catch (err) {
     console.warn('Could not load contact data:', err.message);
   }
+}
+
+// Textareas store literal newlines (Enter key); the public site renders
+// this as raw HTML, where a bare "\n" does not create a line break —
+// convert to <br> so multi-line text displays the same as the existing
+// static i18n content (which already uses <br> throughout).
+function nlToBr(value) {
+  return value.replace(/\r\n|\r|\n/g, '<br>');
 }
 
 async function saveContact() {
@@ -56,14 +70,14 @@ async function saveContact() {
     phone1: DOMPurify.sanitize(document.getElementById('contact-phone1').value.trim()),
     phone2: DOMPurify.sanitize(document.getElementById('contact-phone2').value.trim()),
     hours: {
-      de: DOMPurify.sanitize(document.getElementById('hours-de').value),
-      en: DOMPurify.sanitize(document.getElementById('hours-en').value),
-      ta: DOMPurify.sanitize(document.getElementById('hours-ta').value)
+      de: DOMPurify.sanitize(nlToBr(document.getElementById('hours-de').value)),
+      en: DOMPurify.sanitize(nlToBr(document.getElementById('hours-en').value)),
+      ta: DOMPurify.sanitize(nlToBr(document.getElementById('hours-ta').value))
     },
     address: {
-      de: DOMPurify.sanitize(document.getElementById('address-de').value),
-      en: DOMPurify.sanitize(document.getElementById('address-en').value),
-      ta: DOMPurify.sanitize(document.getElementById('address-ta').value)
+      de: DOMPurify.sanitize(nlToBr(document.getElementById('address-de').value)),
+      en: DOMPurify.sanitize(nlToBr(document.getElementById('address-en').value)),
+      ta: DOMPurify.sanitize(nlToBr(document.getElementById('address-ta').value))
     },
     updatedAt: serverTimestamp()
   };
