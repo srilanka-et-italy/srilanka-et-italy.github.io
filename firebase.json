@@ -17,6 +17,10 @@
         "destination": "/admin.html"
       },
       {
+        "source": "/menu-card",
+        "function": "menuCard"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
