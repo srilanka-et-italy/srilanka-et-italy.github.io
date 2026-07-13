@@ -745,3 +745,55 @@
 @media (min-width: 640px) {
   .tile-panel-footer { padding: 1.1rem 2rem; }
 }
+
+/* ── Launcher (admin.html home) ── */
+
+a.tile-panel-back { text-decoration: none; }
+
+.launcher-category {
+  margin-bottom: .85rem;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted, #7A6E64);
+}
+
+.launcher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 1.25rem;
+}
+
+.launcher-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.launcher-tile-icon {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 92px;
+  border-radius: 16px;
+  background: var(--ink, #1C1410);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  transition: background .15s, transform .15s;
+}
+.launcher-tile:hover .launcher-tile-icon {
+  background: var(--spice, #C8651A);
+  transform: translateY(-2px);
+}
+
+.launcher-tile-label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ink, #1C1410);
+  text-align: center;
+}
