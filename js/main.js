@@ -1,7 +1,7 @@
 import { I18n } from './i18n.js';
 import { db, remoteConfig } from './firebase-config.js';
 import {
-  collection, query, where, orderBy, getDocs, Timestamp
+  collection, query, where, orderBy, getDocs, doc, getDoc, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   fetchAndActivate, getValue
@@ -10,6 +10,7 @@ import {
 class App {
     constructor() {
         this.i18n = new I18n();
+        this.contactData = null;
         this.components = [
             { id: 'nav-placeholder',      file: 'components/nav.html' },
             { id: 'hero-placeholder',     file: 'components/hero.html' },
@@ -23,11 +24,54 @@ class App {
     }
 
     async init() {
-        await Promise.all(this.components.map(c => this.loadComponent(c.id, c.file)));
+        await Promise.all([
+            Promise.all(this.components.map(c => this.loadComponent(c.id, c.file))),
+            this.loadContactData()
+        ]);
         await this.i18n.init();
+        this.applyContactOverrides();
         this.setupAnimations();
         this.setupEventListeners();
         await this.setupSeasonalCarousel();
+    }
+
+    async loadContactData() {
+        try {
+            const snap = await getDoc(doc(db, 'site_content', 'contact'));
+            this.contactData = snap.exists() ? snap.data() : null;
+        } catch (err) {
+            console.warn('Could not load contact data:', err);
+            this.contactData = null;
+        }
+    }
+
+    applyContactOverrides() {
+        const data = this.contactData;
+        if (!data) return;
+        const lang = this.i18n.lang;
+
+        const hoursEl = document.querySelector('[data-i18n="location.hours_desc"]');
+        if (hoursEl && data.hours?.[lang]) hoursEl.innerHTML = data.hours[lang];
+
+        document.querySelectorAll('[data-i18n="location.address_desc"]').forEach(el => {
+            if (data.address?.[lang]) el.innerHTML = data.address[lang];
+        });
+
+        const emailLink = document.querySelector('#location a[href^="mailto:"]');
+        if (emailLink && data.email) {
+            emailLink.textContent = data.email;
+            emailLink.href = `mailto:${data.email}`;
+        }
+
+        const telLinks = document.querySelectorAll('#location a[href^="tel:"]');
+        if (telLinks[0] && data.phone1) {
+            telLinks[0].textContent = data.phone1;
+            telLinks[0].href = `tel:${data.phone1.replace(/\s+/g, '')}`;
+        }
+        if (telLinks[1] && data.phone2) {
+            telLinks[1].textContent = data.phone2;
+            telLinks[1].href = `tel:${data.phone2.replace(/\s+/g, '')}`;
+        }
     }
 
     async loadComponent(id, file) {
@@ -58,7 +102,7 @@ class App {
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('lang-btn')) {
                 const lang = e.target.getAttribute('data-lang');
-                this.i18n.setLanguage(lang);
+                this.i18n.setLanguage(lang).then(() => this.applyContactOverrides());
             }
         });
 
