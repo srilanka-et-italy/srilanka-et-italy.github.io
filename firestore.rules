@@ -12,6 +12,15 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    match /main_menu/{doc} {
+      allow read: if isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /rate_limits/{ip} {
+      allow read, write: if false;
+    }
+
     match /admins/{userId} {
       // Only allow a user to read their own document — prevents admin enumeration
       allow read: if request.auth != null && request.auth.uid == userId;
