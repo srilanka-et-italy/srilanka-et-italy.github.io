@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 // 1. Deletes expired PDFs (endDate in the past)
 // 2. Deletes audit logs older than 90 days
 // 3. Deletes stuck drafts older than 1 hour
+// 4. Deletes stale rate_limits windows older than 1 hour
 exports.scheduledCleanup = functions.pubsub
   .schedule('0 2 * * *')
   .timeZone('UTC')
@@ -53,6 +54,15 @@ exports.scheduledCleanup = functions.pubsub
       await docSnap.ref.delete();
     });
 
-    await Promise.allSettled([...expiredDeletes, ...logDeletes, ...stuckDeletes]);
-    console.log(`Cleanup complete: ${expiredSnap.size} expired, ${oldLogsSnap.size} logs, ${stuckSnap.size} stuck drafts`);
+    // 4. Stale rate_limits windows older than 1 hour.
+    // windowStart is stored as a plain JS number (Date.now()), not a
+    // Firestore Timestamp, so compare against a plain number here.
+    const rateLimitCutoffMs = Date.now() - 3600 * 1000;
+    const staleRateLimitsSnap = await db.collection('rate_limits')
+      .where('windowStart', '<', rateLimitCutoffMs)
+      .get();
+    const rateLimitDeletes = staleRateLimitsSnap.docs.map(d => d.ref.delete());
+
+    await Promise.allSettled([...expiredDeletes, ...logDeletes, ...stuckDeletes, ...rateLimitDeletes]);
+    console.log(`Cleanup complete: ${expiredSnap.size} expired, ${oldLogsSnap.size} logs, ${stuckSnap.size} stuck drafts, ${staleRateLimitsSnap.size} stale rate limits`);
   });
