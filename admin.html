@@ -67,16 +67,27 @@
         <button class="admin-lang-btn" data-lang="ta">TA</button>
       </div>
 
-      <div class="launcher-category" data-i18n="admin.launcher_category">Speisekarten</div>
-      <div class="launcher-grid">
-        <a href="admin-main-menu.html" class="launcher-tile">
-          <div class="launcher-tile-icon">🍽</div>
-          <span class="launcher-tile-label" data-i18n="admin.main_menu_title">Hauptspeisekarte</span>
-        </a>
-        <a href="admin-seasonal-pdfs.html" class="launcher-tile">
-          <div class="launcher-tile-icon">🗂</div>
-          <span class="launcher-tile-label" data-i18n="admin.list_title">Aktive Dateien</span>
-        </a>
+      <div class="launcher-wrap">
+        <div class="launcher-category" data-i18n="admin.launcher_category">Speisekarten</div>
+        <div class="launcher-grid">
+          <a href="admin-main-menu.html" class="launcher-tile">
+            <div class="launcher-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.4"/>
+                <circle cx="12" cy="12" r="3.75" stroke="currentColor" stroke-width="1.4"/>
+              </svg>
+            </div>
+            <span class="launcher-tile-label" data-i18n="admin.main_menu_title">Hauptspeisekarte</span>
+          </a>
+          <a href="admin-seasonal-pdfs.html" class="launcher-tile">
+            <div class="launcher-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.5 7.25a1.75 1.75 0 011.75-1.75h3.19c.31 0 .61.12.83.34l1.32 1.32c.22.22.52.34.83.34h7.08a1.75 1.75 0 011.75 1.75v7.5a1.75 1.75 0 01-1.75 1.75H5.25a1.75 1.75 0 01-1.75-1.75v-9.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="launcher-tile-label" data-i18n="admin.list_title">Aktive Dateien</span>
+          </a>
+        </div>
       </div>
     </main>
   </div>
