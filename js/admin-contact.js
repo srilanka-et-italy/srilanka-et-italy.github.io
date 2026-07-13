@@ -1,6 +1,6 @@
 import { db } from './firebase-config.js';
 import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { t, initAuthGate, showError, writeAuditLog } from './admin-shared.js';
+import { initAuthGate, showError, writeAuditLog } from './admin-shared.js';
 
 setupLangTabs('hours-field', 'hours-lang-tabs');
 setupLangTabs('address-field', 'address-lang-tabs');
@@ -74,8 +74,7 @@ async function saveContact() {
     await writeAuditLog('contact_update', 'contact', '');
     successEl.hidden = false;
   } catch (err) {
-    errorEl.textContent = err.message;
-    errorEl.hidden = false;
+    showError(errorEl, err.message);
   } finally {
     saveBtn.disabled = false;
   }

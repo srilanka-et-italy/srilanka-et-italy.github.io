@@ -24,14 +24,11 @@ class App {
     }
 
     async init() {
-        await Promise.all([
-            Promise.all(this.components.map(c => this.loadComponent(c.id, c.file))),
-            this.loadContactData()
-        ]);
+        await Promise.all(this.components.map(c => this.loadComponent(c.id, c.file)));
         await this.i18n.init();
-        this.applyContactOverrides();
         this.setupAnimations();
         this.setupEventListeners();
+        this.loadContactData().then(() => this.applyContactOverrides());
         await this.setupSeasonalCarousel();
     }
 
@@ -51,10 +48,10 @@ class App {
         const lang = this.i18n.lang;
 
         const hoursEl = document.querySelector('[data-i18n="location.hours_desc"]');
-        if (hoursEl && data.hours?.[lang]) hoursEl.innerHTML = data.hours[lang];
+        if (hoursEl && data.hours?.[lang]) hoursEl.innerHTML = DOMPurify.sanitize(data.hours[lang]);
 
         document.querySelectorAll('[data-i18n="location.address_desc"]').forEach(el => {
-            if (data.address?.[lang]) el.innerHTML = data.address[lang];
+            if (data.address?.[lang]) el.innerHTML = DOMPurify.sanitize(data.address[lang]);
         });
 
         const emailLink = document.querySelector('#location a[href^="mailto:"]');
