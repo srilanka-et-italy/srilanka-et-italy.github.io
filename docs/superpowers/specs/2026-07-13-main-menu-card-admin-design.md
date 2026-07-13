@@ -51,6 +51,29 @@ Neuer Abschnitt "Hauptspeisekarte" in `components/admin-panel.html`, oberhalb de
 - Ein "Ersetzen"-Button/Datei-Upload (kein Titel-, Zeitraum- oder Reihenfolge-Feld nötig).
 - Gleiche Validierung/Fehlermeldungen wie Seasonal-Upload (Dateityp, Größe).
 
+### 4b. Firestore- und Storage-Regeln
+
+Beide Regeldateien erlauben aktuell nur `seasonal_pdfs` bzw. `seasonal-pdfs/*`; alles andere ist implizit verboten. Für `main_menu` müssen eigene Regeln ergänzt werden, sonst schlägt der Admin-Upload mit "permission denied" fehl (die Cloud Function selbst ist davon nicht betroffen, da sie über das Admin-SDK mit vollen Rechten liest).
+
+**`firestore.rules`** — neue Regel analog zu `seasonal_pdfs`, aber ohne Public-Read (die Cloud Function liest serverseitig, der Client braucht kein direktes Read):
+```
+match /main_menu/{doc} {
+  allow read: if isAdmin();
+  allow create, update, delete: if isAdmin();
+}
+```
+
+**`storage.rules`** — neue Regel analog zu `seasonal-pdfs/{fileName}`, gleiche Größen-/Typ-Beschränkung:
+```
+match /main-menu/{fileName} {
+  allow read: if request.auth != null;
+  allow write: if request.auth != null &&
+                  request.resource.size < 2 * 1024 * 1024 &&
+                  request.resource.contentType in ['application/pdf', 'image/png', 'image/jpeg'];
+  allow delete: if request.auth != null;
+}
+```
+
 ### 5. Öffentliche Seite
 
 `components/menu.html` (und `preview/components/menu.html`, `preview/index.html` JSON-LD `hasMenu`) verlinken künftig auf `/menu-card` statt auf einen fest verdrahteten `assets/...pdf`-Pfad.
