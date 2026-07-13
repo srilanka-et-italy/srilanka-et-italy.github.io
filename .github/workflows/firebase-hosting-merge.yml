@@ -21,9 +21,3 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SRILANKA_ET_ITALY }}
           channelId: live
           projectId: srilanka-et-italy
-      - name: Deploy Firestore and Storage rules
-        run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SRILANKA_ET_ITALY }}' > /tmp/gcp-key.json
-          npx firebase-tools deploy --only firestore:rules,storage --project srilanka-et-italy --non-interactive
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
