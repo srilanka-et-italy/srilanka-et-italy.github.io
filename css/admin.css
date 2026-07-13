@@ -88,7 +88,8 @@
 }
 
 .admin-field input,
-.admin-field select {
+.admin-field select,
+.admin-field textarea {
   padding: .75rem 1rem;
   border: 1.5px solid var(--border, #E8DFD0);
   border-radius: 10px;
@@ -103,10 +104,18 @@
 }
 
 .admin-field input:focus,
-.admin-field select:focus {
+.admin-field select:focus,
+.admin-field textarea:focus {
   border-color: var(--spice, #C8651A);
   background: #fff;
   box-shadow: 0 0 0 3px rgba(200,101,26,.1);
+}
+
+.admin-field textarea {
+  min-height: 90px;
+  resize: vertical;
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.5;
 }
 
 .admin-field input[type="file"] {
@@ -770,6 +779,10 @@ a.tile-panel-back { text-decoration: none; }
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--muted, #7A6E64);
+}
+
+.launcher-wrap .launcher-category:not(:first-child) {
+  margin-top: 2.5rem;
 }
 
 .launcher-grid {
