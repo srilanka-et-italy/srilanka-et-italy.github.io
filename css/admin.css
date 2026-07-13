@@ -772,6 +772,20 @@ a.tile-panel-back { text-decoration: none; }
   .launcher-wrap { min-height: calc(100dvh - 60px - 4rem); }
 }
 
+.launcher-columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3.5rem;
+}
+
+.launcher-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .launcher-category {
   margin-bottom: 1.5rem;
   font-size: .82rem;
@@ -779,10 +793,6 @@ a.tile-panel-back { text-decoration: none; }
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--muted, #7A6E64);
-}
-
-.launcher-wrap .launcher-category:not(:first-child) {
-  margin-top: 2.5rem;
 }
 
 .launcher-grid {
