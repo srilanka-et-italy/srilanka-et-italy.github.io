@@ -51,6 +51,24 @@ Neuer Abschnitt "Hauptspeisekarte" in `components/admin-panel.html`, oberhalb de
 - Ein "Ersetzen"-Button/Datei-Upload (kein Titel-, Zeitraum- oder Reihenfolge-Feld nötig).
 - Gleiche Validierung/Fehlermeldungen wie Seasonal-Upload (Dateityp, Größe).
 
+### 3b. Abuse-/Kostenschutz für `/menu-card`
+
+`/menu-card` ist ein öffentlicher, unauthentifizierter Endpunkt und liest bei jedem Aufruf Firestore — ohne Schutz treibt Bot-/Scraper-Traffic unnötig Function-Invocations und Firestore-Reads hoch. Zwei Maßnahmen, kombiniert:
+
+**a) CDN-Caching (erste Verteidigungslinie)**
+Die Function setzt auf die Redirect-Antwort `Cache-Control: public, max-age=120`. Firebase Hosting/CDN liefert wiederholte Anfragen innerhalb von 2 Minuten direkt aus dem Cache aus, ohne die Function erneut aufzurufen. Deckt die meisten Missbrauchsfälle bereits ab.
+Trade-off: nach einem PDF-Wechsel kann `/menu-card` bis zu 2 Minuten noch auf die alte (ggf. bereits gelöschte) Datei zeigen. Akzeptiert, da Austausch kein Alltagsvorgang ist.
+
+**b) IP-basiertes Rate-Limiting (zusätzliche Absicherung)**
+Zusätzlich ein einfacher Zähler in Firestore, Collection `rate_limits`, Dokument-ID = gehashte Client-IP:
+```
+{ count: number, windowStart: Timestamp }
+```
+- Zeitfenster: 60 Sekunden, Limit: 60 Anfragen/Fenster (großzügig für normalen Traffic, reicht aber um automatisierte Missbrauchs-Spitzen zu bremsen).
+- Bei Anfrage: Fenster abgelaufen → Zähler zurücksetzen; sonst hochzählen. Überschreitung → HTTP 429.
+- IP wird gehasht (nicht im Klartext gespeichert) aus Datenschutzgründen.
+- Da Caching (a) die meisten wiederholten Anfragen ohnehin abfängt, verursacht (b) in der Praxis kaum zusätzliche Firestore-Kosten — greift nur, wenn Cache umgangen wird (z. B. `Cache-Control` ignorierender Client).
+
 ### 4b. Firestore- und Storage-Regeln
 
 Beide Regeldateien erlauben aktuell nur `seasonal_pdfs` bzw. `seasonal-pdfs/*`; alles andere ist implizit verboten. Für `main_menu` müssen eigene Regeln ergänzt werden, sonst schlägt der Admin-Upload mit "permission denied" fehl (die Cloud Function selbst ist davon nicht betroffen, da sie über das Admin-SDK mit vollen Rechten liest).
@@ -60,6 +78,13 @@ Beide Regeldateien erlauben aktuell nur `seasonal_pdfs` bzw. `seasonal-pdfs/*`; 
 match /main_menu/{doc} {
   allow read: if isAdmin();
   allow create, update, delete: if isAdmin();
+}
+```
+
+**`firestore.rules`** — zusätzlich `rate_limits` sperren (nur die Cloud Function schreibt/liest über das Admin-SDK, das ignoriert Security Rules ohnehin — die Regel verhindert nur direkten Client-Zugriff):
+```
+match /rate_limits/{ip} {
+  allow read, write: if false;
 }
 ```
 
@@ -93,6 +118,7 @@ match /main-menu/{fileName} {
 - Wenn Storage-Upload fehlschlägt: Firestore-Dokument nicht aktualisieren (alter Zustand bleibt aktiv), Fehlermeldung anzeigen.
 - Wenn Löschen der alten Datei fehlschlägt (z. B. `storage/object-not-found`): das ist kein harter Fehler, still ignorieren (alte Datei existiert eh nicht mehr).
 - `/menu-card` Cloud Function: wenn kein Dokument vorhanden oder `pdfUrl` fehlt → HTTP 404 mit einfacher Textantwort.
+- `/menu-card` Cloud Function: bei Überschreiten des Rate-Limits → HTTP 429 mit einfacher Textantwort.
 
 ## Nicht im Scope
 
