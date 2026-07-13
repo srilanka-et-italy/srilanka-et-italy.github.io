@@ -1,5 +1,27 @@
 <div class="admin-section">
   <div class="admin-section-header">
+    <h2 class="admin-section-title" data-i18n="admin.main_menu_title">Hauptspeisekarte</h2>
+  </div>
+  <div id="main-menu-current">
+    <p class="pdf-list-empty" data-i18n="admin.main_menu_empty">Keine Hauptspeisekarte hinterlegt.</p>
+  </div>
+  <form id="main-menu-form" class="admin-upload-form" novalidate>
+    <div class="admin-field">
+      <label for="main-menu-file" data-i18n="admin.main_menu_file_label">Neue Datei (max. 2 MB)</label>
+      <input type="file" id="main-menu-file" accept="application/pdf,image/png,image/jpeg" required>
+    </div>
+    <div id="main-menu-progress-wrap" class="upload-progress-wrap" hidden>
+      <div class="upload-progress-bar"><div id="main-menu-progress-fill" class="upload-progress-fill"></div></div>
+      <span id="main-menu-progress-text" class="upload-progress-label">0 %</span>
+    </div>
+    <p id="main-menu-error" class="admin-error" hidden></p>
+    <p id="main-menu-success" class="admin-success" hidden data-i18n="admin.main_menu_success">Hauptspeisekarte aktualisiert.</p>
+    <button type="submit" class="btn-dark" data-i18n="admin.main_menu_replace_btn">Ersetzen</button>
+  </form>
+</div>
+
+<div class="admin-section">
+  <div class="admin-section-header">
     <h2 class="admin-section-title" data-i18n="admin.upload_title">PDF hochladen</h2>
   </div>
   <form id="upload-form" class="admin-upload-form" novalidate>
