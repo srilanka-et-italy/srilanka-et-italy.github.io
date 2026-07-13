@@ -648,7 +648,16 @@
   transform: translateX(100%);
   transition: transform .25s ease;
 }
-.tile-panel:not([hidden]) { transform: translateX(0); }
+.tile-panel[hidden] {
+  display: flex !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+.tile-panel:not([hidden]) {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
 
 .tile-panel-header {
   display: flex;

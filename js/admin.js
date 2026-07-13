@@ -238,7 +238,7 @@ function renderPdfTile(id, d) {
     <div class="pdf-tile-info">
       <span class="pdf-tile-title">${DOMPurify.sanitize(titleText)}</span>
       <div class="pdf-tile-meta">
-        <span class="pdf-tile-status ${d.status}">${d.status}</span>
+        <span class="pdf-tile-status ${d.status || 'draft'}">${d.status || 'draft'}</span>
       </div>
     </div>`;
 
@@ -600,6 +600,14 @@ async function openTilePanel(type, docId, d) {
   }
 
   panel.hidden = false;
+
+  const focusTargetId = type === 'seasonal' ? 'tile-title' : 'tile-mainmenu-file';
+  const focusTarget = document.getElementById(focusTargetId);
+  try {
+    focusTarget?.focus();
+  } catch (err) {
+    /* ignore focus errors */
+  }
 }
 
 function closeTilePanel() {
@@ -609,6 +617,12 @@ function closeTilePanel() {
 }
 
 document.getElementById('tile-panel-back').addEventListener('click', closeTilePanel);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const panel = document.getElementById('tile-panel');
+  if (panel && !panel.hidden) closeTilePanel();
+});
 
 function isoLocalFromTimestamp(ts, endOfDay) {
   const dt = ts.toDate();
@@ -726,12 +740,13 @@ async function replaceMainMenuFile(prevData) {
       successEl.hidden = false;
       await refreshMainMenuTile();
       const refreshedDoc = await getDoc(docRef);
+      const freshData = refreshedDoc.data();
       renderLargePreview(
         document.getElementById('tile-panel-preview'),
         downloadURL,
         file.type.startsWith('image/')
       );
-      tilePanelState = { type: 'mainMenu', docId: 'current', data: refreshedDoc.data() };
+      document.getElementById('tile-save-btn').onclick = () => replaceMainMenuFile(freshData);
     }
   );
 }
