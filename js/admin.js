@@ -284,8 +284,6 @@ async function deletePdf(docId, fileName) {
 // ── Main menu card ────────────────────────────────────────────────────────
 
 async function setupMainMenuSection() {
-  await refreshMainMenuCurrent();
-
   const form         = document.getElementById('main-menu-form');
   const progressWrap = document.getElementById('main-menu-progress-wrap');
   const progressFill = document.getElementById('main-menu-progress-fill');
@@ -352,12 +350,19 @@ async function setupMainMenuSection() {
       }
     );
   });
+
+  await refreshMainMenuCurrent();
 }
 
 async function refreshMainMenuCurrent() {
   const container = document.getElementById('main-menu-current');
-  const docSnap = await getDoc(doc(db, 'main_menu', 'current'));
-  renderMainMenuCurrent(container, docSnap.exists() ? docSnap.data() : null);
+  try {
+    const docSnap = await getDoc(doc(db, 'main_menu', 'current'));
+    renderMainMenuCurrent(container, docSnap.exists() ? docSnap.data() : null);
+  } catch (err) {
+    console.warn('Could not load main menu card:', err.message);
+    container.innerHTML = `<p class="pdf-list-empty">${t('admin.main_menu_empty')}</p>`;
+  }
 }
 
 function renderMainMenuCurrent(container, d) {
