@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt &amp; Öffnungszeiten — Admin — Sri Lanka ET Italy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="admin-login-screen">
+    <div class="admin-login-card">
+      <p class="admin-login-eyebrow">Sri Lanka ET Italy</p>
+      <h1 class="admin-login-title" data-i18n="admin.login_title">Admin Login</h1>
+
+      <div class="admin-lang-switch">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
+      <form id="login-form" novalidate>
+        <div class="admin-field">
+          <label for="email" data-i18n="admin.email_label">E-Mail</label>
+          <input type="email" id="email" autocomplete="email" required>
+        </div>
+        <div class="admin-field">
+          <label for="password" data-i18n="admin.password_label">Passwort</label>
+          <div class="admin-password-wrap">
+            <input type="password" id="password" autocomplete="current-password" required>
+            <button type="button" id="toggle-password" class="admin-pw-toggle" aria-label="Passwort anzeigen">👁</button>
+          </div>
+        </div>
+        <p id="login-error" class="admin-error" hidden></p>
+        <button type="submit" class="btn-dark admin-submit" data-i18n="admin.login_btn">Anmelden</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Panel (hidden until authenticated) -->
+  <div id="admin-panel" class="admin-panel" hidden>
+    <header class="admin-header">
+      <div class="admin-header-brand">
+        <a href="admin.html" class="tile-panel-back" aria-label="Zurück">←</a>
+        <span class="admin-header-logo">Sri Lanka <em>ET</em> Italy</span>
+        <span class="admin-header-badge" data-i18n="admin.header_badge">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <div class="admin-header-langs">
+          <button class="admin-lang-btn active" data-lang="de">DE</button>
+          <button class="admin-lang-btn" data-lang="en">EN</button>
+          <button class="admin-lang-btn" data-lang="ta">TA</button>
+        </div>
+        <button id="logout-btn" class="btn-outline" data-i18n="admin.logout_btn">Abmelden</button>
+      </div>
+    </header>
+    <main class="admin-main">
+      <div class="admin-panel-langs">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2 class="admin-section-title" data-i18n="admin.contact_title">Kontakt &amp; Öffnungszeiten</h2>
+        </div>
+
+        <div class="admin-field">
+          <label for="contact-email" data-i18n="admin.email_label">E-Mail</label>
+          <input type="email" id="contact-email">
+        </div>
+        <div class="admin-field">
+          <label for="contact-phone1" data-i18n="admin.phone1_label">Telefon 1</label>
+          <input type="tel" id="contact-phone1">
+        </div>
+        <div class="admin-field">
+          <label for="contact-phone2" data-i18n="admin.phone2_label">Telefon 2</label>
+          <input type="tel" id="contact-phone2">
+        </div>
+
+        <div class="admin-field" id="hours-field">
+          <label data-i18n="admin.hours_field_label">Öffnungszeiten</label>
+          <div class="admin-lang-tabs" id="hours-lang-tabs">
+            <button type="button" class="admin-lang-tab active" data-lang="de">DE</button>
+            <button type="button" class="admin-lang-tab" data-lang="en">EN</button>
+            <button type="button" class="admin-lang-tab" data-lang="ta">TA</button>
+          </div>
+          <div class="admin-title-pane active" data-lang-pane="de"><textarea id="hours-de" rows="3"></textarea></div>
+          <div class="admin-title-pane" data-lang-pane="en"><textarea id="hours-en" rows="3"></textarea></div>
+          <div class="admin-title-pane" data-lang-pane="ta"><textarea id="hours-ta" rows="3"></textarea></div>
+        </div>
+
+        <div class="admin-field" id="address-field">
+          <label data-i18n="admin.address_field_label">Adresse</label>
+          <div class="admin-lang-tabs" id="address-lang-tabs">
+            <button type="button" class="admin-lang-tab active" data-lang="de">DE</button>
+            <button type="button" class="admin-lang-tab" data-lang="en">EN</button>
+            <button type="button" class="admin-lang-tab" data-lang="ta">TA</button>
+          </div>
+          <div class="admin-title-pane active" data-lang-pane="de"><textarea id="address-de" rows="3"></textarea></div>
+          <div class="admin-title-pane" data-lang-pane="en"><textarea id="address-en" rows="3"></textarea></div>
+          <div class="admin-title-pane" data-lang-pane="ta"><textarea id="address-ta" rows="3"></textarea></div>
+        </div>
+
+        <p id="contact-error" class="admin-error" hidden></p>
+        <p id="contact-success" class="admin-success" hidden data-i18n="admin.contact_success">Kontaktdaten gespeichert.</p>
+        <button id="contact-save-btn" type="button" class="btn-dark" data-i18n="admin.contact_save_btn">Speichern</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+  <script type="module" src="js/admin-contact.js"></script>
+</body>
+</html>
