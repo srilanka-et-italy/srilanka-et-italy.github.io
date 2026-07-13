@@ -204,7 +204,7 @@
         "err_no_title": "Title (DE) is required.",
         "err_no_dates": "Start and end date are required.",
         "err_date_order": "End date must be after start date.",
-        "list_title": "Active Files",
+        "list_title": "Header Flyers",
         "list_empty": "No files available.",
         "delete_btn": "Delete",
         "delete_confirm": "Really delete this PDF?",

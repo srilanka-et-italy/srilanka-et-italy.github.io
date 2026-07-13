@@ -204,7 +204,7 @@
         "err_no_title": "Titel (DE) ist erforderlich.",
         "err_no_dates": "Start- und Enddatum sind erforderlich.",
         "err_date_order": "Enddatum muss nach Startdatum liegen.",
-        "list_title": "Aktive Dateien",
+        "list_title": "Header-Flyer",
         "list_empty": "Keine Dateien vorhanden.",
         "delete_btn": "Löschen",
         "delete_confirm": "PDF wirklich löschen?",
