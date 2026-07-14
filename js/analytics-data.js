@@ -19,6 +19,14 @@ export function translateLabel(key) {
   return translated === i18nKey ? key : translated;
 }
 
+// Tracked "page" values are raw pathnames (window.location.pathname) —
+// translate the ones with a friendly name, fall back to the raw path for
+// anything else (e.g. a future subpage that hasn't been given a label).
+export function translatePage(path) {
+  if (path === '/') return t('admin.analytics_page_home');
+  return path;
+}
+
 export async function fetchAnalyticsSummary(db) {
   const eventsCol = collection(db, 'analytics_events');
   const [totalSnap, ...labelSnaps] = await Promise.all([

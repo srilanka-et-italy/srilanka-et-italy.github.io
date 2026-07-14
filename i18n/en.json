@@ -259,6 +259,7 @@
         "analytics_label_lang_switch_de": "Language: German",
         "analytics_label_lang_switch_en": "Language: English",
         "analytics_label_lang_switch_ta": "Language: Tamil",
-        "analytics_label_flyer_open": "Flyer opened"
+        "analytics_label_flyer_open": "Flyer opened",
+        "analytics_page_home": "Homepage"
     }
 }

@@ -3,7 +3,7 @@ import {
   collection, query, where, orderBy, limit, getDocs, getCountFromServer, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { initAuthGate, showError, i18n, t } from './admin-shared.js';
-import { fetchAnalyticsSummary, renderBarRanking, translateLabel } from './analytics-data.js';
+import { fetchAnalyticsSummary, renderBarRanking, translateLabel, translatePage } from './analytics-data.js';
 
 const LANG_LABELS = ['lang_switch_de', 'lang_switch_en', 'lang_switch_ta'];
 const CONTACT_LABELS = ['contact_email', 'contact_phone', 'route_plan'];
@@ -180,7 +180,8 @@ function renderRecentEvents(recentSnap, todayStart, yesterdayStart) {
       main.appendChild(typeEl);
       const detailEl = document.createElement('span');
       detailEl.className = 'analytics-event-detail';
-      detailEl.textContent = data.label ? `${translateLabel(data.label)} · ${data.page || '(unbekannt)'}` : (data.page || '(unbekannt)');
+      const pageText = translatePage(data.page || '(unbekannt)');
+      detailEl.textContent = data.label ? `${translateLabel(data.label)} · ${pageText}` : pageText;
       main.appendChild(detailEl);
 
       const timeEl = document.createElement('span');
@@ -218,7 +219,7 @@ function renderCountList(elementId, counts) {
     .sort(([, a], [, b]) => b - a)
     .forEach(([key, count]) => {
       const li = document.createElement('li');
-      li.textContent = `${key}: ${count}`;
+      li.textContent = `${translatePage(key)}: ${count}`;
       el.appendChild(li);
     });
 }

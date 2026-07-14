@@ -937,8 +937,15 @@ footer {
     padding: 0 1.5rem;
   }
 
-  .nav-links {
+  /* Keep the language switcher reachable on mobile — only hide the nav
+     links themselves, since .lang-switcher is a non-<li> sibling inside
+     .nav-links and unaffected by display:none on <li> children alone. */
+  .nav-links > li {
     display: none;
+  }
+
+  .lang-switcher {
+    margin-left: 0;
   }
 
   #hero {
