@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { createRateLimiter } = require('./rateLimit');
 
 const VALID_TYPES = ['pageview', 'click'];
+const MAX_FIELD_LENGTH = 512;
 
 exports.trackEvent = functions.https.onRequest(async (req, res) => {
   if (req.method !== 'POST') {
@@ -15,8 +16,9 @@ exports.trackEvent = functions.https.onRequest(async (req, res) => {
   const checkRateLimit = createRateLimiter(db, { limit: 30, windowMs: 60000 });
 
   const forwardedFor = req.headers['x-forwarded-for'];
-  const ip = (typeof forwardedFor === 'string' ? forwardedFor.split(',')[0].trim() : null)
-    || req.ip || 'unknown';
+  const ip = req.ip
+    || (typeof forwardedFor === 'string' ? forwardedFor.split(',').pop().trim() : null)
+    || 'unknown';
   const ipHash = crypto.createHash('sha256').update(ip).digest('hex');
 
   const { allowed } = await checkRateLimit(ipHash);
@@ -27,7 +29,11 @@ exports.trackEvent = functions.https.onRequest(async (req, res) => {
 
   const body = req.body || {};
   const { type, page, label } = body;
-  if (!VALID_TYPES.includes(type) || typeof page !== 'string' || !page) {
+  if (!VALID_TYPES.includes(type) || typeof page !== 'string' || !page || page.length > MAX_FIELD_LENGTH) {
+    res.status(204).send();
+    return;
+  }
+  if (typeof label === 'string' && label.length > MAX_FIELD_LENGTH) {
     res.status(204).send();
     return;
   }
