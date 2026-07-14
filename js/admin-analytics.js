@@ -53,7 +53,7 @@ async function loadAnalytics() {
     const hasData = totalPageviewsSnap.data().count > 0 || recentSnap.size > 0;
     document.getElementById('analytics-empty').hidden = hasData;
   } catch (err) {
-    const errorEl = document.getElementById('analytics-empty');
+    const errorEl = document.getElementById('analytics-error');
     errorEl.hidden = false;
     showError(errorEl, err.message);
   }
