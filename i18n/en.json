@@ -20,6 +20,11 @@
         "club": "At the Wolfegg Shooting Club",
         "open": "Open daily except Wednesday"
     },
+    "consent": {
+        "banner_text": "We use anonymous usage statistics to improve our website. We only collect pageviews and clicks after you consent.",
+        "accept_btn": "Accept",
+        "decline_btn": "Decline"
+    },
     "about": {
         "label": "Our Story",
         "title1": "Two Cultures, ",
@@ -175,6 +180,7 @@
         "login_error_invalid": "Invalid credentials or missing permission.",
         "header_badge": "Admin",
         "launcher_category": "Menus",
+        "launcher_category_analytics": "Statistics",
         "launcher_category_contact": "Contact & Location",
         "contact_title": "Contact & Opening Hours",
         "phone1_label": "Phone 1",
@@ -219,6 +225,12 @@
         "delete_storage_error": "Storage deletion failed: ",
         "edit_title": "Edit",
         "edit_save": "Save",
-        "edit_cancel": "Cancel"
+        "edit_cancel": "Cancel",
+        "analytics_title": "Visitor Statistics",
+        "analytics_pageviews_label": "Total pageviews",
+        "analytics_by_page_label": "Views per page",
+        "analytics_by_label_label": "Clicks per label",
+        "analytics_recent_label": "Recent events",
+        "analytics_empty": "No data yet."
     }
 }
