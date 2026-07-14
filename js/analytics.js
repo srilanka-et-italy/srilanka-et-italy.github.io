@@ -41,15 +41,15 @@ export function initConsentBanner() {
 
     banner.hidden = false;
 
-    banner.querySelector('.consent-accept-btn').addEventListener('click', () => {
-        localStorage.setItem('cookie_consent', 'accepted');
-        banner.hidden = true;
-        trackPageview(window.location.pathname);
-    });
-
-    banner.querySelector('.consent-decline-btn').addEventListener('click', () => {
-        localStorage.setItem('cookie_consent', 'declined');
-        banner.hidden = true;
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.consent-accept-btn')) {
+            localStorage.setItem('cookie_consent', 'accepted');
+            banner.hidden = true;
+            trackPageview(window.location.pathname);
+        } else if (e.target.closest('.consent-decline-btn')) {
+            localStorage.setItem('cookie_consent', 'declined');
+            banner.hidden = true;
+        }
     });
 }
 

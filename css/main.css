@@ -1042,7 +1042,7 @@ footer {
     left: 1rem;
     right: 1rem;
     bottom: 1rem;
-    z-index: 999;
+    z-index: 1100;
     max-width: 640px;
     margin: 0 auto;
     background: var(--white);
@@ -1055,6 +1055,12 @@ footer {
     gap: 1rem;
     align-items: center;
     justify-content: space-between;
+    pointer-events: auto;
+}
+
+.cookie-consent-actions button {
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .cookie-consent-text {

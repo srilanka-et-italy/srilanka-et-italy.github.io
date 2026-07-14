@@ -38,7 +38,7 @@ async function loadAnalytics() {
       const snap = await getCountFromServer(query(eventsCol, where('type', '==', 'click'), where('label', '==', label)));
       byLabelCounts[label] = snap.data().count;
     }));
-    renderCountList('analytics-by-label', byLabelCounts);
+    renderTileGrid('analytics-by-label', byLabelCounts);
 
     const recentList = document.getElementById('analytics-recent');
     recentList.innerHTML = '';
@@ -69,5 +69,26 @@ function renderCountList(elementId, counts) {
       const li = document.createElement('li');
       li.textContent = `${key}: ${count}`;
       el.appendChild(li);
+    });
+}
+
+function renderTileGrid(elementId, counts) {
+  const el = document.getElementById(elementId);
+  el.innerHTML = '';
+  Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .sort(([, a], [, b]) => b - a)
+    .forEach(([key, count]) => {
+      const tile = document.createElement('div');
+      tile.className = 'analytics-tile';
+      const value = document.createElement('span');
+      value.className = 'analytics-tile-value';
+      value.textContent = count;
+      const label = document.createElement('span');
+      label.className = 'analytics-tile-label';
+      label.textContent = key;
+      tile.appendChild(value);
+      tile.appendChild(label);
+      el.appendChild(tile);
     });
 }

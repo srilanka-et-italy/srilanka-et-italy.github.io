@@ -868,3 +868,35 @@ a.tile-panel-back { text-decoration: none; }
   color: var(--ink, #1C1410);
   text-align: center;
 }
+
+/* ── Analytics stat tiles ── */
+.analytics-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: .75rem;
+}
+
+.analytics-tile {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  padding: 1rem;
+  background: var(--cream, #FDFAF5);
+  border: 1.5px solid var(--border, #E8DFD0);
+  border-radius: 12px;
+}
+
+.analytics-tile-value {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--spice, #C8651A);
+}
+
+.analytics-tile-label {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--muted, #7A6E64);
+  word-break: break-word;
+}
