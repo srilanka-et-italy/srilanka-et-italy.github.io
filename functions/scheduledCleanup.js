@@ -6,6 +6,7 @@ const admin = require('firebase-admin');
 // 2. Deletes audit logs older than 90 days
 // 3. Deletes stuck drafts older than 1 hour
 // 4. Deletes stale rate_limits windows older than 1 hour
+// 5. Deletes analytics_events older than 90 days
 exports.scheduledCleanup = functions.pubsub
   .schedule('0 2 * * *')
   .timeZone('UTC')
@@ -63,6 +64,12 @@ exports.scheduledCleanup = functions.pubsub
       .get();
     const rateLimitDeletes = staleRateLimitsSnap.docs.map(d => d.ref.delete());
 
-    await Promise.allSettled([...expiredDeletes, ...logDeletes, ...stuckDeletes, ...rateLimitDeletes]);
-    console.log(`Cleanup complete: ${expiredSnap.size} expired, ${oldLogsSnap.size} logs, ${stuckSnap.size} stuck drafts, ${staleRateLimitsSnap.size} stale rate limits`);
+    // 5. Analytics events older than 90 days
+    const oldEventsSnap = await db.collection('analytics_events')
+      .where('timestamp', '<', cutoff90)
+      .get();
+    const eventDeletes = oldEventsSnap.docs.map(d => d.ref.delete());
+
+    await Promise.allSettled([...expiredDeletes, ...logDeletes, ...stuckDeletes, ...rateLimitDeletes, ...eventDeletes]);
+    console.log(`Cleanup complete: ${expiredSnap.size} expired, ${oldLogsSnap.size} logs, ${stuckSnap.size} stuck drafts, ${staleRateLimitsSnap.size} stale rate limits, ${oldEventsSnap.size} analytics events`);
   });
