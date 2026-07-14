@@ -232,6 +232,13 @@
         "analytics_by_label_label": "Klicks pro Label",
         "analytics_recent_label": "Letzte Ereignisse",
         "analytics_empty": "Noch keine Daten vorhanden.",
-        "analytics_view_details": "Alle Details ansehen →"
+        "analytics_view_details": "Alle Details ansehen →",
+        "analytics_clicks_total_label": "Klicks gesamt",
+        "analytics_click_rate_label": "Klickrate",
+        "analytics_top_label_label": "Meistgeklicktes Element",
+        "analytics_today_label": "Aufrufe heute",
+        "analytics_week_label": "Aufrufe letzte 7 Tage",
+        "analytics_lang_label": "Sprachwechsel-Verteilung",
+        "analytics_last_activity_label": "Letzte Aktivität"
     }
 }

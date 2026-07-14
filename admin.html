@@ -170,11 +170,22 @@
             <a href="admin-analytics.html" class="stats-tile-more" data-i18n="admin.analytics_view_details">Alle Details ansehen →</a>
           </div>
           <div class="stats-tile-body">
-            <div class="analytics-tile">
-              <span class="analytics-tile-value" id="home-stats-pageviews">–</span>
-              <span class="analytics-tile-label" data-i18n="admin.analytics_pageviews_label">Seitenaufrufe gesamt</span>
+            <div class="analytics-hero-metric">
+              <div class="analytics-hero-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+                  <circle cx="50" cy="50" r="46" fill="#1c2229" />
+                  <circle cx="50" cy="50" r="41" fill="none" stroke="#d4af37" stroke-width="2.5" />
+                  <rect x="30" y="55" width="8" height="18" rx="2" fill="#d4af37" />
+                  <rect x="46" y="42" width="8" height="31" rx="2" fill="#ffffff" />
+                  <rect x="62" y="30" width="8" height="43" rx="2" fill="#d4af37" />
+                </svg>
+              </div>
+              <div>
+                <span class="analytics-hero-value" id="home-stats-pageviews">–</span>
+                <span class="analytics-hero-label" data-i18n="admin.analytics_pageviews_label">Seitenaufrufe gesamt</span>
+              </div>
             </div>
-            <div id="home-stats-by-label" class="analytics-tile-grid"></div>
+            <div id="home-stats-by-label" class="analytics-bar-list"></div>
           </div>
           <p id="home-stats-error" class="admin-error" hidden></p>
           <p id="home-stats-empty" class="admin-error" hidden data-i18n="admin.analytics_empty">Noch keine Daten vorhanden.</p>

@@ -232,6 +232,13 @@
         "analytics_by_label_label": "ஒரு லேபிளுக்கான கிளிக்குகள்",
         "analytics_recent_label": "சமீபத்திய நிகழ்வுகள்",
         "analytics_empty": "இன்னும் தரவு இல்லை.",
-        "analytics_view_details": "எல்லா விவரங்களையும் காண்க →"
+        "analytics_view_details": "எல்லா விவரங்களையும் காண்க →",
+        "analytics_clicks_total_label": "மொத்த கிளிக்குகள்",
+        "analytics_click_rate_label": "கிளிக் விகிதம்",
+        "analytics_top_label_label": "அதிகம் கிளிக் செய்யப்பட்டது",
+        "analytics_today_label": "இன்றைய பார்வைகள்",
+        "analytics_week_label": "கடந்த 7 நாட்களின் பார்வைகள்",
+        "analytics_lang_label": "மொழி மாற்ற விநியோகம்",
+        "analytics_last_activity_label": "சமீபத்திய செயல்பாடு"
     }
 }

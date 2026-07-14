@@ -1,6 +1,6 @@
 import { initAuthGate, showError } from './admin-shared.js';
 import { db } from './firebase-config.js';
-import { fetchAnalyticsSummary, renderTileGrid } from './analytics-data.js';
+import { fetchAnalyticsSummary, renderBarRanking } from './analytics-data.js';
 
 initAuthGate(async () => {
   await loadStatsTile();
@@ -11,7 +11,7 @@ async function loadStatsTile() {
     const { totalPageviews, byLabel } = await fetchAnalyticsSummary(db);
 
     document.getElementById('home-stats-pageviews').textContent = totalPageviews;
-    renderTileGrid(document.getElementById('home-stats-by-label'), byLabel);
+    renderBarRanking(document.getElementById('home-stats-by-label'), byLabel);
 
     const hasData = totalPageviews > 0 || Object.values(byLabel).some(count => count > 0);
     document.getElementById('home-stats-empty').hidden = hasData;

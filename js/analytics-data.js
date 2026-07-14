@@ -23,22 +23,39 @@ export async function fetchAnalyticsSummary(db) {
   return { totalPageviews: totalSnap.data().count, byLabel };
 }
 
-export function renderTileGrid(el, counts) {
+// Renders a sorted, proportional-width bar ranking — each bar's length is
+// relative to the largest count in the set, so the busiest item reads at
+// a glance without needing a full charting library for a handful of rows.
+export function renderBarRanking(el, counts) {
   el.innerHTML = '';
-  Object.entries(counts)
+  const entries = Object.entries(counts)
     .filter(([, count]) => count > 0)
-    .sort(([, a], [, b]) => b - a)
-    .forEach(([key, count]) => {
-      const tile = document.createElement('div');
-      tile.className = 'analytics-tile';
-      const value = document.createElement('span');
-      value.className = 'analytics-tile-value';
-      value.textContent = count;
-      const label = document.createElement('span');
-      label.className = 'analytics-tile-label';
-      label.textContent = key;
-      tile.appendChild(value);
-      tile.appendChild(label);
-      el.appendChild(tile);
-    });
+    .sort(([, a], [, b]) => b - a);
+
+  const max = entries.length ? entries[0][1] : 0;
+
+  entries.forEach(([key, count]) => {
+    const row = document.createElement('div');
+    row.className = 'analytics-bar-row';
+
+    const label = document.createElement('span');
+    label.className = 'analytics-bar-label';
+    label.textContent = key;
+
+    const track = document.createElement('div');
+    track.className = 'analytics-bar-track';
+    const fill = document.createElement('div');
+    fill.className = 'analytics-bar-fill';
+    fill.style.width = max > 0 ? `${Math.max((count / max) * 100, 4)}%` : '0%';
+    track.appendChild(fill);
+
+    const value = document.createElement('span');
+    value.className = 'analytics-bar-count';
+    value.textContent = count;
+
+    row.appendChild(label);
+    row.appendChild(track);
+    row.appendChild(value);
+    el.appendChild(row);
+  });
 }

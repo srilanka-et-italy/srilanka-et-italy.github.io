@@ -73,9 +73,35 @@
           <h2 class="admin-section-title" data-i18n="admin.analytics_title">Besucherstatistiken</h2>
         </div>
 
-        <div class="admin-field">
-          <label data-i18n="admin.analytics_pageviews_label">Seitenaufrufe gesamt</label>
-          <p id="analytics-total-pageviews">–</p>
+        <div class="analytics-tile-grid">
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-total-pageviews">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_pageviews_label">Seitenaufrufe gesamt</span>
+          </div>
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-total-clicks">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_clicks_total_label">Klicks gesamt</span>
+          </div>
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-click-rate">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_click_rate_label">Klickrate</span>
+          </div>
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-top-label">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_top_label_label">Meistgeklicktes Element</span>
+          </div>
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-today">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_today_label">Aufrufe heute</span>
+          </div>
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-week">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_week_label">Aufrufe letzte 7 Tage</span>
+          </div>
+          <div class="analytics-tile">
+            <span class="analytics-tile-value" id="analytics-last-activity">–</span>
+            <span class="analytics-tile-label" data-i18n="admin.analytics_last_activity_label">Letzte Aktivität</span>
+          </div>
         </div>
 
         <div class="admin-field">
@@ -85,7 +111,12 @@
 
         <div class="admin-field">
           <label data-i18n="admin.analytics_by_label_label">Klicks pro Label</label>
-          <div id="analytics-by-label" class="analytics-tile-grid"></div>
+          <div id="analytics-by-label" class="analytics-bar-list"></div>
+        </div>
+
+        <div class="admin-field">
+          <label data-i18n="admin.analytics_lang_label">Sprachwechsel-Verteilung</label>
+          <div id="analytics-lang-breakdown" class="analytics-bar-list"></div>
         </div>
 
         <div class="admin-field">
