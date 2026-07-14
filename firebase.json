@@ -21,6 +21,10 @@
         "function": "menuCard"
       },
       {
+        "source": "/track-event",
+        "function": "trackEvent"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
