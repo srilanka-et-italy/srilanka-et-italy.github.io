@@ -1,4 +1,5 @@
 import { I18n } from './i18n.js';
+import { initConsentBanner, setupClickTracking, trackPageview } from './analytics.js';
 import { db, remoteConfig } from './firebase-config.js';
 import {
   collection, query, where, orderBy, getDocs, doc, getDoc, Timestamp
@@ -18,7 +19,8 @@ class App {
             { id: 'club-placeholder',     file: 'components/club.html' },
             { id: 'menu-placeholder',     file: 'components/menu.html' },
             { id: 'location-placeholder', file: 'components/location.html' },
-            { id: 'footer-placeholder',   file: 'components/footer.html' }
+            { id: 'footer-placeholder',   file: 'components/footer.html' },
+            { id: 'cookie-consent-placeholder', file: 'components/cookie-consent.html' }
         ];
         this._carouselTimer = null;
     }
@@ -30,6 +32,9 @@ class App {
         this.setupEventListeners();
         this.loadContactData().then(() => this.applyContactOverrides());
         await this.setupSeasonalCarousel();
+        initConsentBanner();
+        setupClickTracking();
+        trackPageview(window.location.pathname);
     }
 
     async loadContactData() {
