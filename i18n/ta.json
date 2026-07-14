@@ -244,6 +244,11 @@
         "analytics_flyer_clicks_label": "ஃப்ளையர் கிளிக்குகள்",
         "analytics_busiest_hour_label": "அதிக பார்வை நேரம்",
         "analytics_busiest_weekday_label": "அதிக பார்வை நாள்",
-        "analytics_trend_new": "புதியது"
+        "analytics_trend_new": "புதியது",
+        "analytics_event_pageview": "பக்கப் பார்வை",
+        "analytics_event_click": "கிளிக்",
+        "analytics_group_today": "இன்று",
+        "analytics_group_yesterday": "நேற்று",
+        "analytics_group_older": "பழையது"
     }
 }

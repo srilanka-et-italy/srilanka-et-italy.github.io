@@ -90,15 +90,7 @@ async function loadAnalytics() {
     LANG_LABELS.forEach(label => { langCounts[label] = byLabel[label] || 0; });
     renderBarRanking(document.getElementById('analytics-lang-breakdown'), langCounts);
 
-    const recentList = document.getElementById('analytics-recent');
-    recentList.innerHTML = '';
-    recentSnap.forEach(docSnap => {
-      const data = docSnap.data();
-      const li = document.createElement('li');
-      const ts = data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString('de-DE') : '–';
-      li.textContent = `${ts} — ${data.type}${data.label ? ' (' + data.label + ')' : ''} — ${data.page || '(unbekannt)'}`;
-      recentList.appendChild(li);
-    });
+    renderRecentEvents(recentSnap, todayStart, yesterdayStart);
 
     const lastActivityTs = recentSnap.docs[0]?.data().timestamp;
     document.getElementById('analytics-last-activity').textContent = lastActivityTs?.toDate
@@ -138,6 +130,84 @@ function formatBusiestWeekday(weekdayCounts) {
   const day = weekdayCounts.indexOf(max);
   const reference = new Date(2026, 0, 4 + day); // a known Sunday-indexed week
   return reference.toLocaleDateString(i18n.lang, { weekday: 'long' });
+}
+
+const EVENT_ICONS = {
+  pageview: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  click: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V4a1.5 1.5 0 0 1 3 0v6M12 10V2.5a1.5 1.5 0 0 1 3 0V10M15 10V4.5a1.5 1.5 0 0 1 3 0V12M18 11.5a1.5 1.5 0 0 1 3 0V15c0 4-2.5 8-7.5 8h-2C7.5 23 6 20 4.5 18l-2-3.5c-.5-1 0-2.3 1.5-2.3.8 0 1.3.4 1.8 1l1.2 1.8"/></svg>'
+};
+
+function renderRecentEvents(recentSnap, todayStart, yesterdayStart) {
+  const container = document.getElementById('analytics-recent');
+  container.innerHTML = '';
+
+  const groups = [
+    { key: 'today', labelKey: 'admin.analytics_group_today', docs: [] },
+    { key: 'yesterday', labelKey: 'admin.analytics_group_yesterday', docs: [] },
+    { key: 'older', labelKey: 'admin.analytics_group_older', docs: [] }
+  ];
+
+  recentSnap.forEach(docSnap => {
+    const data = docSnap.data();
+    const ts = data.timestamp?.toMillis ? data.timestamp.toMillis() : 0;
+    if (ts >= todayStart.toMillis()) groups[0].docs.push(data);
+    else if (ts >= yesterdayStart.toMillis()) groups[1].docs.push(data);
+    else groups[2].docs.push(data);
+  });
+
+  groups.filter(g => g.docs.length > 0).forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'analytics-event-group';
+
+    const header = document.createElement('div');
+    header.className = 'analytics-event-group-header';
+    header.textContent = t(group.labelKey);
+    groupEl.appendChild(header);
+
+    group.docs.forEach(data => {
+      const row = document.createElement('div');
+      row.className = 'analytics-event-row';
+
+      const icon = document.createElement('span');
+      icon.className = `analytics-event-icon analytics-event-icon--${data.type}`;
+      icon.innerHTML = EVENT_ICONS[data.type] || EVENT_ICONS.pageview;
+
+      const main = document.createElement('div');
+      main.className = 'analytics-event-main';
+      const typeEl = document.createElement('span');
+      typeEl.className = 'analytics-event-type';
+      typeEl.textContent = t(data.type === 'click' ? 'admin.analytics_event_click' : 'admin.analytics_event_pageview');
+      main.appendChild(typeEl);
+      const detailEl = document.createElement('span');
+      detailEl.className = 'analytics-event-detail';
+      detailEl.textContent = data.label ? `${data.label} · ${data.page || '(unbekannt)'}` : (data.page || '(unbekannt)');
+      main.appendChild(detailEl);
+
+      const timeEl = document.createElement('span');
+      timeEl.className = 'analytics-event-time';
+      timeEl.textContent = data.timestamp?.toDate ? formatRelativeTime(data.timestamp.toDate()) : '–';
+
+      row.appendChild(icon);
+      row.appendChild(main);
+      row.appendChild(timeEl);
+      groupEl.appendChild(row);
+    });
+
+    container.appendChild(groupEl);
+  });
+}
+
+function formatRelativeTime(date) {
+  const diffMs = Date.now() - date.getTime();
+  const diffMin = Math.round(diffMs / 60000);
+  const rtf = new Intl.RelativeTimeFormat(i18n.lang, { numeric: 'auto', style: 'short' });
+
+  if (diffMin < 1) return rtf.format(0, 'minute');
+  if (diffMin < 60) return rtf.format(-diffMin, 'minute');
+  const diffHour = Math.round(diffMin / 60);
+  if (diffHour < 24) return rtf.format(-diffHour, 'hour');
+  const diffDay = Math.round(diffHour / 24);
+  return rtf.format(-diffDay, 'day');
 }
 
 function renderCountList(elementId, counts) {

@@ -244,6 +244,11 @@
         "analytics_flyer_clicks_label": "Flyer-Klicks",
         "analytics_busiest_hour_label": "Meistbesuchte Uhrzeit",
         "analytics_busiest_weekday_label": "Meistbesuchter Wochentag",
-        "analytics_trend_new": "neu"
+        "analytics_trend_new": "neu",
+        "analytics_event_pageview": "Seitenaufruf",
+        "analytics_event_click": "Klick",
+        "analytics_group_today": "Heute",
+        "analytics_group_yesterday": "Gestern",
+        "analytics_group_older": "Älter"
     }
 }
