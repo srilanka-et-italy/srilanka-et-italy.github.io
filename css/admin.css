@@ -904,7 +904,7 @@ a.tile-panel-back { text-decoration: none; }
 
 /* ── Stats summary tile (admin.html home, spans full width) ── */
 .stats-tile {
-  margin-top: 2rem;
+  margin-bottom: 2rem;
   padding: 2.5rem;
   border-radius: 20px;
   background: #fff;
