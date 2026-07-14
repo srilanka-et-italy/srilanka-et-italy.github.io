@@ -249,6 +249,16 @@
         "analytics_event_click": "Click",
         "analytics_group_today": "Today",
         "analytics_group_yesterday": "Yesterday",
-        "analytics_group_older": "Older"
+        "analytics_group_older": "Older",
+        "analytics_label_hero_cta_menu": "Hero button: Menu",
+        "analytics_label_menu_open": "Menu opened",
+        "analytics_label_route_plan": "Directions requested",
+        "analytics_label_contact_email": "Email contact",
+        "analytics_label_contact_phone": "Phone contact",
+        "analytics_label_club_link": "Club link",
+        "analytics_label_lang_switch_de": "Language: German",
+        "analytics_label_lang_switch_en": "Language: English",
+        "analytics_label_lang_switch_ta": "Language: Tamil",
+        "analytics_label_flyer_open": "Flyer opened"
     }
 }

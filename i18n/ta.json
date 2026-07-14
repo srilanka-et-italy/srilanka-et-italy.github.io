@@ -249,6 +249,16 @@
         "analytics_event_click": "கிளிக்",
         "analytics_group_today": "இன்று",
         "analytics_group_yesterday": "நேற்று",
-        "analytics_group_older": "பழையது"
+        "analytics_group_older": "பழையது",
+        "analytics_label_hero_cta_menu": "ஹீரோ பொத்தான்: மெனு",
+        "analytics_label_menu_open": "மெனு திறக்கப்பட்டது",
+        "analytics_label_route_plan": "வழி திட்டமிடப்பட்டது",
+        "analytics_label_contact_email": "மின்னஞ்சல் தொடர்பு",
+        "analytics_label_contact_phone": "தொலைபேசி தொடர்பு",
+        "analytics_label_club_link": "சங்க இணைப்பு",
+        "analytics_label_lang_switch_de": "மொழி: ஜெர்மன்",
+        "analytics_label_lang_switch_en": "மொழி: ஆங்கிலம்",
+        "analytics_label_lang_switch_ta": "மொழி: தமிழ்",
+        "analytics_label_flyer_open": "ஃப்ளையர் திறக்கப்பட்டது"
     }
 }

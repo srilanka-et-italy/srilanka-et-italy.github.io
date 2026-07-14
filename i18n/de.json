@@ -249,6 +249,16 @@
         "analytics_event_click": "Klick",
         "analytics_group_today": "Heute",
         "analytics_group_yesterday": "Gestern",
-        "analytics_group_older": "Älter"
+        "analytics_group_older": "Älter",
+        "analytics_label_hero_cta_menu": "Hero-Button: Speisekarte",
+        "analytics_label_menu_open": "Speisekarte geöffnet",
+        "analytics_label_route_plan": "Route geplant",
+        "analytics_label_contact_email": "E-Mail-Kontakt",
+        "analytics_label_contact_phone": "Telefon-Kontakt",
+        "analytics_label_club_link": "Vereins-Link",
+        "analytics_label_lang_switch_de": "Sprache: Deutsch",
+        "analytics_label_lang_switch_en": "Sprache: Englisch",
+        "analytics_label_lang_switch_ta": "Sprache: Tamil",
+        "analytics_label_flyer_open": "Flyer geöffnet"
     }
 }

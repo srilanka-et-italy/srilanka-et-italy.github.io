@@ -3,7 +3,7 @@ import {
   collection, query, where, orderBy, limit, getDocs, getCountFromServer, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { initAuthGate, showError, i18n, t } from './admin-shared.js';
-import { fetchAnalyticsSummary, renderBarRanking } from './analytics-data.js';
+import { fetchAnalyticsSummary, renderBarRanking, translateLabel } from './analytics-data.js';
 
 const LANG_LABELS = ['lang_switch_de', 'lang_switch_en', 'lang_switch_ta'];
 const CONTACT_LABELS = ['contact_email', 'contact_phone', 'route_plan'];
@@ -53,7 +53,7 @@ async function loadAnalytics() {
 
     const topLabelEntry = Object.entries(byLabel).sort(([, a], [, b]) => b - a)[0];
     document.getElementById('analytics-top-label').textContent =
-      topLabelEntry && topLabelEntry[1] > 0 ? topLabelEntry[0] : '–';
+      topLabelEntry && topLabelEntry[1] > 0 ? translateLabel(topLabelEntry[0]) : '–';
 
     document.getElementById('analytics-today').textContent = todayCount;
     renderTrend(document.getElementById('analytics-today-trend'), todayCount, yesterdaySnap.data().count);
@@ -180,7 +180,7 @@ function renderRecentEvents(recentSnap, todayStart, yesterdayStart) {
       main.appendChild(typeEl);
       const detailEl = document.createElement('span');
       detailEl.className = 'analytics-event-detail';
-      detailEl.textContent = data.label ? `${data.label} · ${data.page || '(unbekannt)'}` : (data.page || '(unbekannt)');
+      detailEl.textContent = data.label ? `${translateLabel(data.label)} · ${data.page || '(unbekannt)'}` : (data.page || '(unbekannt)');
       main.appendChild(detailEl);
 
       const timeEl = document.createElement('span');

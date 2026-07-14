@@ -1,6 +1,7 @@
 import {
   collection, query, where, getCountFromServer
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { t } from './admin-shared.js';
 
 export const CLICK_LABELS = [
   'hero_cta_menu', 'menu_open', 'route_plan',
@@ -8,6 +9,15 @@ export const CLICK_LABELS = [
   'lang_switch_de', 'lang_switch_en', 'lang_switch_ta',
   'flyer_open'
 ];
+
+// data-track values are internal tracking identifiers, not display text —
+// translate known ones for the admin UI, falling back to the raw key for
+// any future label that hasn't been given a translation yet.
+export function translateLabel(key) {
+  const i18nKey = `admin.analytics_label_${key}`;
+  const translated = t(i18nKey);
+  return translated === i18nKey ? key : translated;
+}
 
 export async function fetchAnalyticsSummary(db) {
   const eventsCol = collection(db, 'analytics_events');
@@ -41,7 +51,7 @@ export function renderBarRanking(el, counts) {
 
     const label = document.createElement('span');
     label.className = 'analytics-bar-label';
-    label.textContent = key;
+    label.textContent = translateLabel(key);
 
     const track = document.createElement('div');
     track.className = 'analytics-bar-track';
