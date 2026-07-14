@@ -239,6 +239,11 @@
         "analytics_today_label": "இன்றைய பார்வைகள்",
         "analytics_week_label": "கடந்த 7 நாட்களின் பார்வைகள்",
         "analytics_lang_label": "மொழி மாற்ற விநியோகம்",
-        "analytics_last_activity_label": "சமீபத்திய செயல்பாடு"
+        "analytics_last_activity_label": "சமீபத்திய செயல்பாடு",
+        "analytics_conversion_rate_label": "தொடர்பு மாற்று விகிதம்",
+        "analytics_flyer_clicks_label": "ஃப்ளையர் கிளிக்குகள்",
+        "analytics_busiest_hour_label": "அதிக பார்வை நேரம்",
+        "analytics_busiest_weekday_label": "அதிக பார்வை நாள்",
+        "analytics_trend_new": "புதியது"
     }
 }

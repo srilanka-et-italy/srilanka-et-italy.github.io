@@ -5,7 +5,8 @@ import {
 export const CLICK_LABELS = [
   'hero_cta_menu', 'menu_open', 'route_plan',
   'contact_email', 'contact_phone', 'club_link',
-  'lang_switch_de', 'lang_switch_en', 'lang_switch_ta'
+  'lang_switch_de', 'lang_switch_en', 'lang_switch_ta',
+  'flyer_open'
 ];
 
 export async function fetchAnalyticsSummary(db) {

@@ -902,6 +902,22 @@ a.tile-panel-back { text-decoration: none; }
   word-break: break-word;
 }
 
+.analytics-tile-trend {
+  display: block;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--green, #4A7C59);
+  margin-top: -.15rem;
+}
+
+.analytics-tile-trend--down {
+  color: var(--spice, #C8651A);
+}
+
+.analytics-tile-trend:empty {
+  display: none;
+}
+
 /* ── Stats summary tile (admin.html home, spans full width) ── */
 .stats-tile {
   margin-bottom: 2rem;

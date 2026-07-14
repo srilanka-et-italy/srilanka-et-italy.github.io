@@ -1,5 +1,5 @@
 import { I18n } from './i18n.js';
-import { initConsentBanner, setupClickTracking, trackPageview } from './analytics.js';
+import { initConsentBanner, setupClickTracking, trackPageview, trackClick } from './analytics.js';
 import { db, remoteConfig } from './firebase-config.js';
 import {
   collection, query, where, orderBy, getDocs, doc, getDoc, Timestamp
@@ -212,7 +212,10 @@ class App {
                     <span data-i18n="hero.pdf_loading">Angebot wird geladen…</span>
                 </div>
                 <canvas class="pdf-canvas"></canvas>`;
-            slide.addEventListener('click', () => openCarouselLightbox(pdf.pdfUrl, pdf.contentType, pdf.fileName));
+            slide.addEventListener('click', () => {
+                trackClick('flyer_open');
+                openCarouselLightbox(pdf.pdfUrl, pdf.contentType, pdf.fileName);
+            });
             container.appendChild(slide);
             return slide;
         });

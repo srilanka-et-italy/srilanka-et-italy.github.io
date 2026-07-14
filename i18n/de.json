@@ -239,6 +239,11 @@
         "analytics_today_label": "Aufrufe heute",
         "analytics_week_label": "Aufrufe letzte 7 Tage",
         "analytics_lang_label": "Sprachwechsel-Verteilung",
-        "analytics_last_activity_label": "Letzte Aktivität"
+        "analytics_last_activity_label": "Letzte Aktivität",
+        "analytics_conversion_rate_label": "Kontakt-Conversion-Rate",
+        "analytics_flyer_clicks_label": "Flyer-Klicks",
+        "analytics_busiest_hour_label": "Meistbesuchte Uhrzeit",
+        "analytics_busiest_weekday_label": "Meistbesuchter Wochentag",
+        "analytics_trend_new": "neu"
     }
 }

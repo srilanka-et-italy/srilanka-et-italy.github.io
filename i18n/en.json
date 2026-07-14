@@ -239,6 +239,11 @@
         "analytics_today_label": "Views today",
         "analytics_week_label": "Views last 7 days",
         "analytics_lang_label": "Language switch distribution",
-        "analytics_last_activity_label": "Last activity"
+        "analytics_last_activity_label": "Last activity",
+        "analytics_conversion_rate_label": "Contact conversion rate",
+        "analytics_flyer_clicks_label": "Flyer clicks",
+        "analytics_busiest_hour_label": "Busiest hour",
+        "analytics_busiest_weekday_label": "Busiest weekday",
+        "analytics_trend_new": "new"
     }
 }
