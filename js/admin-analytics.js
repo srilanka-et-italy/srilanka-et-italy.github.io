@@ -2,7 +2,7 @@ import { db } from './firebase-config.js';
 import {
   collection, query, where, orderBy, limit, getDocs, getCountFromServer
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { initAuthGate } from './admin-shared.js';
+import { initAuthGate, showError } from './admin-shared.js';
 
 const CLICK_LABELS = [
   'hero_cta_menu', 'menu_open', 'route_plan',
@@ -15,42 +15,48 @@ initAuthGate(async () => {
 });
 
 async function loadAnalytics() {
-  const eventsCol = collection(db, 'analytics_events');
+  try {
+    const eventsCol = collection(db, 'analytics_events');
 
-  const [totalPageviewsSnap, allPageSnap, recentSnap] = await Promise.all([
-    getCountFromServer(query(eventsCol, where('type', '==', 'pageview'))),
-    getDocs(query(eventsCol, where('type', '==', 'pageview'))),
-    getDocs(query(eventsCol, orderBy('timestamp', 'desc'), limit(50)))
-  ]);
+    const [totalPageviewsSnap, allPageSnap, recentSnap] = await Promise.all([
+      getCountFromServer(query(eventsCol, where('type', '==', 'pageview'))),
+      getDocs(query(eventsCol, where('type', '==', 'pageview'))),
+      getDocs(query(eventsCol, orderBy('timestamp', 'desc'), limit(50)))
+    ]);
 
-  document.getElementById('analytics-total-pageviews').textContent = totalPageviewsSnap.data().count;
+    document.getElementById('analytics-total-pageviews').textContent = totalPageviewsSnap.data().count;
 
-  const byPage = {};
-  allPageSnap.forEach(docSnap => {
-    const page = docSnap.data().page || '(unbekannt)';
-    byPage[page] = (byPage[page] || 0) + 1;
-  });
-  renderCountList('analytics-by-page', byPage);
+    const byPage = {};
+    allPageSnap.forEach(docSnap => {
+      const page = docSnap.data().page || '(unbekannt)';
+      byPage[page] = (byPage[page] || 0) + 1;
+    });
+    renderCountList('analytics-by-page', byPage);
 
-  const byLabelCounts = {};
-  await Promise.all(CLICK_LABELS.map(async (label) => {
-    const snap = await getCountFromServer(query(eventsCol, where('type', '==', 'click'), where('label', '==', label)));
-    byLabelCounts[label] = snap.data().count;
-  }));
-  renderCountList('analytics-by-label', byLabelCounts);
+    const byLabelCounts = {};
+    await Promise.all(CLICK_LABELS.map(async (label) => {
+      const snap = await getCountFromServer(query(eventsCol, where('type', '==', 'click'), where('label', '==', label)));
+      byLabelCounts[label] = snap.data().count;
+    }));
+    renderCountList('analytics-by-label', byLabelCounts);
 
-  const recentList = document.getElementById('analytics-recent');
-  recentList.innerHTML = '';
-  recentSnap.forEach(docSnap => {
-    const data = docSnap.data();
-    const li = document.createElement('li');
-    const ts = data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString('de-DE') : '–';
-    li.textContent = `${ts} — ${data.type}${data.label ? ' (' + data.label + ')' : ''} — ${data.page}`;
-    recentList.appendChild(li);
-  });
+    const recentList = document.getElementById('analytics-recent');
+    recentList.innerHTML = '';
+    recentSnap.forEach(docSnap => {
+      const data = docSnap.data();
+      const li = document.createElement('li');
+      const ts = data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString('de-DE') : '–';
+      li.textContent = `${ts} — ${data.type}${data.label ? ' (' + data.label + ')' : ''} — ${data.page || '(unbekannt)'}`;
+      recentList.appendChild(li);
+    });
 
-  const hasData = totalPageviewsSnap.data().count > 0 || recentSnap.size > 0;
-  document.getElementById('analytics-empty').hidden = hasData;
+    const hasData = totalPageviewsSnap.data().count > 0 || recentSnap.size > 0;
+    document.getElementById('analytics-empty').hidden = hasData;
+  } catch (err) {
+    const errorEl = document.getElementById('analytics-empty');
+    errorEl.hidden = false;
+    showError(errorEl, err.message);
+  }
 }
 
 function renderCountList(elementId, counts) {
