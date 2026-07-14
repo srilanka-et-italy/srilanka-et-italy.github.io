@@ -1,14 +1,9 @@
 import { db } from './firebase-config.js';
 import {
-  collection, query, where, orderBy, limit, getDocs, getCountFromServer
+  collection, query, where, orderBy, limit, getDocs
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { initAuthGate, showError } from './admin-shared.js';
-
-const CLICK_LABELS = [
-  'hero_cta_menu', 'menu_open', 'route_plan',
-  'contact_email', 'contact_phone', 'club_link',
-  'lang_switch_de', 'lang_switch_en', 'lang_switch_ta'
-];
+import { fetchAnalyticsSummary, renderTileGrid } from './analytics-data.js';
 
 initAuthGate(async () => {
   await loadAnalytics();
@@ -18,13 +13,13 @@ async function loadAnalytics() {
   try {
     const eventsCol = collection(db, 'analytics_events');
 
-    const [totalPageviewsSnap, allPageSnap, recentSnap] = await Promise.all([
-      getCountFromServer(query(eventsCol, where('type', '==', 'pageview'))),
+    const [{ totalPageviews, byLabel }, allPageSnap, recentSnap] = await Promise.all([
+      fetchAnalyticsSummary(db),
       getDocs(query(eventsCol, where('type', '==', 'pageview'))),
       getDocs(query(eventsCol, orderBy('timestamp', 'desc'), limit(50)))
     ]);
 
-    document.getElementById('analytics-total-pageviews').textContent = totalPageviewsSnap.data().count;
+    document.getElementById('analytics-total-pageviews').textContent = totalPageviews;
 
     const byPage = {};
     allPageSnap.forEach(docSnap => {
@@ -33,12 +28,7 @@ async function loadAnalytics() {
     });
     renderCountList('analytics-by-page', byPage);
 
-    const byLabelCounts = {};
-    await Promise.all(CLICK_LABELS.map(async (label) => {
-      const snap = await getCountFromServer(query(eventsCol, where('type', '==', 'click'), where('label', '==', label)));
-      byLabelCounts[label] = snap.data().count;
-    }));
-    renderTileGrid('analytics-by-label', byLabelCounts);
+    renderTileGrid(document.getElementById('analytics-by-label'), byLabel);
 
     const recentList = document.getElementById('analytics-recent');
     recentList.innerHTML = '';
@@ -50,7 +40,7 @@ async function loadAnalytics() {
       recentList.appendChild(li);
     });
 
-    const hasData = totalPageviewsSnap.data().count > 0 || recentSnap.size > 0;
+    const hasData = totalPageviews > 0 || recentSnap.size > 0;
     document.getElementById('analytics-empty').hidden = hasData;
   } catch (err) {
     const errorEl = document.getElementById('analytics-error');
@@ -69,26 +59,5 @@ function renderCountList(elementId, counts) {
       const li = document.createElement('li');
       li.textContent = `${key}: ${count}`;
       el.appendChild(li);
-    });
-}
-
-function renderTileGrid(elementId, counts) {
-  const el = document.getElementById(elementId);
-  el.innerHTML = '';
-  Object.entries(counts)
-    .filter(([, count]) => count > 0)
-    .sort(([, a], [, b]) => b - a)
-    .forEach(([key, count]) => {
-      const tile = document.createElement('div');
-      tile.className = 'analytics-tile';
-      const value = document.createElement('span');
-      value.className = 'analytics-tile-value';
-      value.textContent = count;
-      const label = document.createElement('span');
-      label.className = 'analytics-tile-label';
-      label.textContent = key;
-      tile.appendChild(value);
-      tile.appendChild(label);
-      el.appendChild(tile);
     });
 }

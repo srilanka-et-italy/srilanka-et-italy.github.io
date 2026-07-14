@@ -900,3 +900,44 @@ a.tile-panel-back { text-decoration: none; }
   color: var(--muted, #7A6E64);
   word-break: break-word;
 }
+
+/* ── Stats summary tile (admin.html home, spans full width) ── */
+.stats-tile {
+  margin-top: 2rem;
+  padding: 2.5rem;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid var(--border, #E8DFD0);
+  box-shadow: 0 2px 12px rgba(28,20,16,.05);
+  text-align: left;
+}
+
+.stats-tile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stats-tile-more {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--spice, #C8651A);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.stats-tile-more:hover {
+  text-decoration: underline;
+}
+
+.stats-tile-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.stats-tile-body .analytics-tile-grid {
+  flex: 1 1 100%;
+}

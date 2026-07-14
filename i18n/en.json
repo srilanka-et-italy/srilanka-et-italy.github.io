@@ -231,6 +231,7 @@
         "analytics_by_page_label": "Views per page",
         "analytics_by_label_label": "Clicks per label",
         "analytics_recent_label": "Recent events",
-        "analytics_empty": "No data yet."
+        "analytics_empty": "No data yet.",
+        "analytics_view_details": "View all details →"
     }
 }

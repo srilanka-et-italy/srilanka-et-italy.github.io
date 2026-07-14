@@ -231,6 +231,7 @@
         "analytics_by_page_label": "ஒரு பக்கத்திற்கான பார்வைகள்",
         "analytics_by_label_label": "ஒரு லேபிளுக்கான கிளிக்குகள்",
         "analytics_recent_label": "சமீபத்திய நிகழ்வுகள்",
-        "analytics_empty": "இன்னும் தரவு இல்லை."
+        "analytics_empty": "இன்னும் தரவு இல்லை.",
+        "analytics_view_details": "எல்லா விவரங்களையும் காண்க →"
     }
 }
