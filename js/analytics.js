@@ -17,7 +17,11 @@ function sendEvent(payload) {
 }
 
 export function hasConsent() {
-    return localStorage.getItem('cookie_consent') === 'accepted';
+    try {
+        return localStorage.getItem('cookie_consent') === 'accepted';
+    } catch {
+        return false;
+    }
 }
 
 export function trackPageview(page) {
@@ -30,11 +34,22 @@ export function trackClick(label) {
     sendEvent({ type: 'click', page: window.location.pathname, label });
 }
 
+function setConsent(value) {
+    try {
+        localStorage.setItem('cookie_consent', value);
+    } catch { /* storage may be blocked (private mode, in-app browsers, etc.) */ }
+}
+
 export function initConsentBanner() {
     const banner = document.getElementById('cookie-consent-banner');
     if (!banner) return;
 
-    if (localStorage.getItem('cookie_consent')) {
+    let stored;
+    try {
+        stored = localStorage.getItem('cookie_consent');
+    } catch { stored = null; }
+
+    if (stored) {
         banner.hidden = true;
         return;
     }
@@ -43,12 +58,12 @@ export function initConsentBanner() {
 
     document.addEventListener('click', (e) => {
         if (e.target.closest('.consent-accept-btn')) {
-            localStorage.setItem('cookie_consent', 'accepted');
             banner.hidden = true;
+            setConsent('accepted');
             trackPageview(window.location.pathname);
         } else if (e.target.closest('.consent-decline-btn')) {
-            localStorage.setItem('cookie_consent', 'declined');
             banner.hidden = true;
+            setConsent('declined');
         }
     });
 }
