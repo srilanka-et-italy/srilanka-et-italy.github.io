@@ -30,11 +30,11 @@ class App {
         await this.i18n.init();
         this.setupAnimations();
         this.setupEventListeners();
-        this.loadContactData().then(() => this.applyContactOverrides());
-        await this.setupSeasonalCarousel();
         initConsentBanner();
         setupClickTracking();
         trackPageview(window.location.pathname);
+        this.loadContactData().then(() => this.applyContactOverrides());
+        this.setupSeasonalCarousel();
     }
 
     async loadContactData() {
