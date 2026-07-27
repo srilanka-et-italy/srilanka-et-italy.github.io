@@ -1064,6 +1064,9 @@ footer {
     justify-content: space-between;
     pointer-events: auto;
 }
+.cookie-consent[hidden] {
+    display: none;
+}
 
 .cookie-consent-actions {
     display: flex;
