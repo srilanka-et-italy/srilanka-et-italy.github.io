@@ -294,7 +294,7 @@ class App {
         const bar = container.querySelector('.pdf-progress-fill');
 
         pdfjsLib.GlobalWorkerOptions.workerSrc =
-            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            '/js/vendor/pdf.worker.min.js';
 
         try {
             const loadingTask = pdfjsLib.getDocument({
@@ -353,7 +353,7 @@ function openCarouselLightbox(url, contentType, fileName) {
             try {
                 if (typeof pdfjsLib === 'undefined') return;
                 pdfjsLib.GlobalWorkerOptions.workerSrc =
-                    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                    '/js/vendor/pdf.worker.min.js';
                 const pdf  = await pdfjsLib.getDocument({ url }).promise;
                 const page = await pdf.getPage(1);
                 const scale = Math.min(window.innerWidth * .88, 840) / page.getViewport({ scale: 1 }).width;

@@ -278,7 +278,7 @@ export async function renderLargePreview(container, url, isImage) {
   container.appendChild(canvas);
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      '/js/vendor/pdf.worker.min.js';
     const pdf  = await pdfjsLib.getDocument({ url }).promise;
     const page = await pdf.getPage(1);
     const scale = Math.min(window.innerWidth * .8, 680) / page.getViewport({ scale: 1 }).width;
@@ -295,7 +295,7 @@ export async function renderPdfThumb(url, canvas, targetWidth = 220) {
   if (!canvas || typeof pdfjsLib === 'undefined') return;
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      '/js/vendor/pdf.worker.min.js';
     const pdf  = await pdfjsLib.getDocument({ url }).promise;
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 1 });

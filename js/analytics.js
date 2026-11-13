@@ -40,30 +40,59 @@ function setConsent(value) {
     } catch { /* storage may be blocked (private mode, in-app browsers, etc.) */ }
 }
 
+function getStoredConsent() {
+    try {
+        return localStorage.getItem('cookie_consent');
+    } catch {
+        return null;
+    }
+}
+
+// Elements marked with data-consent-state="accepted|declined|none" are shown
+// only while that state is current (used on the privacy page).
+function renderConsentState() {
+    const stored = getStoredConsent();
+    const state = stored === 'accepted' || stored === 'declined' ? stored : 'none';
+    document.querySelectorAll('[data-consent-state]').forEach(el => {
+        el.hidden = el.getAttribute('data-consent-state') !== state;
+    });
+}
+
+let consentHandlersBound = false;
+
+// Shows the banner on first visit and wires up every consent control on the
+// page: the banner buttons, the "statistics settings" link in the footer
+// (.consent-settings-btn) and the controls on the privacy page. Consent can
+// be given or withdrawn at any time with the same effort.
 export function initConsentBanner() {
     const banner = document.getElementById('cookie-consent-banner');
-    if (!banner) return;
+    if (banner) banner.hidden = Boolean(getStoredConsent());
+    renderConsentState();
 
-    let stored;
-    try {
-        stored = localStorage.getItem('cookie_consent');
-    } catch { stored = null; }
-
-    if (stored) {
-        banner.hidden = true;
-        return;
-    }
-
-    banner.hidden = false;
+    if (consentHandlersBound) return;
+    consentHandlersBound = true;
 
     document.addEventListener('click', (e) => {
+        const currentBanner = document.getElementById('cookie-consent-banner');
         if (e.target.closest('.consent-accept-btn')) {
-            banner.hidden = true;
+            if (currentBanner) currentBanner.hidden = true;
+            const wasAccepted = hasConsent();
             setConsent('accepted');
-            trackPageview(window.location.pathname);
+            renderConsentState();
+            if (!wasAccepted) trackPageview(window.location.pathname);
         } else if (e.target.closest('.consent-decline-btn')) {
-            banner.hidden = true;
+            if (currentBanner) currentBanner.hidden = true;
             setConsent('declined');
+            renderConsentState();
+        } else if (e.target.closest('.consent-settings-btn')) {
+            e.preventDefault();
+            if (currentBanner) {
+                currentBanner.hidden = false;
+                const focusTarget = currentBanner.querySelector(hasConsent() ? '.consent-decline-btn' : '.consent-accept-btn');
+                if (focusTarget) focusTarget.focus();
+            } else {
+                window.location.href = 'datenschutz.html#statistik';
+            }
         }
     });
 }

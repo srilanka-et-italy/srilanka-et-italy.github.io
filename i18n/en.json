@@ -83,7 +83,8 @@
         "col_info": "Information",
         "col_links": "Navigation",
         "hours_val": "Open Mon, Tue, Thu–Sun",
-        "kitchen": "Kitchen until 9:00 PM"
+        "kitchen": "Kitchen until 9:00 PM",
+        "consent_settings": "Statistics settings"
     },
     "legal": {
         "back": "Back to Home"
@@ -124,53 +125,66 @@
     "datenschutz": {
         "title": "Privacy Policy",
         "email": "Email",
-        "section1": {
+        "s1": {
             "title": "1. Privacy at a Glance",
-            "subtitle": "General Notes",
-            "content": "The following information provides a simple overview of what happens to your personal data when you visit this website. Personal data is any data with which you can be personally identified. Detailed information on the subject of data protection can be found in our privacy policy listed below this text."
+            "body": "<p>The following notes give an overview of what happens to your personal data when you visit this website. Personal data is any data that can be used to identify you personally. The German version of this policy is legally binding.</p><p><strong>In short:</strong> We do not use cookies or any advertising or tracking services. Fonts and code libraries are served from our own server. We use Google services (Firebase) to run the website. We only collect anonymous visitor statistics if you agree. Google Maps is only loaded when you activate the map yourself.</p>"
         },
-        "section2": {
-            "title": "2. Responsible Body",
-            "intro": "The responsible body for data processing on this website is:",
-            "content": "The responsible body is the natural or legal person who alone or jointly with others decides on the purposes and means of processing personal data (e.g., names, email addresses, etc.)."
+        "s2": {
+            "title": "2. Controller",
+            "body": "<p>The controller responsible for data processing on this website is:</p><p>Akeelan Gunasiri<br>Rötenbacher Str. 33<br>88364 Wolfegg<br>Germany<br><br><strong>Email:</strong> <a href=\"mailto:srilanka.et.italy@gmail.com\">srilanka.et.italy@gmail.com</a></p><p>The controller is the natural or legal person who alone or jointly with others decides on the purposes and means of processing personal data.</p>"
         },
-        "section3": {
-            "title": "3. Data Collection on this Website",
-            "subtitle": "How do we collect your data?",
-            "content1": "Your data is partly collected by you communicating it to us. This could be data that you send us by email.",
-            "content2": "Other data is collected automatically or after your consent when visiting the website by our IT systems. This is primarily technical data (e.g., internet browser, operating system, or time of page access). This data is collected automatically as soon as you enter this website."
+        "s3": {
+            "title": "3. Hosting and Server Log Files",
+            "body": "<p>This website is hosted on Firebase Hosting. The provider is Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland (\"Google\").</p><p>Each time the website is accessed, Google as the hosting provider automatically processes technical data sent by your browser: IP address, date and time of access, requested address, referrer URL, browser type and version, and operating system. This data is required to deliver the website and to ensure its security and stability. We do not combine it with other data sources.</p><p>The legal basis is Art. 6(1)(f) GDPR. Our legitimate interest is the reliable and secure provision of the website. A data processing agreement under Art. 28 GDPR is in place with Google (Firebase Data Processing and Security Terms). More information: <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">https://policies.google.com/privacy</a>.</p>"
         },
-        "section4": {
-            "title": "What do we use your data for?",
-            "content": "Part of the data is collected to ensure the error-free provision of the website. Other data can be used to analyze your user behavior."
+        "s4": {
+            "title": "4. Content from Firebase (Firestore, Cloud Storage, Remote Config)",
+            "body": "<p>Some content on this website is loaded from Google Firebase services, which are also operated by Google Ireland Limited:</p><ul><li><strong>Cloud Firestore</strong> (database): contact details, opening hours and information on current offers.</li><li><strong>Cloud Storage</strong> (file storage): menus and offer PDFs.</li><li><strong>Remote Config</strong>: website settings, e.g. whether and how long offers are displayed.</li><li><strong>Firebase code libraries</strong>, loaded from <em>www.gstatic.com</em>.</li></ul><p>In the process, your IP address and the technical data listed above are transmitted to Google; the content cannot be delivered to your browser otherwise. For Remote Config, the Firebase library stores a randomly generated installation identifier (Firebase Installation ID) in your browser's storage (IndexedDB). It is used only to fetch the settings and not to analyse your behaviour.</p><p>The legal basis is Art. 6(1)(f) GDPR; our legitimate interest is being able to show current content without republishing the website. Storing the installation identifier is based on Section 25(2) no. 2 TDDDG, as it is strictly necessary to provide the content you requested. The data processing agreement mentioned in section 3 applies.</p>"
         },
-        "section5": {
-            "title": "What rights do you have regarding your data?",
-            "content": "You have the right to receive information about the origin, recipient, and purpose of your stored personal data free of charge at any time. You also have a right to request the correction or deletion of this data. If you have given your consent to data processing, you can revoke this consent for the future at any time. You also have the right to request the restriction of processing of your personal data under certain circumstances."
+        "s5": {
+            "title": "5. Fonts and Code Libraries",
+            "body": "<p>The fonts used on this website (Libre Baskerville and Outfit) and the code libraries DOMPurify and pdf.js are loaded directly from our own web server. No connection is made to Google Fonts servers or other external providers (content delivery networks).</p>"
         },
-        "section6": {
-            "title": "4. Hosting",
-            "content": "This website is hosted by Firebase Hosting (Google). The provider is Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland. When you visit the website, various types of data are automatically collected, such as IP addresses. For details, please see Google's privacy policy: https://policies.google.com/privacy."
+        "s6": {
+            "title": "6. Visitor Statistics (only with your consent)",
+            "body": "<p>If you click \"Accept\" in the notice banner, we collect simple visitor statistics to understand which parts of the website are used. Without your consent, no statistics data is sent.</p><p><strong>What is collected?</strong> The page visited, clicks on certain buttons (e.g. open menu, switch language, call, email, plan route) and the time. We do not store an IP address or any identifier of your device, and we do not set cookies. The stored entries cannot be linked to any person.</p><p><strong>Where does the data go?</strong> The data is sent to our own address <em>/track-event</em>, processed there by a Google Cloud Function and stored in Cloud Firestore (Google). To prevent abuse, a hash value (pseudonymised checksum) is derived from your IP address and used to limit the number of requests per minute. This hash value is deleted automatically after about one day at the latest.</p><p><strong>How long?</strong> Statistics entries are deleted automatically after 90 days.</p><p><strong>The legal basis</strong> is your consent (Art. 6(1)(a) GDPR, Section 25(1) TDDDG). We store your decision (\"accepted\" or \"declined\") in your browser's local storage so that the banner does not reappear on every visit.</p><p><strong>Withdrawal:</strong> You can withdraw or give your consent at any time with effect for the future – via the \"Statistics settings\" link in the footer of every page, or directly here:</p>"
         },
-        "section7": {
-            "title": "5. General Notes and Mandatory Information",
-            "subtitle": "SSL or TLS Encryption",
-            "content": "For security reasons and to protect the transmission of confidential content, such as inquiries you send to us as the site operator, this site uses SSL or TLS encryption. You can recognize an encrypted connection by the fact that the address line of the browser changes from \"http://\" to \"https://\" and by the lock symbol in your browser line."
+        "consent": {
+            "accepted": "Current status: you have agreed to visitor statistics.",
+            "declined": "Current status: you have declined visitor statistics.",
+            "none": "Current status: you have not made a choice yet. No statistics are collected.",
+            "accept_btn": "Allow statistics",
+            "decline_btn": "Decline statistics"
         },
-        "section8": {
-            "title": "6. Cookies and Storage",
-            "content1": "This website does not use tracking cookies. We only use your browser's local storage (localStorage) to store your chosen language (German, English, or Tamil). This is technically necessary to display the website in your preferred language (Art. 6 para. 1 lit. f GDPR).",
-            "content2": "When embedding Google Maps, Google's own cookies may be set, over which we have no influence."
+        "s7": {
+            "title": "7. Browser Storage, No Cookies",
+            "body": "<p>This website does not set any cookies itself. We only store the following in your browser's local storage (localStorage):</p><ul><li><strong>lang</strong> – the language you chose (German, English or Tamil),</li><li><strong>cookie_consent</strong> – your decision on visitor statistics.</li></ul><p>In addition, there is the Firebase Remote Config installation identifier described in section 4. These entries are strictly necessary to display the website as you requested (Section 25(2) no. 2 TDDDG, Art. 6(1)(f) GDPR). You can delete them at any time in your browser settings.</p>"
         },
-        "section9": {
-            "title": "7. Contact",
-            "content": "If you contact us via email, your query including all personal data (name, query) will be stored and processed by us for the purpose of processing your request. We do not pass on this data without your consent."
-        },
-        "section10": {
+        "s8": {
             "title": "8. Google Maps",
-            "content": "This site uses the Google Maps mapping service. The provider is Google Ireland Limited (\"Google\"), Gordon House, Barrow Street, Dublin 4, Ireland. To use the functions of Google Maps, it is necessary to store your IP address. This information is usually transmitted to a Google server in the USA and stored there. The provider of this page has no influence on this data transmission."
+            "body": "<p>You can display a Google Maps map on this website. The provider is Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland.</p><p>The map is <strong>only loaded when you click \"Load Map\"</strong>. Before that, no data is sent to Google Maps. By clicking, you consent to your browser connecting to Google. Your IP address and technical data are then transmitted to Google; Google may set cookies, load its own fonts (Google Fonts) and also process data in the USA. We have no influence on this processing; Google is responsible for it.</p><p>The legal basis is your consent (Art. 6(1)(a) GDPR, Section 25(1) TDDDG). Consent applies only to the current page view: if you reload the page, the map is no longer shown until you click again. The \"Plan Route\" link opens Google Maps in a new window; only then is data sent to Google. More information: <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">https://policies.google.com/privacy</a>.</p>"
         },
-        "date": "Last updated: March 2025"
+        "s9": {
+            "title": "9. Contacting Us by Email or Phone",
+            "body": "<p>If you contact us by email or phone, we process the information you provide (e.g. name, email address, phone number, content of your request) to handle your request, such as a table reservation. Our mailbox is provided by Google (Gmail).</p><p>The legal basis is Art. 6(1)(b) GDPR if your request relates to a contract or pre-contractual measures, otherwise Art. 6(1)(f) GDPR (our legitimate interest in answering enquiries). We delete your information once the request has been dealt with, unless statutory retention obligations (e.g. under commercial or tax law) apply. We do not pass this data on without your consent.</p>"
+        },
+        "s10": {
+            "title": "10. Data Transfer to the USA",
+            "body": "<p>Google is a company based in the USA (Google LLC). When the Google services mentioned are used, data may therefore also be transferred to the USA. Google LLC is certified under the EU-US Data Privacy Framework. For certified companies, the EU Commission determined an adequate level of data protection by decision of 10 July 2023 (Art. 45 GDPR). EU Standard Contractual Clauses apply in addition. Information on the certification: <a href=\"https://www.dataprivacyframework.gov/\" target=\"_blank\" rel=\"noopener\">https://www.dataprivacyframework.gov/</a>.</p>"
+        },
+        "s11": {
+            "title": "11. Storage Period",
+            "body": "<p>We only store personal data for as long as necessary for the respective purpose or required by statutory retention periods. Specific periods are given in the individual sections (e.g. visitor statistics: 90 days). Data in your browser's local storage remains there until you delete it.</p>"
+        },
+        "s12": {
+            "title": "12. Your Rights",
+            "body": "<p>You have the following rights regarding your personal data:</p><ul><li>Right of access (Art. 15 GDPR)</li><li>Right to rectification (Art. 16 GDPR)</li><li>Right to erasure (Art. 17 GDPR)</li><li>Right to restriction of processing (Art. 18 GDPR)</li><li>Right to data portability (Art. 20 GDPR)</li><li>Right to withdraw consent with effect for the future (Art. 7(3) GDPR)</li></ul><p><strong>Right to object (Art. 21 GDPR):</strong> Where we process data on the basis of Art. 6(1)(f) GDPR (legitimate interest), you may object to this processing at any time on grounds relating to your particular situation. We will then no longer process the data unless we can demonstrate compelling legitimate grounds that override your interests, or the processing serves the establishment, exercise or defence of legal claims.</p><p>An informal message to the email address above is sufficient to exercise your rights.</p><p><strong>Right to lodge a complaint (Art. 77 GDPR):</strong> You have the right to lodge a complaint with a data protection supervisory authority. The authority responsible for us is:<br>The State Commissioner for Data Protection and Freedom of Information Baden-Württemberg (Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg)<br>Lautenschlagerstraße 20, 70173 Stuttgart, Germany<br><a href=\"https://www.baden-wuerttemberg.datenschutz.de\" target=\"_blank\" rel=\"noopener\">www.baden-wuerttemberg.datenschutz.de</a></p>"
+        },
+        "s13": {
+            "title": "13. SSL/TLS Encryption",
+            "body": "<p>For security reasons and to protect the transmission of confidential content, this site uses SSL/TLS encryption. You can recognise an encrypted connection by the browser's address bar starting with \"https://\" and by the lock symbol.</p>"
+        },
+        "date": "Last updated: November 2026"
     },
     "admin": {
         "login_title": "Admin Login",

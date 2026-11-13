@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenschutzerklärung - Sri Lanka ET Italy</title>
     <link rel="stylesheet" href="css/main.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="css/fonts.css">
     <style>
         body {
             padding-top: 100px;
@@ -50,11 +48,47 @@
             color: var(--ink);
         }
 
-        .legal-section p {
+        .legal-section p,
+        .legal-section li {
             line-height: 1.8;
             color: var(--muted);
             font-size: .95rem;
             margin-bottom: 1rem;
+        }
+
+        .legal-section ul {
+            margin: 0 0 1rem 1.25rem;
+        }
+
+        .legal-section a {
+            color: var(--spice);
+            overflow-wrap: anywhere;
+        }
+
+        .consent-controls {
+            margin-top: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .consent-controls .consent-status[hidden] {
+            display: none;
+        }
+
+        .consent-controls .cookie-consent-actions {
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 600px) {
+            .legal-container {
+                padding: 1rem;
+            }
+
+            .legal-content {
+                padding: 1.5rem;
+            }
         }
 
         .legal-section strong {
@@ -73,81 +107,92 @@
         <div class="legal-content">
             <h1 class="h2" data-i18n="datenschutz.title" style="margin-bottom: 2rem;">Datenschutzerklärung</h1>
 
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section1.title">1. Datenschutz auf einen Blick</h2>
-                <h3 data-i18n="datenschutz.section1.subtitle">Allgemeine Hinweise</h3>
-                <p data-i18n="datenschutz.section1.content"></p>
-            </div>
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s1.title">1. Datenschutz auf einen Blick</h2>
+                <div class="legal-body" data-i18n="datenschutz.s1.body"><p>Die folgenden Hinweise geben einen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p><p><strong>Kurz zusammengefasst:</strong> Wir setzen keine Cookies und keine Werbe- oder Tracking-Dienste ein. Schriftarten und Programmbibliotheken liefern wir von unserem eigenen Server aus. Für den Betrieb der Website nutzen wir Dienste von Google (Firebase). Eine anonyme Besucherstatistik führen wir nur, wenn Sie zustimmen. Google Maps wird erst geladen, wenn Sie die Karte selbst aktivieren.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s2.title">2. Verantwortliche Stelle</h2>
+                <div class="legal-body" data-i18n="datenschutz.s2.body"><p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p><p>Akeelan Gunasiri<br>Rötenbacher Str. 33<br>88364 Wolfegg<br>Deutschland<br><br><strong>E-Mail:</strong> <a href="mailto:srilanka.et.italy@gmail.com">srilanka.et.italy@gmail.com</a></p><p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s3.title">3. Hosting und Server-Logfiles</h2>
+                <div class="legal-body" data-i18n="datenschutz.s3.body"><p>Diese Website wird bei Firebase Hosting gehostet. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“).</p><p>Bei jedem Aufruf der Website verarbeitet Google als Hosting-Anbieter automatisch technische Daten, die Ihr Browser übermittelt: IP-Adresse, Datum und Uhrzeit des Abrufs, aufgerufene Adresse, Referrer-URL, Browsertyp und -version sowie Betriebssystem. Diese Daten sind erforderlich, um die Website auszuliefern und ihre Sicherheit und Stabilität zu gewährleisten. Eine Zusammenführung mit anderen Datenquellen nehmen wir nicht vor.</p><p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in der zuverlässigen und sicheren Bereitstellung der Website. Mit Google besteht ein Vertrag über Auftragsverarbeitung nach Art. 28 DSGVO (Firebase Data Processing and Security Terms). Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a>.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s4.title">4. Inhalte aus Firebase (Firestore, Cloud Storage, Remote Config)</h2>
+                <div class="legal-body" data-i18n="datenschutz.s4.body"><p>Einige Inhalte der Website werden beim Aufruf aus Diensten von Google Firebase geladen, die ebenfalls von Google Ireland Limited betrieben werden:</p><ul><li><strong>Cloud Firestore</strong> (Datenbank): Kontaktdaten, Öffnungszeiten und Angaben zu aktuellen Angeboten.</li><li><strong>Cloud Storage</strong> (Dateispeicher): Speisekarten und Angebots-PDFs.</li><li><strong>Remote Config</strong>: Einstellungen der Website, z. B. ob und wie lange Angebote angezeigt werden.</li><li><strong>Firebase-Programmbibliotheken</strong>, die von <em>www.gstatic.com</em> geladen werden.</li></ul><p>Dabei wird Ihre IP-Adresse zusammen mit den oben genannten technischen Daten an Google übermittelt; anders lassen sich die Inhalte nicht an Ihren Browser ausliefern. Für Remote Config legt die Firebase-Bibliothek im Speicher Ihres Browsers (IndexedDB) eine zufällig erzeugte Installationskennung (Firebase Installation ID) ab, die nur zum Abrufen der Einstellungen dient und nicht zur Analyse Ihres Verhaltens verwendet wird.</p><p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse liegt darin, aktuelle Inhalte ohne erneute Veröffentlichung der Website anzeigen zu können. Das Speichern der Installationskennung erfolgt nach § 25 Abs. 2 Nr. 2 TDDDG, weil es für die Bereitstellung der von Ihnen aufgerufenen Inhalte unbedingt erforderlich ist. Es gilt der unter Abschnitt 3 genannte Vertrag über Auftragsverarbeitung.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s5.title">5. Schriftarten und Programmbibliotheken</h2>
+                <div class="legal-body" data-i18n="datenschutz.s5.body"><p>Die auf dieser Website verwendeten Schriftarten (Libre Baskerville und Outfit) sowie die Programmbibliotheken DOMPurify und pdf.js werden direkt von unserem eigenen Webserver geladen. Es wird dabei keine Verbindung zu Servern von Google Fonts oder anderen externen Anbietern (Content Delivery Networks) aufgebaut.</p></div>
+            </section>
+
+            <section class="legal-section" id="statistik">
+                <h2 data-i18n="datenschutz.s6.title">6. Besucherstatistik (nur mit Ihrer Einwilligung)</h2>
+                <div class="legal-body" data-i18n="datenschutz.s6.body"><p>Wenn Sie im Hinweisbanner auf „Akzeptieren“ klicken, erfassen wir eine einfache Besucherstatistik, um zu verstehen, welche Bereiche der Website genutzt werden. Ohne Ihre Einwilligung werden keine Statistikdaten gesendet.</p><p><strong>Was wird erfasst?</strong> Die aufgerufene Seite, Klicks auf bestimmte Schaltflächen (z. B. Speisekarte öffnen, Sprache wechseln, Anruf, E-Mail, Route planen) und der Zeitpunkt. Wir speichern dazu keine IP-Adresse, keine Kennung Ihres Geräts und setzen keine Cookies. Die gespeicherten Einträge lassen sich keiner Person zuordnen.</p><p><strong>Wohin gehen die Daten?</strong> Die Daten werden an unsere eigene Adresse <em>/track-event</em> gesendet, dort von einer Google Cloud Function verarbeitet und in Cloud Firestore (Google) gespeichert. Zum Schutz vor Missbrauch wird dabei aus Ihrer IP-Adresse ein Hashwert (pseudonymisierte Prüfsumme) gebildet, mit dem die Zahl der Anfragen pro Minute begrenzt wird. Dieser Hashwert wird automatisch spätestens nach etwa einem Tag gelöscht.</p><p><strong>Wie lange?</strong> Die Statistikeinträge werden nach 90 Tagen automatisch gelöscht.</p><p><strong>Rechtsgrundlage</strong> ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Ihre Entscheidung („zugestimmt“ oder „abgelehnt“) speichern wir im lokalen Speicher Ihres Browsers, damit das Banner nicht bei jedem Besuch erneut erscheint.</p><p><strong>Widerruf:</strong> Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen oder neu erteilen – über den Link „Statistik-Einstellungen“ in der Fußzeile jeder Seite oder direkt hier:</p></div>
+                <div class="consent-controls">
+                    <p class="consent-status" data-consent-state="accepted" data-i18n="datenschutz.consent.accepted" hidden>Aktueller Stand: Sie haben der Besucherstatistik zugestimmt.</p>
+                    <p class="consent-status" data-consent-state="declined" data-i18n="datenschutz.consent.declined" hidden>Aktueller Stand: Sie haben die Besucherstatistik abgelehnt.</p>
+                    <p class="consent-status" data-consent-state="none" data-i18n="datenschutz.consent.none">Aktueller Stand: Sie haben noch keine Entscheidung getroffen. Es werden keine Statistikdaten erfasst.</p>
+                    <div class="cookie-consent-actions">
+                        <button type="button" class="consent-decline-btn" data-i18n="datenschutz.consent.decline_btn">Statistik ablehnen</button>
+                        <button type="button" class="consent-accept-btn" data-i18n="datenschutz.consent.accept_btn">Statistik zulassen</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s7.title">7. Speicherung im Browser, keine Cookies</h2>
+                <div class="legal-body" data-i18n="datenschutz.s7.body"><p>Diese Website setzt selbst keine Cookies. Im lokalen Speicher Ihres Browsers (localStorage) legen wir lediglich ab:</p><ul><li><strong>lang</strong> – die von Ihnen gewählte Sprache (Deutsch, Englisch oder Tamil),</li><li><strong>cookie_consent</strong> – Ihre Entscheidung zur Besucherstatistik.</li></ul><p>Hinzu kommt die in Abschnitt 4 beschriebene Installationskennung von Firebase Remote Config. Diese Einträge sind für die von Ihnen gewünschte Darstellung der Website unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG, Art. 6 Abs. 1 lit. f DSGVO). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p></div>
+            </section>
+
+            <section class="legal-section" id="google-maps">
+                <h2 data-i18n="datenschutz.s8.title">8. Google Maps</h2>
+                <div class="legal-body" data-i18n="datenschutz.s8.body"><p>Auf dieser Website können Sie eine Karte von Google Maps anzeigen lassen. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.</p><p>Die Karte wird <strong>erst geladen, wenn Sie auf „Karte laden“ klicken</strong>. Vorher werden keine Daten an Google Maps übertragen. Mit dem Klick willigen Sie ein, dass Ihr Browser eine Verbindung zu Google aufbaut. Dabei werden Ihre IP-Adresse und technische Daten an Google übermittelt; Google kann Cookies setzen, eigene Schriftarten (Google Fonts) nachladen und Daten auch in den USA verarbeiten. Auf diese Verarbeitung haben wir keinen Einfluss; verantwortlich ist insoweit Google.</p><p>Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Die Einwilligung gilt nur für den jeweiligen Seitenaufruf: Laden Sie die Seite neu, wird die Karte nicht mehr angezeigt, bis Sie erneut klicken. Der Link „Route planen“ öffnet Google Maps in einem neuen Fenster; erst dann werden Daten an Google übertragen. Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a>.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s9.title">9. Kontaktaufnahme per E-Mail oder Telefon</h2>
+                <div class="legal-body" data-i18n="datenschutz.s9.body"><p>Wenn Sie uns per E-Mail oder Telefon kontaktieren, verarbeiten wir Ihre Angaben (z. B. Name, E-Mail-Adresse, Telefonnummer, Inhalt der Anfrage), um Ihre Anfrage zu bearbeiten, etwa eine Tischreservierung. Unser E-Mail-Postfach wird von Google (Gmail) bereitgestellt.</p><p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit einem Vertrag oder vorvertraglichen Maßnahmen zusammenhängt, ansonsten Art. 6 Abs. 1 lit. f DSGVO (unser berechtigtes Interesse an der Beantwortung von Anfragen). Wir löschen Ihre Angaben, sobald die Anfrage erledigt ist und keine gesetzlichen Aufbewahrungspflichten (z. B. aus Handels- oder Steuerrecht) entgegenstehen. Ohne Ihre Einwilligung geben wir diese Daten nicht weiter.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s10.title">10. Datenübermittlung in die USA</h2>
+                <div class="legal-body" data-i18n="datenschutz.s10.body"><p>Google ist ein Unternehmen mit Sitz in den USA (Google LLC). Bei der Nutzung der genannten Google-Dienste können Daten daher auch in die USA übertragen werden. Google LLC ist nach dem EU-US Data Privacy Framework zertifiziert. Für zertifizierte Unternehmen hat die EU-Kommission mit Beschluss vom 10. Juli 2023 ein angemessenes Datenschutzniveau festgestellt (Art. 45 DSGVO). Ergänzend gelten die EU-Standardvertragsklauseln. Informationen zur Zertifizierung: <a href="https://www.dataprivacyframework.gov/" target="_blank" rel="noopener">https://www.dataprivacyframework.gov/</a>.</p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s11.title">11. Speicherdauer</h2>
+                <div class="legal-body" data-i18n="datenschutz.s11.body"><p>Wir speichern personenbezogene Daten nur so lange, wie es für den jeweiligen Zweck erforderlich ist oder gesetzliche Aufbewahrungsfristen es verlangen. Konkrete Fristen sind bei den einzelnen Abschnitten angegeben (z. B. Besucherstatistik: 90 Tage). Daten im lokalen Speicher Ihres Browsers bleiben dort, bis Sie sie löschen.</p></div>
+            </section>
+
+            <section class="legal-section" id="rechte">
+                <h2 data-i18n="datenschutz.s12.title">12. Ihre Rechte</h2>
+                <div class="legal-body" data-i18n="datenschutz.s12.body"><p>Sie haben gegenüber uns folgende Rechte hinsichtlich Ihrer personenbezogenen Daten:</p><ul><li>Recht auf Auskunft (Art. 15 DSGVO)</li><li>Recht auf Berichtigung (Art. 16 DSGVO)</li><li>Recht auf Löschung (Art. 17 DSGVO)</li><li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li><li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li><li>Recht auf Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)</li></ul><p><strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Soweit wir Daten auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse) verarbeiten, können Sie dieser Verarbeitung aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen. Wir verarbeiten die Daten dann nicht mehr, es sei denn, wir können zwingende schutzwürdige Gründe nachweisen, die Ihre Interessen überwiegen, oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.</p><p>Zur Ausübung Ihrer Rechte genügt eine formlose Nachricht an die oben genannte E-Mail-Adresse.</p><p><strong>Beschwerderecht (Art. 77 DSGVO):</strong> Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Für uns zuständig ist:<br>Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg<br>Lautenschlagerstraße 20, 70173 Stuttgart<br><a href="https://www.baden-wuerttemberg.datenschutz.de" target="_blank" rel="noopener">www.baden-wuerttemberg.datenschutz.de</a></p></div>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="datenschutz.s13.title">13. SSL- bzw. TLS-Verschlüsselung</h2>
+                <div class="legal-body" data-i18n="datenschutz.s13.body"><p>Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers mit „https://“ beginnt und ein Schloss-Symbol angezeigt wird.</p></div>
+            </section>
 
             <div class="legal-section">
-                <h2 data-i18n="datenschutz.section2.title">2. Verantwortliche Stelle</h2>
-                <p data-i18n="datenschutz.section2.intro">Die verantwortliche Stelle für die Datenverarbeitung auf
-                    dieser Website ist:</p>
-                <p>
-                    Akeelan Gunasiri<br>
-                    Rötenbacher Str. 33<br>
-                    88364 Wolfegg<br>
-                    Deutschland<br><br>
-                    <strong data-i18n="datenschutz.email">E-Mail:</strong> <a href="mailto:srilanka.et.italy@gmail.com"
-                        style="color: var(--spice);">srilanka.et.italy@gmail.com</a>
-                </p>
-                <p data-i18n="datenschutz.section2.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section3.title">3. Datenerfassung auf dieser Website</h2>
-                <h3 data-i18n="datenschutz.section3.subtitle">Wie erfassen wir Ihre Daten?</h3>
-                <p data-i18n="datenschutz.section3.content1"></p>
-                <p data-i18n="datenschutz.section3.content2"></p>
-            </div>
-
-            <div class="legal-section">
-                <h3 data-i18n="datenschutz.section4.title">Wofür nutzen wir Ihre Daten?</h3>
-                <p data-i18n="datenschutz.section4.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <h3 data-i18n="datenschutz.section5.title">Welche Rechte haben Sie bezüglich Ihrer Daten?</h3>
-                <p data-i18n="datenschutz.section5.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section6.title">4. Hosting</h2>
-                <p data-i18n="datenschutz.section6.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section7.title">5. Allgemeine Hinweise und Pflichtinformationen</h2>
-                <h3 data-i18n="datenschutz.section7.subtitle">Datenschutz</h3>
-                <p data-i18n="datenschutz.section7.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section8.title">6. Cookies</h2>
-                <p data-i18n="datenschutz.section8.content1"></p>
-                <p data-i18n="datenschutz.section8.content2"></p>
-            </div>
-
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section9.title">7. Kontaktaufnahme</h2>
-                <p data-i18n="datenschutz.section9.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <h2 data-i18n="datenschutz.section10.title">8. Google Maps</h2>
-                <p data-i18n="datenschutz.section10.content"></p>
-            </div>
-
-            <div class="legal-section">
-                <p data-i18n="datenschutz.date">Stand: März 2024</p>
+                <p data-i18n="datenschutz.date">Stand: November 2026</p>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { I18n } from './js/i18n.js';
+        import { initConsentBanner } from './js/analytics.js';
         const i18n = new I18n();
         i18n.init();
+        initConsentBanner();
     </script>
 </body>
 
