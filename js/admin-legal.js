@@ -20,16 +20,36 @@ let sourceMode = false;
 function currentHtml() {
   return sourceMode ? source.value : editor.innerHTML;
 }
-function stash() {
-  state[page][lang] = currentHtml();
-}
-function show() {
-  const html = state[page][lang] || '';
-  editor.innerHTML = DOMPurify.sanitize(html);
-  source.value = html;
-}
+// Default (static) text per page+lang, cached once fetched.
+const defaults = {};
+let showToken = 0;
+
 function clean(html) {
   return DOMPurify.sanitize(html).trim();
+}
+// Saves the editor content into state. Text identical to the default is
+// stored as '' (= "no override": the website keeps using the default).
+function stash() {
+  const key = `${page}:${lang}`;
+  const current = clean(currentHtml());
+  state[page][lang] = (key in defaults && current === defaults[key]) ? '' : current;
+}
+// Shows the saved text, or the default text when nothing is saved.
+async function show() {
+  const token = ++showToken;
+  let html = state[page][lang] || '';
+  if (!html) {
+    const key = `${page}:${lang}`;
+    try {
+      if (!(key in defaults)) defaults[key] = clean(await loadRendered());
+      html = defaults[key];
+    } catch (err) {
+      showError(errorEl, err.message);
+    }
+  }
+  if (token !== showToken) return; // a newer tab switch won
+  editor.innerHTML = DOMPurify.sanitize(html);
+  source.value = html;
 }
 
 // ── Tabs ────────────────────────────────────────────────────────────────────
@@ -111,9 +131,10 @@ document.getElementById('legal-load-btn').addEventListener('click', async () => 
   errorEl.hidden = true;
   try {
     // Copies the static default text (page + i18n) of the selected language.
-    const html = await loadRendered();
-    state[page][lang] = clean(html);
-    show();
+    const key = `${page}:${lang}`;
+    defaults[key] = clean(await loadRendered());
+    state[page][lang] = '';
+    await show();
   } catch (err) {
     showError(errorEl, err.message);
   }

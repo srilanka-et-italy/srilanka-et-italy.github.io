@@ -219,7 +219,7 @@
         "legal_source_toggle": "HTML-Quelltext",
         "legal_save_btn": "Speichern",
         "legal_success": "Gespeichert. Die Änderung ist sofort auf der Website sichtbar.",
-        "legal_hint": "Neu starten: „Aktuellen Text laden“ übernimmt den derzeit angezeigten Text zum Bearbeiten. Ist nichts gespeichert, zeigt die Website den Standardtext.",
+        "legal_hint": "Ist für eine Sprache nichts gespeichert, zeigt der Editor den Standardtext der Website zum Bearbeiten. Mit „Speichern“ wird deine Version live geschaltet.",
         "legal_reset_confirm": "Gespeicherten Text dieser Sprache löschen und wieder den Standardtext verwenden?",
         "logout_btn": "Abmelden",
         "upload_title": "PDF hochladen",

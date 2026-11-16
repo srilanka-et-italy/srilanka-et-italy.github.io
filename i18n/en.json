@@ -219,7 +219,7 @@
         "legal_source_toggle": "HTML source",
         "legal_save_btn": "Save",
         "legal_success": "Saved. The change is visible on the website immediately.",
-        "legal_hint": "To start: \"Load current text\" copies the currently displayed text for editing. If nothing is saved, the website shows the default text.",
+        "legal_hint": "If nothing is saved for a language, the editor shows the website's default text for editing. \"Save\" publishes your version.",
         "legal_reset_confirm": "Delete the saved text for this language and use the default text again?",
         "logout_btn": "Sign out",
         "upload_title": "Upload PDF",
