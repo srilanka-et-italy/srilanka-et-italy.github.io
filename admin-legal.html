@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impressum &amp; Datenschutz — Admin — Sri Lanka ET Italy</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    .legal-toolbar { display:flex; flex-wrap:wrap; gap:.4rem; margin:1rem 0 .5rem; }
+    .legal-toolbar button { padding:.4rem .7rem; border:1px solid var(--border); background:var(--white); border-radius:8px; cursor:pointer; font:inherit; }
+    .legal-toolbar button:hover { background:var(--cream); }
+    .legal-editor { min-height:320px; max-height:70vh; overflow:auto; padding:1rem 1.25rem; background:var(--white); border:1px solid var(--border); border-radius:12px; line-height:1.7; }
+    .legal-editor:focus { outline:2px solid var(--spice); }
+    .legal-source { width:100%; font-family:ui-monospace,Menlo,monospace; font-size:.85rem; padding:1rem; border:1px solid var(--border); border-radius:12px; }
+  </style>
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="admin-login-screen" hidden>
+    <div class="admin-login-card">
+      <p class="admin-login-eyebrow">Sri Lanka ET Italy</p>
+      <h1 class="admin-login-title" data-i18n="admin.login_title">Admin Login</h1>
+
+      <div class="admin-lang-switch">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
+      <form id="login-form" novalidate>
+        <div class="admin-field">
+          <label for="email" data-i18n="admin.email_label">E-Mail</label>
+          <input type="email" id="email" autocomplete="email" required>
+        </div>
+        <div class="admin-field">
+          <label for="password" data-i18n="admin.password_label">Passwort</label>
+          <div class="admin-password-wrap">
+            <input type="password" id="password" autocomplete="current-password" required>
+            <button type="button" id="toggle-password" class="admin-pw-toggle" aria-label="Passwort anzeigen">👁</button>
+          </div>
+        </div>
+        <p id="login-error" class="admin-error" hidden></p>
+        <button type="submit" class="btn-dark admin-submit" data-i18n="admin.login_btn">Anmelden</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Panel (hidden until authenticated) -->
+  <div id="admin-panel" class="admin-panel" hidden>
+    <header class="admin-header">
+      <div class="admin-header-brand">
+        <a href="admin.html" class="tile-panel-back" aria-label="Zurück">←</a>
+        <span class="admin-header-logo">Sri Lanka <em>ET</em> Italy</span>
+        <span class="admin-header-badge" data-i18n="admin.header_badge">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <div class="admin-header-langs">
+          <button class="admin-lang-btn active" data-lang="de">DE</button>
+          <button class="admin-lang-btn" data-lang="en">EN</button>
+          <button class="admin-lang-btn" data-lang="ta">TA</button>
+        </div>
+        <button id="logout-btn" class="btn-outline" data-i18n="admin.logout_btn">Abmelden</button>
+      </div>
+    </header>
+    <main class="admin-main">
+      <div class="admin-panel-langs">
+        <button class="admin-lang-btn active" data-lang="de">DE</button>
+        <button class="admin-lang-btn" data-lang="en">EN</button>
+        <button class="admin-lang-btn" data-lang="ta">TA</button>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2 class="admin-section-title" data-i18n="admin.legal_title">Impressum &amp; Datenschutz</h2>
+        </div>
+        <p class="pdf-tile-dates" data-i18n="admin.legal_hint">Neu starten: „Aktuellen Text laden“ übernimmt den derzeit angezeigten Text zum Bearbeiten.</p>
+
+        <div class="admin-lang-tabs" id="legal-page-tabs">
+          <button type="button" class="admin-lang-tab active" data-page="impressum" data-i18n="admin.legal_page_impressum">Impressum</button>
+          <button type="button" class="admin-lang-tab" data-page="datenschutz" data-i18n="admin.legal_page_datenschutz">Datenschutzerklärung</button>
+        </div>
+        <div class="admin-lang-tabs" id="legal-lang-tabs">
+          <button type="button" class="admin-lang-tab active" data-lang="de">DE</button>
+          <button type="button" class="admin-lang-tab" data-lang="en">EN</button>
+          <button type="button" class="admin-lang-tab" data-lang="ta">TA</button>
+        </div>
+
+        <div class="legal-toolbar" id="legal-toolbar">
+          <button type="button" data-cmd="h2" title="Überschrift">H2</button>
+          <button type="button" data-cmd="h3" title="Unterüberschrift">H3</button>
+          <button type="button" data-cmd="p" title="Absatz">¶</button>
+          <button type="button" data-cmd="bold" title="Fett"><b>B</b></button>
+          <button type="button" data-cmd="italic" title="Kursiv"><i>I</i></button>
+          <button type="button" data-cmd="ul" title="Liste">• Liste</button>
+          <button type="button" data-cmd="ol" title="Nummerierte Liste">1. Liste</button>
+          <button type="button" data-cmd="link" title="Link">🔗</button>
+          <button type="button" data-cmd="undo" title="Rückgängig">↶</button>
+          <button type="button" data-cmd="redo" title="Wiederholen">↷</button>
+          <button type="button" id="legal-source-toggle" data-i18n="admin.legal_source_toggle">HTML-Quelltext</button>
+        </div>
+        <div id="legal-editor" class="legal-editor" contenteditable="true" spellcheck="true"></div>
+        <textarea id="legal-source" class="legal-source" rows="18" hidden></textarea>
+
+        <p id="legal-error" class="admin-error" hidden></p>
+        <p id="legal-success" class="admin-success" hidden data-i18n="admin.legal_success">Gespeichert.</p>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem">
+          <button id="legal-save-btn" type="button" class="btn-dark" data-i18n="admin.legal_save_btn">Speichern</button>
+          <button id="legal-load-btn" type="button" class="btn-outline" data-i18n="admin.legal_load_default">Aktuellen Text laden</button>
+          <button id="legal-reset-btn" type="button" class="btn-outline" data-i18n="admin.legal_reset">Zurücksetzen auf Standardtext</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/vendor/purify.min.js"></script>
+  <script type="module" src="js/admin-legal.js"></script>
+</body>
+</html>

@@ -126,10 +126,12 @@
         </div>
     </div>
 
+    <script src="js/vendor/purify.min.js"></script>
     <script type="module">
         import { I18n } from './js/i18n.js';
+        import { applyLegalOverride } from './js/legal-override.js';
         const i18n = new I18n();
-        i18n.init();
+        i18n.init().then(() => applyLegalOverride('impressum', i18n.lang));
     </script>
 </body>
 
