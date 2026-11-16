@@ -1140,3 +1140,21 @@ footer {
     font-size: 0.85rem;
     color: var(--muted);
 }
+
+/* Maintenance mode (Firestore: site_content/maintenance, set in admin) */
+#maintenance-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    background: #fdfaf5;
+    color: #1c1411;
+}
+#maintenance-overlay .maintenance-links { display: flex; gap: 1.5rem; font-size: 0.9rem; }
+#maintenance-overlay a { color: inherit; text-decoration: underline; }

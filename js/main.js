@@ -1,6 +1,7 @@
 import { I18n } from './i18n.js';
 import { initConsentBanner, setupClickTracking, trackPageview, trackClick } from './analytics.js';
 import { db, remoteConfig } from './firebase-config.js';
+import { checkMaintenance } from './maintenance.js';
 import {
   collection, query, where, orderBy, getDocs, doc, getDoc, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -35,6 +36,7 @@ class App {
         trackPageview(window.location.pathname);
         this.loadContactData().then(() => this.applyContactOverrides());
         this.setupSeasonalCarousel();
+        checkMaintenance();
     }
 
     async loadContactData() {
